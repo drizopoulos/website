@@ -16,7 +16,7 @@ weight = 4
 
 I am the cordinator for the following courses at Erasmus MC:
 
-- CE08: Repeated Measurements (<font color="red">Highlight:</font> A [shiny](http://shiny.rstudio.com/) app that contains and replicates the whole course)  
+- CE08: Repeated Measurements (A [shiny](http://shiny.rstudio.com/) app that contains and replicates the whole course is available on the GitHub repository)  
 [[course link](http://www.nihes.com/education/?ct=CE08)]
 [[GitHub](https://github.com/drizopoulos/Repeated_Measurements)]
 [[slides](courses/EMC/CE08.pdf)]
