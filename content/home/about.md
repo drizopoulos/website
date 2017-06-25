@@ -41,5 +41,6 @@ weight = 1
 
 Dimitris Rizopoulos is an associate professor of biostatistics at the Erasmus Medical 
 Center Rotterdam. His research focuses on joint models for longitudinal and time-to-event
-data with applications in precision medicine, screening and active surveilance.
+data with applications in biomarker identification, precision medicine, screening and 
+active surveilance.
 
