@@ -14,4 +14,4 @@ weight = 8
 
 +++
 
-A current version of my CV that contains all of my publications: [pdf](pdf/CV.pdf).
+A full list of my publications and grants can be found in my [CV](pdf/CV.pdf).
