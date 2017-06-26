@@ -14,7 +14,7 @@ weight = 3
 
 +++
 
-I am the cordinator for the following courses at Erasmus MC:
+The current composition of my research group:
 
 - **Eleni-Rosalina Andrinopoulou**: Elrozy is post-Doc working on several extensions of joint models. Currently on time-varying association structures, and a combination of shared random effects joint models with joint latent class models. More info on her GitHub page.  
 [[GitHub](https://github.com/ERandrinopoulou)]
