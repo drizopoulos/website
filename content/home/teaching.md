@@ -10,7 +10,7 @@ subtitle = ""
 widget = "custom"
 
 # Order that this section will appear in.
-weight = 4
+weight = 5
 
 +++
 
@@ -38,6 +38,10 @@ short list of past and upcoming courses
 [[course link](https://ww2.amstat.org/meetings/jsm/2017/onlineprogram/ActivityDetails.cfm?SessionID=214046)] [[slides](courses/Int/JMwithR_JSM_2017.pdf)] [[R script](courses/Int/JMbasics_JSM_2017.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2017.R)]
 - EMR-IBS, 2017, Thessaloniki  
 [[course link](http://stat-athens.aueb.gr/~emribs/page/EMR2017/rizopoulos.htm)] [[slides](courses/Int/JMwithR_EMR_2017.pdf)] [[R script](courses/Int/JMbasics_EMR_2017.R)] [[Solutions practicals](courses/Int/Solutions_EMR_2017.R)]
+- ISCB 2016, Birmingham  
+[[course link](http://www.birmingham.ac.uk/facilities/mds-cpd/conferences/iscb-2016/programme/pre-conference-courses.aspx)] [[slides](courses/Int/JMwithR_ISCB_2016.pdf)] [[R script](courses/Int/JMbasics_ISCB_2016.R)] [[Solutions practicals](courses/Int/Solutions_ISCB_2016.R)]
 - JSM 2016, Chicago  
 [[course link](https://ww2.amstat.org/meetings/jsm/2016/onlineprogram/ActivityDetails.cfm?SessionID=212624)] [[slides](courses/Int/JMwithR_JSM_2016.pdf)] [[R script](courses/Int/JMbasics_JSM_2016.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2016.R)]
+- IBC 2016, Victoria  
+[[course link](http://2016.biometricconference.org/2016ibc-short-course-offerings/)] [[slides](courses/Int/JMwithR_IBC_2016.pdf)] [[R script](courses/Int/JMbasics_IBC_2016.R)] [[Solutions practicals](courses/Int/Solutions_IBC_2016.R)]
 
