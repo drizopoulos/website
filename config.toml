@@ -1,5 +1,5 @@
 baseurl = "http://www.drizopoulos.com/"  # End your URL with a `/` trailing slash.
-title = "D. Rizopoulos"
+title = "DRizopoulos"
 copyright = "&copy; 2017 Dimitris Rizopoulos"
 theme = "hugo-academic"
 enableEmoji = true

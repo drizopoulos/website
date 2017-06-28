@@ -22,7 +22,7 @@ The current composition of my research group:
 
 - **Sara Baart**: Sara is a PhD student working on fitting joint models in studies with special types of designs, and in particular in case-cohort designs.
 
-- **Nicole Erler**: Nicole is a PhD student working on methods for analyzing longitudinal outcomes with missing baseline and time-varying covariates. She currently also writes an R package for implementing a full Bayesian anlysis under the un such settings sequential approach. More info on her GitHub page.  
+- **Nicole Erler**: Nicole is a PhD student working on methods for analyzing longitudinal outcomes with missing baseline and time-varying covariates. She currently also writes an R package for implementing a full Bayesian anlysis in such settings under the sequential approach. More info on her GitHub page.  
 [[GitHub](https://github.com/nerler)]
 [[twitter](https://twitter.com/n_erler)]
 

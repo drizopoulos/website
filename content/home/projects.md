@@ -34,7 +34,7 @@ view = 1
   tag = ".mvJM"
 
 [[filter]]
-  name = "Time-varying Effects and Covariates"
+  name = "Individualized Predictions, Time-varying Effects and Time-varying Covariates"
   tag = ".tve"
 +++
 
