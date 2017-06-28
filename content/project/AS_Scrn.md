@@ -3,10 +3,10 @@
 date = "2017-06-20"
 
 # Project title.
-title = "Active Surveilance and Screening"
+title = "Personalized Active Surveilance and Screening"
 
 # Project summary to display on homepage.
-summary = "For many different diseases ..."
+summary = "Novel methods for optimally planning when to collect longitudinal measurements or event information."
 
 # Optional image to display on homepage (relative to `static/img/` folder).
 image_preview = "Screening.jpg"

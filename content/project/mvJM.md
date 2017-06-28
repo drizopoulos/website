@@ -6,7 +6,7 @@ date = "2017-06-20"
 title = "Multivariate Joint Models"
 
 # Project summary to display on homepage.
-summary = "Multivariate joint models."
+summary = "Computational methods for multivariate joint models."
 
 # Optional image to display on homepage (relative to `static/img/` folder).
 image_preview = "boards.jpg"

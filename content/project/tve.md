@@ -6,7 +6,7 @@ date = "2017-06-20"
 title = "Individualized Predictions, Time-varying Effects and Time-varying Covariates"
 
 # Project summary to display on homepage.
-summary = "Multivariate joint models."
+summary = "Extensions of joint models for improving subject-specific predictions."
 
 # Optional image to display on homepage (relative to `static/img/` folder).
 image_preview = "time-varying.jpg"
@@ -23,5 +23,6 @@ math = false
 
 +++
 
+TTT
 
 
