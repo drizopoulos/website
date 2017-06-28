@@ -9,7 +9,7 @@ title = "Multivariate Joint Models"
 summary = "Computational methods for multivariate joint models."
 
 # Optional image to display on homepage (relative to `static/img/` folder).
-image_preview = "boards.jpg"
+image_preview = "multivariate.jpeg"
 
 # Tags: can be used for filtering projects.
 # Example: `tags = ["machine-learning", "deep-learning"]`
