@@ -188,14 +188,19 @@ defaultContentLanguageInSubdir = false
   weight = 7
 
 [[menu.main]]
+  name = "Book"
+  url = "#Book"
+  weight = 8
+
+[[menu.main]]
   name = "CV"
   url = "#CV"
-  weight = 8
+  weight = 9
 
 [[menu.main]]
   name = "Contact"
   url = "#contact"
-  weight = 9
+  weight = 10
 
 # Taxonomies.
 [taxonomies]
