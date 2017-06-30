@@ -19,7 +19,7 @@ I have written the first book on *Joint Models for Longitudinal and Survival Dat
 <img src="http://jmr.r-forge.r-project.org/book-cover.jpg" alt="Book-Cover" 
 style="float: left; margin: 0px 30px 0px 0px; width: 200px;"/>
 
-[R-forge website](http://jmr.r-forge.r-project.org/) containing the R code to replicate the analysis  
+- [R-forge website](http://jmr.r-forge.r-project.org/) containing the R code to replicate the analysis  
 
-[Publishers website](http://www.crcpress.com/product/isbn/9781439872864)
+- [Publishers website](http://www.crcpress.com/product/isbn/9781439872864)
 
