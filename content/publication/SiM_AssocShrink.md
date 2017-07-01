@@ -10,7 +10,7 @@ publication_short = "Statistics in Medicine (2016)"
 selected = true
 title = "Bayesian shrinkage approach for a joint model of longitudinal and survival outcomes assuming different association structures"
 url_pdf = "https://dx.doi.org/10.1002/sim.7027"
-url_project = "project/TVeffects/"
+url_project = "project/tve/"
 [[url_custom]]
     name = "Supplementary material"
     url = "pdf/papers/SiM_AssocShrink_SuppMat.pdf"

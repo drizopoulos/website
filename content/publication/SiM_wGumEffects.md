@@ -10,7 +10,7 @@ publication_short = "Statistics in Medicine (2017)"
 selected = true
 title = "Extension of the association structure in joint models to include weighted cumulative effects"
 url_pdf = "pdf/papers/SiM_wGumEffects_paper.pdf"
-url_project = "project/TVeffects/"
+url_project = "project/tve/"
 [[url_custom]]
     name = "Supplementary material"
     url = "pdf/papers/SiM_wGumEffects_SuppMat.pdf"

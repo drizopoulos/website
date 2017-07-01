@@ -10,8 +10,8 @@ publication_short = "JASA (2014)"
 selected = true
 title = "Combining dynamic predictions from joint models for longitudinal and time-to-event data using Bayesian model averaging"
 url_pdf = "http://dx.doi.org/10.1080/01621459.2014.931236"
-url_slides = "pdf/JASA_BMA_slides.pdf"
-url_project = "project/TVeffects/"
+url_slides = "pdf/Slides/WorkSurvJun_2014.pdf"
+url_project = "project/tve/"
 [[url_custom]]
     name = "Supplementary material"
     url = "pdf/papers/JASA_BMA_SuppMat.pdf"
