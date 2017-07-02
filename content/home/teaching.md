@@ -30,7 +30,7 @@ I am the cordinator for the following courses at Erasmus MC:
 [[slides](courses/EMC/EP03.pdf)]
 
 I have been also teaching short-courses in joint modeling in international conferences. A 
-short list of past and upcoming courses
+list of recent and upcoming courses
 
 - CEN-ISBS 2017, Vienna  
 [[course link](http://www.cenisbs2017.org/programme/courses.html)] [[slides](courses/Int/JMwithR_CEN-ISBS_2017.pdf)] [[R script](courses/Int/JMbasics_CEN-ISBS_2017.pdf)] [[Solutions practicals](courses/Int/Solutions_CEN-ISBS_2017.R)]
