@@ -44,4 +44,6 @@ list of recent and upcoming courses
 [[course link](https://ww2.amstat.org/meetings/jsm/2016/onlineprogram/ActivityDetails.cfm?SessionID=212624)] [[slides](courses/Int/JMwithR_JSM_2016.pdf)] [[R script](courses/Int/JMbasics_JSM_2016.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2016.R)]
 - IBC 2016, Victoria  
 [[course link](http://2016.biometricconference.org/2016ibc-short-course-offerings/)] [[slides](courses/Int/JMwithR_IBC_2016.pdf)] [[R script](courses/Int/JMbasics_IBC_2016.R)] [[Solutions practicals](courses/Int/Solutions_IBC_2016.R)]
+- SACEMA 2015, Stellenbosch  
+[[course link](http://www.sacema.org/node/introduction-to-the-joint-modelling-of-longitudinal-and-survival-data-with-applications-in-r)] [[slides](courses/Int/JMwithR_SACEMA_2015.pdf)] [[R script](courses/Int/JMbasics_SACEMA_2015.R)] [[Solutions practicals](courses/Int/Solutions_SACEMA_2015.R)]
 
