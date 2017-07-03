@@ -8,7 +8,7 @@ publication_types = ["2"]
 publication = "Biometrical Journal, to appear"
 publication_short = "Biometrical Journal (2017)"
 selected = true
-title = "Dynamic Predictions with Time-Dependent Covariates in Survival Analysis using Joint Modeling and Landmarking"
+title = "Dynamic predictions with time-dependent covariates in survival analysis using joint modeling and landmarking"
 url_pdf = "pdf/papers/BiomJrn_JMvsLM_paper.pdf"
 url_project = "project/tve/"
 [[url_custom]]
