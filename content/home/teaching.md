@@ -32,18 +32,20 @@ I am the cordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
-- CEN-ISBS 2017, Vienna  
+- CEN-ISBS 2017, Vienna, Austria  
 [[course link](http://www.cenisbs2017.org/programme/courses.html)] [[slides](courses/Int/JMwithR_CEN-ISBS_2017.pdf)] [[R script](courses/Int/JMbasics_CEN-ISBS_2017.pdf)] [[Solutions practicals](courses/Int/Solutions_CEN-ISBS_2017.R)]
-- JSM 2017, Baltimore  
+- JSM 2017, Baltimore, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2017/onlineprogram/ActivityDetails.cfm?SessionID=214046)] [[slides](courses/Int/JMwithR_JSM_2017.pdf)] [[R script](courses/Int/JMbasics_JSM_2017.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2017.R)]
-- EMR-IBS, 2017, Thessaloniki  
+- EMR-IBS, 2017, Thessaloniki, Greece  
 [[course link](http://stat-athens.aueb.gr/~emribs/page/EMR2017/rizopoulos.htm)] [[slides](courses/Int/JMwithR_EMR_2017.pdf)] [[R script](courses/Int/JMbasics_EMR_2017.R)] [[Solutions practicals](courses/Int/Solutions_EMR_2017.R)]
-- ISCB 2016, Birmingham  
+- ISCB 2016, Birmingham, UK  
 [[course link](http://www.birmingham.ac.uk/facilities/mds-cpd/conferences/iscb-2016/programme/pre-conference-courses.aspx)] [[slides](courses/Int/JMwithR_ISCB_2016.pdf)] [[R script](courses/Int/JMbasics_ISCB_2016.R)] [[Solutions practicals](courses/Int/Solutions_ISCB_2016.R)]
-- JSM 2016, Chicago  
+- JSM 2016, Chicago, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2016/onlineprogram/ActivityDetails.cfm?SessionID=212624)] [[slides](courses/Int/JMwithR_JSM_2016.pdf)] [[R script](courses/Int/JMbasics_JSM_2016.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2016.R)]
-- IBC 2016, Victoria  
+- IBC 2016, Victoria, Canada  
 [[course link](http://2016.biometricconference.org/2016ibc-short-course-offerings/)] [[slides](courses/Int/JMwithR_IBC_2016.pdf)] [[R script](courses/Int/JMbasics_IBC_2016.R)] [[Solutions practicals](courses/Int/Solutions_IBC_2016.R)]
-- SACEMA 2015, Stellenbosch  
+- Workshop Joint Modeling and Beyond 2016, Diepenbeek, Belgium  
+[[course link](http://www.uhasselt.be/Joint-Modeling-and-Beyond)] [[slides Tutorial I](courses/Int/JMwithR_Hasselt1_2016.pdf)] [[slides Tutorial IV](courses/Int/JMwithR_Hasselt4_2016.pdf)]
+- SACEMA 2015, Stellenbosch, S. Africa  
 [[course link](http://www.sacema.org/node/introduction-to-the-joint-modelling-of-longitudinal-and-survival-data-with-applications-in-r)] [[slides](courses/Int/JMwithR_SACEMA_2015.pdf)] [[R script](courses/Int/JMbasics_SACEMA_2015.R)] [[Solutions practicals](courses/Int/Solutions_SACEMA_2015.R)]
 
