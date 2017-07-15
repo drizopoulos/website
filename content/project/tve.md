@@ -23,7 +23,7 @@ math = false
 
 +++
 
-<img src="dynPred.gif" alt="Dynamic-Predictions" 
+<img src="/img/dynPred.gif" alt="Dynamic-Predictions" 
 style="float: left; margin: 0px 30px 0px 0px; width: 400px;"/>
 
 Individualized predictions play a key role in precision medicine and shared decision making. Joint models for longitudinal and survival data have been shown to be a valuable tool in this context. 

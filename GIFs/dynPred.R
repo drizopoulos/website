@@ -12,4 +12,4 @@ saveGIF({
         mtext("updated predictions with extra measurements")
         par(op)
     }
-}, movie.name = "./public/project/tve/dynPred.gif")
+}, movie.name = "./static/img/dynPred.gif")
