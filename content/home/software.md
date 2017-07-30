@@ -28,6 +28,7 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[JSS paper](http://www.jstatsoft.org/v35/i09/)]
 [[Book](www.crcpress.com/product/isbn/9781439872864)]
 [[Book website](http://jmr.r-forge.r-project.org/)]
+[[sample_analysis](/Rpgm/JM_sampe_analysis.R)]
 
 - **ltm**: Latent trait models under the Item Response Theory approach  
 [[GitHub](https://github.com/drizopoulos/ltm)] 
