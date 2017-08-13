@@ -25,6 +25,7 @@ I am the cordinator for the following courses at Erasmus MC:
 - ESP72: Joint Models for Longitudinal and Survival Data  
 [[course link](http://erasmussummerprogramme.nl/summer-programme-courses/?ct=ESP72&pg=Courses)]
 [[slides](courses/EMC/ESP72.pdf)]
+[[Solutions_Practicals](courses/EMC/ESP72_solutions.R)]
 
 - Biostatistical Methods II: Logistic Regression and Survival Analysis  
 [[course link](http://www.nihes.com/education/?ct=EP03)]
