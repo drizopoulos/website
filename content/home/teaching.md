@@ -30,6 +30,7 @@ I am the cordinator for the following courses at Erasmus MC:
 - Biostatistical Methods II: Logistic Regression and Survival Analysis  
 [[course link](http://www.nihes.com/education/?ct=EP03)]
 [[slides](courses/EMC/EP03.pdf)]
+[[Survival Analysis in R Companion](courses/EMC/Survival Analysis in R Companion.html)]
 
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
