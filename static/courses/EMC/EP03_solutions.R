@@ -205,3 +205,112 @@ plot(fit, xlab = "Months", ylab = "Survival", col = 1:2)
 plot(fit, fun = function (s) -log(-log(s)), xlab = "Months", 
      ylab = "-log(- log(Survival))", col = 1:2)
 
+##########################################################################################
+##########################################################################################
+
+######################################################################
+# Survival - Practical 4: Cox Proportional Hazards Models Extensions #
+######################################################################
+
+# Q1
+fit1 <- coxph(Surv(time, status) ~ sex * (ns(age, 3) + ns(ph.karno, 3)), data = lung)
+
+# a
+# the model without the interactions
+fit2 <- coxph(Surv(time, status) ~ sex + ns(age, 3) + ns(ph.karno, 3), data = lung)
+
+anova(fit2, fit1)
+
+# b
+# the model without nonlinear terms
+
+fit3 <- coxph(Surv(time, status) ~ sex * (age + ph.karno), data = lung)
+
+anova(fit3, fit1)
+
+# c
+# the final model is 
+fit4 <- coxph(Surv(time, status) ~ sex + age + ph.karno, data = lung)
+
+anova(fit4, fit1)
+
+# d check PH assumption
+check_PH <- cox.zph(fit4)
+
+plot(check_PH, var = 1)
+abline(h = coef(fit4)[1], col = "red", lwd = 2)
+
+plot(check_PH, var = 2)
+abline(h = coef(fit4)[2], col = "red", lwd = 2)
+
+plot(check_PH, var = 3)
+abline(h = coef(fit4)[3], col = "red", lwd = 2)
+
+# partion the time axis at 170 days
+lung_b170 <- lung
+lung_b170$status[lung_b170$time > 170] <- 1
+lung_a170 <- lung[lung$time > 170, ]
+
+fit4_b170 <- coxph(Surv(time, status) ~ sex + age + ph.karno, data = lung_b170)
+fit4_a170 <- coxph(Surv(time, status) ~ sex + age + ph.karno, data = lung_a170)
+
+check_PH_b170 <- cox.zph(fit4_b170)
+
+plot(check_PH_b170, var = 1)
+abline(h = coef(fit4_b170)[1], col = "red", lwd = 2)
+
+plot(check_PH_b170, var = 2)
+abline(h = coef(fit4_b170)[2], col = "red", lwd = 2)
+
+plot(check_PH_b170, var = 3)
+abline(h = coef(fit4_b170)[3], col = "red", lwd = 2)
+
+check_PH_a170 <- cox.zph(fit4_a170)
+
+plot(check_PH_a170, var = 1)
+abline(h = coef(fit4_a170)[1], col = "red", lwd = 2)
+
+plot(check_PH_a170, var = 2)
+abline(h = coef(fit4_a170)[2], col = "red", lwd = 2)
+
+plot(check_PH_a170, var = 3)
+abline(h = coef(fit4_a170)[3], col = "red", lwd = 2)
+
+# Q2
+# before 170 days
+ND_b170 <- with(lung_b170, expand.grid(
+    sex = levels(sex), age = median(age), ph.karno = mean(ph.karno)
+))
+
+probs_b170 <- survfit(fit4_b170, newdata = ND_b170)
+
+probs_b170
+
+plot(probs_b170)
+
+# after 170 days
+ND_a170 <- with(lung_a170, expand.grid(
+    sex = levels(sex), age = median(age), ph.karno = mean(ph.karno)
+))
+
+probs_a170 <- survfit(fit4_a170, newdata = ND_a170)
+
+probs_a170
+
+plot(probs_a170)
+
+summary(probs_a170, times = c(200, 400, 600, 800))
+
+# Q3
+lung$ph.ecog2 <- lung$ph.ecog
+lung$ph.ecog2[lung$ph.ecog2 > 0] <- 1
+
+fit5 <- coxph(Surv(time, status) ~ sex + age + ph.karno + strata(ph.ecog2), data = lung)
+
+summary(fit5)
+
+# Q4
+
+fit6 <- coxph(Surv(time, status) ~ (sex + age + ph.karno) * strata(ph.ecog2), data = lung)
+
+anova(fit5, fit6)
