@@ -38,7 +38,7 @@ I have been also teaching short-courses in joint modeling in international confe
 list of recent and upcoming courses
 
 - CEN-ISBS 2017, Vienna, Austria  
-[[course link](http://www.cenisbs2017.org/programme/courses.html)] [[slides](courses/Int/JMwithR_CEN-ISBS_2017.pdf)] [[R script](courses/Int/JMbasics_CEN-ISBS_2017.pdf)] [[Solutions practicals](courses/Int/Solutions_CEN-ISBS_2017.R)]
+[[course link](http://www.cenisbs2017.org/programme/courses.html)] [[slides](courses/Int/JMwithR_CEN-ISBS_2017.pdf)] [[R script](courses/Int/JMbasics_CEN-ISBS_2017.R)] [[Solutions practicals](courses/Int/Solutions_CEN-ISBS_2017.R)]
 - JSM 2017, Baltimore, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2017/onlineprogram/ActivityDetails.cfm?SessionID=214046)] [[slides](courses/Int/JMwithR_JSM_2017.pdf)] [[R script](courses/Int/JMbasics_JSM_2017.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2017.R)]
 - EMR-IBS, 2017, Thessaloniki, Greece  
