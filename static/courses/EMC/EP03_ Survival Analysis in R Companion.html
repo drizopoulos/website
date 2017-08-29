@@ -11,7 +11,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2017-08-28" />
+<meta name="date" content="2017-08-29" />
 
 <title>EP03: Survival Analysis in R Companion</title>
 
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">EP03: Survival Analysis in R Companion</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>August 28, 2017</em></h4>
+<h4 class="date"><em>August 29, 2017</em></h4>
 
 </div>
 
@@ -162,7 +162,6 @@ $(document).ready(function () {
 library(&quot;splines&quot;)
 library(&quot;lattice&quot;)
 library(&quot;JM&quot;)</code></pre>
-<pre><code>## Warning: package 'JM' was built under R version 3.4.1</code></pre>
 <p>Next we load the datasets that we will need for our illustrations, namely the AIDS, PBC, Lung and Stanford datasets introduced in the main slides of the course. These datasets are available as objects <code>aids.id</code>, <code>pbc2.id</code>, <code>lung</code> and <code>stanford2</code>, respectively. The first two from package <strong>JM</strong> and the last two from package <strong>survival</strong>. To load the datasets from the packages we use the <code>data()</code> function, i.e.,</p>
 <pre class="r"><code>data(&quot;aids&quot;, package = &quot;JM&quot;)
 data(&quot;aids.id&quot;, package = &quot;JM&quot;)
