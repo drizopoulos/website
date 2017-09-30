@@ -21,6 +21,7 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[CRAN](https://cran.r-project.org/package=JMbayes)]
 [[JSS paper](http://dx.doi.org/10.18637/jss.v072.i07)]
 [[multivatiate joint Models vignette](vignettes/Multivariate Joint Models.html)]
+[[dynamic predictions vignette](vignettes/Dynamic_Predictions.html)]
 
 - **JM**: Joint models for longitudinal and time-to-event data under maximum likelihood  
 [[GitHub](https://github.com/drizopoulos/JM)] 
