@@ -4,7 +4,7 @@ title = "Personalized Biopsy Schedules using Joint Models"
 abstract = ""
 abstract_short = ""
 event = "CISNET Prostate Cancer Modeling Symposium"
-event_url = "https://cisnet.cancer.gov/prostate/"
+event_url = "https://www.scgcorp.com/cisnetannual2017/Meeting-Information"
 location = "Baltimore, USA"
 
 selected = false
