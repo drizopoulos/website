@@ -37,6 +37,8 @@ I am the cordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
+- ENAR 2018, Atlanta, USA  
+[[course link](https://enar.org/meetings/spring2018/program/Preliminary_Program.pdf)] [[slides](courses/Int/JMwithR_ENAR_2018.pdf)] [[R script](courses/Int/JMbasics_ENAR_2018.R)] [[Solutions practicals](courses/Int/Solutions_ENAR_2018.R)]
 - CEN-ISBS 2017, Vienna, Austria  
 [[course link](http://www.cenisbs2017.org/programme/courses.html)] [[slides](courses/Int/JMwithR_CEN-ISBS_2017.pdf)] [[R script](courses/Int/JMbasics_CEN-ISBS_2017.R)] [[Solutions practicals](courses/Int/Solutions_CEN-ISBS_2017.R)]
 - JSM 2017, Baltimore, USA  
