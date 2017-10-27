@@ -5,7 +5,7 @@ abstract = ""
 abstract_short = ""
 event = "CISNET Prostate Cancer Modeling Symposium"
 event_url = "https://www.scgcorp.com/cisnetannual2017/Meeting-Information"
-location = "Baltimore, USA"
+location = "Rockville, USA"
 
 selected = false
 math = true
