@@ -35,4 +35,10 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[GitHub](https://github.com/drizopoulos/ltm)] 
 [[CRAN](https://cran.r-project.org/package=ltm)]
 [[JSS paper](http://www.jstatsoft.org/v17/i05/)]
+[[sample_analysis_dichotomous](/Rpgm/ltm_dichotomous.R)]
+[[sample_analysis_polytomous1](/Rpgm/ltm_polytomous_GPCM.R)]
+[[sample_analysis_polytomous2](/Rpgm/ltm_polytomous_GRM.R)]
+[[sample_analysis_abilities](/Rpgm/ltm_scoring.R)]
+[[sample_analysis_information](/Rpgm/ltm_Info.R)]
+
 
