@@ -9,7 +9,7 @@ publication = "Biometrics, under review"
 publication_short = "Biometrics, under review"
 selected = true
 title = "Personalized schedules for surveillance of low risk prostate cancer patients"
-url_pdf = "https://arxiv.org/abs/1609.03439"
+url_pdf = "https://arxiv.org/abs/1711.00285"
 url_slides = "https://emcbiostatistics.shinyapps.io/CISNET2017_Dimitris/"
 url_project = "project/AS_Scrn/"
 [[url_custom]]
