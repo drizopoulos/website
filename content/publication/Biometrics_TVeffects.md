@@ -9,7 +9,7 @@ publication = "Biometrics, to appear"
 publication_short = "Biometrics (2017)"
 selected = true
 title = "Improved dynamic predictions from joint models of longitudinal and survival data with time-varying effects using P-splines"
-url_pdf = "https://arxiv.org/abs/1609.03439"
+url_pdf = "http://onlinelibrary.wiley.com/doi/10.1111/biom.12814/full"
 url_slides = "pdf/Slides/JSM_2017.pdf"
 url_project = "project/tve/"
 [[url_custom]]
