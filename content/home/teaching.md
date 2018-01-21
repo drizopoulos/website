@@ -39,6 +39,8 @@ list of recent and upcoming courses
 
 - ENAR 2018, Atlanta, USA  
 [[course link](https://enar.org/meetings/spring2018/program/Preliminary_Program.pdf)] [[slides](courses/Int/JMwithR_ENAR_2018.pdf)] [[R script](courses/Int/JMbasics_ENAR_2018.R)] [[Solutions practicals](courses/Int/Solutions_ENAR_2018.R)]
+- Faculty of Medicine, University of Santiago de Compostela, USA  
+[[course link](http://icbusc.com/event/introduction_joint_modeling)] [[slides](courses/Int/JMwithR_USC_2018.pdf)] [[R script](courses/Int/JMbasics_USC_2018.R)] [[Solutions practicals](courses/Int/Solutions_USC_2018.R)]
 - Western Regional Health Authorities 2018, Bergen, Norway  
 [[slides](courses/Int/JMwithR_Bergen_2018.pdf)] [[R script](courses/Int/JMbasics_Bergen_2018.R)] [[Solutions practicals](courses/Int/Solutions_Bergen_2018.R)]
 - CEN-ISBS 2017, Vienna, Austria  
