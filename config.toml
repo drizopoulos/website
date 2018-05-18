@@ -21,7 +21,7 @@ defaultContentLanguageInSubdir = false
 
 [params]
   name = "Dimitris Rizopoulos"
-  role = "Associate Professor of Biostatistics"
+  role = "Professor of Biostatistics"
   organization = "Erasmus University Medical Center"
   organization_url = ""
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)

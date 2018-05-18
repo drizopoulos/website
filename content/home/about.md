@@ -39,7 +39,7 @@ weight = 1
 
 # Biography
 
-I am an associate professor of biostatistics at the Erasmus Medical 
+I am a professor of biostatistics at the Erasmus Medical 
 Center Rotterdam. My research focuses on joint models for longitudinal and time-to-event
 data with applications in biomarker identification, precision medicine, screening and 
 active surveilance. I currently serve as a co-Editor for [Biostatistics](https://academic.oup.com/biostatistics) [[twitter handle](https://twitter.com/biostatistics)].
