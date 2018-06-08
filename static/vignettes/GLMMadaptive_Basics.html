@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Dimitris Rizopoulos" />
+
+<meta name="date" content="2018-06-08" />
+
+<title>GLMMadaptive Basics</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">GLMMadaptive Basics</h1>
+<h4 class="author"><em>Dimitris Rizopoulos</em></h4>
+<h4 class="date"><em>2018-06-08</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#generalized-linear-mixed-models---theory">Generalized Linear Mixed Models - Theory</a><ul>
+<li><a href="#model-specification">Model Specification</a></li>
+<li><a href="#estimation">Estimation</a></li>
+</ul></li>
+<li><a href="#generalized-linear-mixed-models---practice">Generalized Linear Mixed Models - Practice</a><ul>
+<li><a href="#mixed-effects-logistic-regression">Mixed Effects Logistic Regression</a></li>
+<li><a href="#penalized-mixed-effects-poisson-regression">Penalized Mixed Effects Poisson Regression</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="generalized-linear-mixed-models---theory" class="section level1">
+<h1>Generalized Linear Mixed Models - Theory</h1>
+<div id="model-specification" class="section level2">
+<h2>Model Specification</h2>
+</div>
+<div id="estimation" class="section level2">
+<h2>Estimation</h2>
+</div>
+</div>
+<div id="generalized-linear-mixed-models---practice" class="section level1">
+<h1>Generalized Linear Mixed Models - Practice</h1>
+<div id="mixed-effects-logistic-regression" class="section level2">
+<h2>Mixed Effects Logistic Regression</h2>
+<p>We start by simulating some data for a binary longitudinal outcome:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of subjects</span>
+K &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># number of measurements per subject</span>
+t_max &lt;-<span class="st"> </span><span class="dv">15</span> <span class="co"># maximum follow-up time</span>
+
+<span class="co"># we constuct a data frame with the design: </span>
+<span class="co"># everyone has a baseline measurment, and then measurements at random follow-up times</span>
+DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">rep</span>(<span class="kw">seq_len</span>(n), <span class="dt">each =</span> K),
+                 <span class="dt">time =</span> <span class="kw">c</span>(<span class="kw">replicate</span>(n, <span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">sort</span>(<span class="kw">runif</span>(K <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dv">0</span>, t_max))))),
+                 <span class="dt">sex =</span> <span class="kw">rep</span>(<span class="kw">gl</span>(<span class="dv">2</span>, n<span class="op">/</span><span class="dv">2</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>)), <span class="dt">each =</span> K))
+
+<span class="co"># design matrices for the fixed and random effects</span>
+X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">data =</span> DF)
+Z &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>time, <span class="dt">data =</span> DF)
+
+betas &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.13</span>, <span class="op">-</span><span class="fl">0.25</span>, <span class="fl">0.24</span>, <span class="op">-</span><span class="fl">0.05</span>) <span class="co"># fixed effects coefficients</span>
+D11 &lt;-<span class="st"> </span><span class="fl">0.48</span> <span class="co"># variance of random intercepts</span>
+D22 &lt;-<span class="st"> </span><span class="fl">0.1</span> <span class="co"># variance of random slopes</span>
+
+<span class="co"># we simulate random effects</span>
+b &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D11)), <span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D22)))
+<span class="co"># linear predictor</span>
+eta_y &lt;-<span class="st"> </span><span class="kw">drop</span>(X <span class="op">%*%</span><span class="st"> </span>betas <span class="op">+</span><span class="st"> </span><span class="kw">rowSums</span>(Z <span class="op">*</span><span class="st"> </span>b[DF<span class="op">$</span>id, ]))
+<span class="co"># we simulate binary longitudinal data</span>
+DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n <span class="op">*</span><span class="st"> </span>K, <span class="dv">1</span>, <span class="kw">plogis</span>(eta_y))</code></pre></div>
+<p>We continue by fitting the mixed effects logistic regression for <code>y</code> assuming random intercepts for the random-effects part.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fm1 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
+                   <span class="dt">family =</span> <span class="kw">binomial</span>())</code></pre></div>
+<p>The summary method gives a detailed output of the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(fm1)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixed_model(fixed = y ~ sex * time, random = ~1 | id, data = DF, </span>
+<span class="co">#&gt;     family = binomial())</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Descriptives:</span>
+<span class="co">#&gt; Number of Observations: 800</span>
+<span class="co">#&gt; Number of Groups: 100 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model:</span>
+<span class="co">#&gt;  family: binomial</span>
+<span class="co">#&gt;  link: logit </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fit statistics:</span>
+<span class="co">#&gt;    log.Lik      AIC      BIC</span>
+<span class="co">#&gt;  -374.5197 759.0395 772.0653</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random effects covariance matrix:</span>
+<span class="co">#&gt;               StdDev</span>
+<span class="co">#&gt; (Intercept) 2.064578</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed effects:</span>
+<span class="co">#&gt;                  Value Std.Err z-value  p-value</span>
+<span class="co">#&gt; (Intercept)    -2.6162  0.4447 -5.8837  &lt; 1e-04</span>
+<span class="co">#&gt; sexfemale      -1.3234  0.6435 -2.0567 0.039714</span>
+<span class="co">#&gt; time            0.2850  0.0395  7.2077  &lt; 1e-04</span>
+<span class="co">#&gt; sexfemale:time  0.0401  0.0545  0.7356 0.461982</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Integration:</span>
+<span class="co">#&gt; method: adaptive Gauss-Hermite quadrature rule</span>
+<span class="co">#&gt; quadrature points: 11</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Optimization:</span>
+<span class="co">#&gt; method: hybrid EM and quasi-Newton</span>
+<span class="co">#&gt; converged: TRUE</span></code></pre></div>
+<p>We continue by checking the impact of the chosen number of quadrature points to the parameters estimates and the log-likelihood value at convergence. First, we refit the model with an increasing number of quadrature points. The default when the number of random effects is smaller or equal to two is 11 points. We fit then with 15, and 21 points:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fm1_q11 &lt;-<span class="st"> </span>fm1
+fm1_q15 &lt;-<span class="st"> </span><span class="kw">update</span>(fm1_q11, <span class="dt">nAGQ =</span> <span class="dv">15</span>)
+fm1_q21 &lt;-<span class="st"> </span><span class="kw">update</span>(fm1_q11, <span class="dt">nAGQ =</span> <span class="dv">21</span>)
+
+models &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;nAGQ=11&quot;</span> =<span class="st"> </span>fm1_q11, <span class="st">&quot;nAGQ=15&quot;</span> =<span class="st"> </span>fm1_q15, <span class="st">&quot;nAGQ=21&quot;</span> =<span class="st"> </span>fm1_q21)</code></pre></div>
+<p>We now extract from the model the estimated parameter for the fixed effects (using function <code>fixef()</code>), for the random effects, and the log-likelihood (using function <code>logLik()</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">extract &lt;-<span class="st"> </span><span class="cf">function</span> (obj) {
+    <span class="kw">c</span>(<span class="kw">fixef</span>(obj), <span class="st">&quot;var_(Intercept)&quot;</span> =<span class="st"> </span>obj<span class="op">$</span>D[<span class="dv">1</span>, <span class="dv">1</span>], <span class="st">&quot;logLik&quot;</span> =<span class="st"> </span><span class="kw">logLik</span>(obj))
+}
+
+<span class="kw">sapply</span>(models, extract)
+<span class="co">#&gt;                       nAGQ=11       nAGQ=15      nAGQ=21</span>
+<span class="co">#&gt; (Intercept)       -2.61624891   -2.61601552   -2.6160838</span>
+<span class="co">#&gt; sexfemale         -1.32341472   -1.32337720   -1.3233880</span>
+<span class="co">#&gt; time               0.28503221    0.28513076    0.2851331</span>
+<span class="co">#&gt; sexfemale:time     0.04005485    0.04011138    0.0401111</span>
+<span class="co">#&gt; var_(Intercept)    4.26248278    4.26261536    4.2627503</span>
+<span class="co">#&gt; logLik          -374.51974940 -374.51986569 -374.5198354</span></code></pre></div>
+<p>We observe rather stable model with virtually no differences between the different choices of quadrature points.</p>
+<p>We extend model <code>fm1</code> by also including a random slopes term; however, we assume that the covariance between the random intercepts and random slopes is zero. This is achieved by using the <code>||</code> in the specification of the <code>random</code> argument, i.e.,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fm2 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span>time <span class="op">||</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
+                   <span class="dt">family =</span> <span class="kw">binomial</span>())</code></pre></div>
+<p>The likelihood ratio test between the two models is computed with function <code>anova()</code>. When two <code>&quot;MixMod&quot;</code> objects the function assumes that the first object represents the model under the null hypothesis, and the second object the model under the alternative, i.e.,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fm1, fm2)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        AIC    BIC log.Lik  LRT df p.value</span>
+<span class="co">#&gt; fm1 759.04 772.07 -374.52                </span>
+<span class="co">#&gt; fm2 730.94 730.94 -359.47 30.1  1 &lt;0.0001</span></code></pre></div>
+<p>The results suggest that we need the random slopes term. We continue by testing whether the covariance between the random effects terms is zero. The model under the alternative hypothesis is:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fm3 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
+                   <span class="dt">family =</span> <span class="kw">binomial</span>())</code></pre></div>
+<p>And again the likelihood ratio test is performed by a call to <code>anova()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fm2, fm3)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        AIC    BIC log.Lik  LRT df p.value</span>
+<span class="co">#&gt; fm2 730.94 746.57 -359.47                </span>
+<span class="co">#&gt; fm3 731.66 731.66 -358.83 1.29  1  0.2566</span></code></pre></div>
+<p>The results now suggest that indeed the covariance between the two random effects terms is not statistically different than zero.</p>
+</div>
+<div id="penalized-mixed-effects-poisson-regression" class="section level2">
+<h2>Penalized Mixed Effects Poisson Regression</h2>
+<p>We start by simulating some data for a Poisson longitudinal outcome:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of subjects</span>
+K &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># number of measurements per subject</span>
+t_max &lt;-<span class="st"> </span><span class="dv">15</span> <span class="co"># maximum follow-up time</span>
+
+<span class="co"># we constuct a data frame with the design: </span>
+<span class="co"># everyone has a baseline measurment, and then measurements at random follow-up times</span>
+DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">rep</span>(<span class="kw">seq_len</span>(n), <span class="dt">each =</span> K),
+                 <span class="dt">time =</span> <span class="kw">c</span>(<span class="kw">replicate</span>(n, <span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">sort</span>(<span class="kw">runif</span>(K <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dv">0</span>, t_max))))),
+                 <span class="dt">sex =</span> <span class="kw">rep</span>(<span class="kw">gl</span>(<span class="dv">2</span>, n<span class="op">/</span><span class="dv">2</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>)), <span class="dt">each =</span> K))
+
+<span class="co"># design matrices for the fixed and random effects</span>
+X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">data =</span> DF)
+
+betas &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.13</span>, <span class="op">-</span><span class="fl">0.25</span>, <span class="fl">0.24</span>, <span class="op">-</span><span class="fl">0.05</span>) <span class="co"># fixed effects coefficients</span>
+D11 &lt;-<span class="st"> </span><span class="fl">0.48</span> <span class="co"># variance of random intercepts</span>
+
+<span class="co"># we simulate random effects</span>
+b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D11))
+<span class="co"># linear predictor</span>
+eta_y &lt;-<span class="st"> </span><span class="kw">drop</span>(X <span class="op">%*%</span><span class="st"> </span>betas <span class="op">+</span><span class="st"> </span>b[DF<span class="op">$</span>id])
+<span class="co"># we simulate Poisson longitudinal data</span>
+DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rpois</span>(n <span class="op">*</span><span class="st"> </span>K, <span class="kw">exp</span>(eta_y))</code></pre></div>
+<p>We continue by fitting the mixed effects logistic regression for <code>y</code> assuming random intercepts for the random-effects part.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gm1 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
+                   <span class="dt">family =</span> <span class="kw">poisson</span>())</code></pre></div>
+<p>The summary method gives a detailed output of the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(gm1)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixed_model(fixed = y ~ sex * time, random = ~1 | id, data = DF, </span>
+<span class="co">#&gt;     family = poisson())</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Descriptives:</span>
+<span class="co">#&gt; Number of Observations: 800</span>
+<span class="co">#&gt; Number of Groups: 100 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model:</span>
+<span class="co">#&gt;  family: poisson</span>
+<span class="co">#&gt;  link: log </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fit statistics:</span>
+<span class="co">#&gt;    log.Lik      AIC      BIC</span>
+<span class="co">#&gt;  -2790.338 5590.675 5603.701</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random effects covariance matrix:</span>
+<span class="co">#&gt;               StdDev</span>
+<span class="co">#&gt; (Intercept) 1.185021</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed effects:</span>
+<span class="co">#&gt;                  Value Std.Err  z-value  p-value</span>
+<span class="co">#&gt; (Intercept)     3.0355  0.7634   3.9765  &lt; 1e-04</span>
+<span class="co">#&gt; sexfemale      -0.7930  0.4598  -1.7248 0.084564</span>
+<span class="co">#&gt; time            0.2403  0.0016 151.2794  &lt; 1e-04</span>
+<span class="co">#&gt; sexfemale:time -0.0510  0.0028 -18.3911  &lt; 1e-04</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Integration:</span>
+<span class="co">#&gt; method: adaptive Gauss-Hermite quadrature rule</span>
+<span class="co">#&gt; quadrature points: 11</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Optimization:</span>
+<span class="co">#&gt; method: hybrid EM and quasi-Newton</span>
+<span class="co">#&gt; converged: TRUE</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gm2 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
+                   <span class="dt">family =</span> <span class="kw">poisson</span>(), 
+                   <span class="dt">penalized =</span> <span class="kw">list</span>(<span class="dt">pen_mu =</span> <span class="dv">0</span>, <span class="dt">pen_sigma =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), 
+                                    <span class="dt">pen_df =</span> <span class="dv">300</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(<span class="kw">fixef</span>(gm1), <span class="kw">fixef</span>(gm2))
+<span class="co">#&gt;                       [,1]        [,2]</span>
+<span class="co">#&gt; (Intercept)     3.03545929  2.97240376</span>
+<span class="co">#&gt; sexfemale      -0.79302156 -0.30493092</span>
+<span class="co">#&gt; time            0.24028826  0.24115501</span>
+<span class="co">#&gt; sexfemale:time -0.05104033 -0.05337623</span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

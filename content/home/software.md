@@ -16,6 +16,13 @@ weight = 4
 
 The major [R](https://cran.r-project.org/) packages I have developed and currently maintain
 
+- **GLMMadaptive**: Generalized Linear Mixed Models using Adaptive Gaussian Quadrature  
+[[GitHub](https://github.com/drizopoulos/GLMMadaptive)] 
+[[CRAN](https://cran.r-project.org/package=GLMMadaptive)]
+[[GLMMadaptive Basics](vignettes/GLMMadaptive_Basics.html)]
+[[Methods for MixMod Objects](vignettes/MixMod_Objects.html)]
+[[Custom Models](vignettes/Custom_Models.html)]
+
 - **JMbayes**: Joint Models for longitudinal and time-to-event data under a Bayesian approach  
 [[GitHub](https://github.com/drizopoulos/JMbayes)] 
 [[CRAN](https://cran.r-project.org/package=JMbayes)]
