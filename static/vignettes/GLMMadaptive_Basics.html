@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-06-08" />
+<meta name="date" content="2018-06-13" />
 
 <title>GLMMadaptive Basics</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">GLMMadaptive Basics</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-06-08</em></h4>
+<h4 class="date"><em>2018-06-13</em></h4>
 
 
 <div id="TOC">
@@ -90,15 +90,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Generalized Linear Mixed Models - Theory</h1>
 <div id="model-specification" class="section level2">
 <h2>Model Specification</h2>
+<p>Package <strong>GLMMadaptive</strong> provides a suit of functions for fitting and post-processing mixed effects models for grouped/clustered outcomes which have a distribution other than a normal distribution. In particular, let <span class="math inline">\(y_i\)</span> denote a vector of repeated measurements for the <span class="math inline">\(i\)</span>-th subject (<span class="math inline">\(i = 1, \ldots, n\)</span>). The conditional distribution of <span class="math inline">\(y_i\)</span> given a vector of random effects <span class="math inline">\(b_i\)</span> is assumed to be a member of the extended exponential family, with linear predictor given by <span class="math display">\[g\{E(y_i \mid b_i)\} = X_i \beta + Z_i b_i,\]</span> where <span class="math inline">\(g(\cdot)\)</span> denotes a monotonic link function, <span class="math inline">\(X_i\)</span> a design matrix for the fixed effects coefficients <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(Z_i\)</span> a design matrix for the random effects coefficients <span class="math inline">\(b_i\)</span>. Typically, matrix <span class="math inline">\(Z_i\)</span> is assumed to be a subset of <span class="math inline">\(X_i\)</span>. The random effects are assumed to follow a normal distribution with mean 0 and variance-covariance matrix <span class="math inline">\(D\)</span>. In addition, that the distribution <span class="math inline">\([y_i \mid b_i]\)</span> may potentially have extra dispersion/shape parameters <span class="math inline">\(\phi\)</span>.</p>
 </div>
 <div id="estimation" class="section level2">
 <h2>Estimation</h2>
+<p>In the cases in which the package focuses the distribution <span class="math inline">\([y_i \mid b_i]\)</span> is not normal and/or the link function <span class="math inline">\(g(\cdot)\)</span> is not the identity. In these settings, the estimation of the model is complicated by the fact that marginal log-likelihood function of the observed <span class="math inline">\(y_i\)</span> cannot be derived analytically. In particular, the log-likelihood function takes the form: <span class="math display">\[\begin{eqnarray*}
+\ell(\theta) &amp; = &amp; \sum_{i = 1}^n \log p(y_i; \theta)\\
+&amp; = &amp; \sum_{i = 1}^n \log \int p(y_i \mid b_i; \theta) \, p(b_i; \theta) \, db_i,
+\end{eqnarray*}\]</span> where <span class="math inline">\(\theta\)</span> denotes the full parameter vector including the fixed effects, the extra potential dispersion/shape parameters <span class="math inline">\(\phi\)</span> and the unique element of the covariance matrix <span class="math inline">\(D\)</span>. The integral in the definition of <span class="math inline">\(\ell(\theta)\)</span> does not have a closed-form solution, and numerical approximations are required to obtain the maximum likelihood estimates.</p>
+<p>In the literature several approaches have been proposed to approximate such integrals, and a nice overview is given in <a href="https://doi.org/10.1198/106186006X96962">Pinheiro and Chao (2006)</a>. A typical approach to approximate these integrals is the Laplace approximation. However, the general consensus has been that in the standard but difficult cases of binary/dichotomous data and count data with small counts and few repeated measurements, the accuracy of this approximation is compromised. Due to this fact, the gold standard numerical approximation methods is the adaptive Gaussian quadrature rule. This is more computationally intensive but also more accurate. This package implements provide an efficient implementation of the adaptive Gaussian quadrature rule, allowing for multiple correlated random effects (e.g., random intercepts, linear and quadratic random slopes) but currently a single grouping factor (i.e., no nested or crossed random effects designs).</p>
+<p>A hybrid optimization procedure is implemented starting with an EM algorithm, treating the random effects as ‘missing data’, followed by a direct optimization procedure with a quasi-Newton algorithm. Fine control of this procedure is allowed with a series of control arguments.</p>
 </div>
 </div>
 <div id="generalized-linear-mixed-models---practice" class="section level1">
 <h1>Generalized Linear Mixed Models - Practice</h1>
 <div id="mixed-effects-logistic-regression" class="section level2">
 <h2>Mixed Effects Logistic Regression</h2>
+<p>We illustrate the use of the package in the standard case of a mixed effects logistic regression. That is, the distribution of <span class="math inline">\([y_i \mid b_i]\)</span> is binomial, and the distribution of <span class="math inline">\([b_i]\)</span> multivariate normal.</p>
 <p>We start by simulating some data for a binary longitudinal outcome:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
 n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of subjects</span>
@@ -125,7 +133,7 @@ b &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">r
 eta_y &lt;-<span class="st"> </span><span class="kw">drop</span>(X <span class="op">%*%</span><span class="st"> </span>betas <span class="op">+</span><span class="st"> </span><span class="kw">rowSums</span>(Z <span class="op">*</span><span class="st"> </span>b[DF<span class="op">$</span>id, ]))
 <span class="co"># we simulate binary longitudinal data</span>
 DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n <span class="op">*</span><span class="st"> </span>K, <span class="dv">1</span>, <span class="kw">plogis</span>(eta_y))</code></pre></div>
-<p>We continue by fitting the mixed effects logistic regression for <code>y</code> assuming random intercepts for the random-effects part.</p>
+<p>We continue by fitting the mixed effects logistic regression for <code>y</code> assuming random intercepts for the random-effects part. The basic model-fitting function in <strong>GLMMadaptive</strong> is the <code>mixed_model()</code>, and has four required arguments, namely <code>fixed</code> a formula for the fixed effects, <code>random</code> a formula for the random effects, <code>family</code> a family object specifying the type of response variable, and <code>data</code> a data frame containing the variables in the previously mentioned formulas. Hence, the call to fit the random intercepts logistic regression is:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fm1 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
                    <span class="dt">family =</span> <span class="kw">binomial</span>())</code></pre></div>
 <p>The summary method gives a detailed output of the model:</p>
@@ -207,7 +215,7 @@ models &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="s
 </div>
 <div id="penalized-mixed-effects-poisson-regression" class="section level2">
 <h2>Penalized Mixed Effects Poisson Regression</h2>
-<p>We start by simulating some data for a Poisson longitudinal outcome:</p>
+<p>We continue our illustration with a Poisson mixed effects model. We start again by simulating some data for a Poisson longitudinal outcome:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
 n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of subjects</span>
 K &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># number of measurements per subject</span>
@@ -231,10 +239,10 @@ b &lt;-<span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dt
 eta_y &lt;-<span class="st"> </span><span class="kw">drop</span>(X <span class="op">%*%</span><span class="st"> </span>betas <span class="op">+</span><span class="st"> </span>b[DF<span class="op">$</span>id])
 <span class="co"># we simulate Poisson longitudinal data</span>
 DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rpois</span>(n <span class="op">*</span><span class="st"> </span>K, <span class="kw">exp</span>(eta_y))</code></pre></div>
-<p>We continue by fitting the mixed effects logistic regression for <code>y</code> assuming random intercepts for the random-effects part.</p>
+<p>We fit the mixed effects Poisson regression for <code>y</code> assuming random intercepts for the random-effects part.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gm1 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
                    <span class="dt">family =</span> <span class="kw">poisson</span>())</code></pre></div>
-<p>The summary method gives a detailed output of the model:</p>
+<p>As previously, the summary method gives a detailed output of the model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(gm1)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
@@ -271,16 +279,16 @@ DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rpoi
 <span class="co">#&gt; Optimization:</span>
 <span class="co">#&gt; method: hybrid EM and quasi-Newton</span>
 <span class="co">#&gt; converged: TRUE</span></code></pre></div>
+<p>In settings with few subjects, repeated measurements of separation effects, the package also allows to place a penalty in the fixed effects regression coefficients <span class="math inline">\(\beta\)</span>. The penalty/prior is of the form a Student’s t distribution with mean 0, scale parameter 1, and 3 degrees of freedom, and it is placed in all <span class="math inline">\(\beta\)</span> coefficients except from the intercept. The penalized model can be fitted by setting argument <code>penalized</code> to <code>TRUE</code>, i.e.,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gm2 &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(<span class="dt">fixed =</span> y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
-                   <span class="dt">family =</span> <span class="kw">poisson</span>(), 
-                   <span class="dt">penalized =</span> <span class="kw">list</span>(<span class="dt">pen_mu =</span> <span class="dv">0</span>, <span class="dt">pen_sigma =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), 
-                                    <span class="dt">pen_df =</span> <span class="dv">300</span>))</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(<span class="kw">fixef</span>(gm1), <span class="kw">fixef</span>(gm2))
-<span class="co">#&gt;                       [,1]        [,2]</span>
-<span class="co">#&gt; (Intercept)     3.03545929  2.97240376</span>
-<span class="co">#&gt; sexfemale      -0.79302156 -0.30493092</span>
-<span class="co">#&gt; time            0.24028826  0.24115501</span>
-<span class="co">#&gt; sexfemale:time -0.05104033 -0.05337623</span></code></pre></div>
+                   <span class="dt">family =</span> <span class="kw">poisson</span>(), <span class="dt">penalized =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(<span class="st">'unpenalized'</span> =<span class="st"> </span><span class="kw">fixef</span>(gm1), <span class="st">'penalized'</span> =<span class="st"> </span><span class="kw">fixef</span>(gm2))
+<span class="co">#&gt;                unpenalized   penalized</span>
+<span class="co">#&gt; (Intercept)     3.03545929  2.94238986</span>
+<span class="co">#&gt; sexfemale      -0.79302156 -0.82073287</span>
+<span class="co">#&gt; time            0.24028826  0.24043929</span>
+<span class="co">#&gt; sexfemale:time -0.05104033 -0.05118503</span></code></pre></div>
+<p>In this example we observe small differences. The users have the option to alter the specification of the Student’s t penalty by directly specifying the mean, scale and degrees of freedom arguments of the distribution.</p>
 </div>
 </div>
 

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-06-08" />
+<meta name="date" content="2018-06-13" />
 
 <title>Custom Models</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Custom Models</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-06-08</em></h4>
+<h4 class="date"><em>2018-06-13</em></h4>
 
 
 <div id="TOC">
@@ -95,7 +95,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>For the internal calculations the derivative of <code>log_dens</code> with respect to the linear predictor <code>eta</code> and extra parameters <code>phis</code> (when present) is also required. If it is not given, then it is approximated numerically using a central difference approximation. However, it greatly facilitates stability and speed if the user also specifies these functions. If the user specifies these function, they should have the names <code>score_eta_fun</code> and <code>score_phis_fun</code>, respectively, and both of them have three arguments named <code>y</code> the numeric vector of the repeated measurements outcome, <code>mu</code> the numeric vector or matrix of the mean of the outcome and <code>phis</code> a numeric vector of the extra parameters.</p>
 <div id="negative-binomial-mixed-model" class="section level2">
 <h2>Negative Binomial Mixed Model</h2>
-<p>We first illustrate the use of a custom-made family object in the case of a negative binomial repeated measurements outcome. We start by simulating some data:</p>
+<p>We first illustrate the use of a custom-made family object in the case of a negative binomial repeated measurements outcome. We should note however that a family object <code>negative.binomial()</code> is already defined in the package and users could invoke this instead - for more info see the relative online help page for <code>negative.binomial()</code>.We start by simulating some data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">101</span>)
 dd &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">f1 =</span> <span class="kw">factor</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>), <span class="dt">f2 =</span> LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">g =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">rep =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">15</span>,
                   <span class="dt">KEEP.OUT.ATTRS =</span> <span class="ot">FALSE</span>)
@@ -127,7 +127,7 @@ dd<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rnbi
                         <span class="dt">initial_values =</span> <span class="kw">list</span>(<span class="st">&quot;betas&quot;</span> =<span class="st"> </span><span class="kw">poisson</span>()))
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    4.08    0.00    4.08</span>
+<span class="co">#&gt;    4.22    0.05    4.26</span>
 
 fm1
 <span class="co">#&gt; </span>
@@ -200,7 +200,7 @@ fm1
                         <span class="dt">initial_values =</span> <span class="kw">list</span>(<span class="st">&quot;betas&quot;</span> =<span class="st"> </span><span class="kw">poisson</span>()))
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    1.25    0.00    1.25</span>
+<span class="co">#&gt;    1.39    0.00    1.39</span>
 
 fm2
 <span class="co">#&gt; </span>
