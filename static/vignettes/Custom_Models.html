@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-06-13" />
+<meta name="date" content="2018-06-16" />
 
 <title>Custom Models</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Custom Models</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-06-13</em></h4>
+<h4 class="date"><em>2018-06-16</em></h4>
 
 
 <div id="TOC">
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p><code>linkinv</code>: a function that is the inverse of the <code>linkfun</code> defined above.</p></li>
 <li><p><code>log_dens</code>: a function that returns the log of the probability density function or the log of the probability mass function of the distribution of the outcome given the random effects. This function should have exactly four arguments named, <code>y</code> the repeated measurements outcome, <code>eta</code> denoting the linear predictor (fixed + random effects), <code>mu_fun</code> the function to calculate the mean from the linear predictor (i.e., the <code>linkinv</code> function), and <code>phis</code> a vector of possible extra dispersion/scale parameters. <strong>Even if <code>phis</code> may not be required, it should always appear as an argument of <code>log_dens</code></strong>. Moreover, when the extra parameters are required, they should be appropriately transformed in order for the optimization of the log-likelihood to be unconstrained. Finally, <code>log_dens</code> should be fully vectorized with respect to <code>eta</code>. That is, for a numeric vector <code>y</code> and a numeric matrix <code>eta</code>, it should return a matrix with the log density evaluated at each column of <code>eta</code>.</p></li>
 </ul>
-<p>For the internal calculations the derivative of <code>log_dens</code> with respect to the linear predictor <code>eta</code> and extra parameters <code>phis</code> (when present) is also required. If it is not given, then it is approximated numerically using a central difference approximation. However, it greatly facilitates stability and speed if the user also specifies these functions. If the user specifies these function, they should have the names <code>score_eta_fun</code> and <code>score_phis_fun</code>, respectively, and both of them have three arguments named <code>y</code> the numeric vector of the repeated measurements outcome, <code>mu</code> the numeric vector or matrix of the mean of the outcome and <code>phis</code> a numeric vector of the extra parameters.</p>
+<p>For the internal calculations the derivative of <code>log_dens</code> with respect to the linear predictor <code>eta</code> and extra parameters <code>phis</code> (when present) is also required. If it is not given, then it is approximated numerically using a central difference approximation. However, it greatly facilitates stability and speed if the user also specifies these functions. If the user specifies these functions, they should have the names <code>score_eta_fun</code> and <code>score_phis_fun</code>, respectively, and both of them have three arguments named <code>y</code> the numeric vector of the repeated measurements outcome, <code>mu</code> the numeric vector or matrix of the mean of the outcome and <code>phis</code> a numeric vector of the extra parameters.</p>
 <div id="negative-binomial-mixed-model" class="section level2">
 <h2>Negative Binomial Mixed Model</h2>
 <p>We first illustrate the use of a custom-made family object in the case of a negative binomial repeated measurements outcome. We should note however that a family object <code>negative.binomial()</code> is already defined in the package and users could invoke this instead - for more info see the relative online help page for <code>negative.binomial()</code>.We start by simulating some data:</p>
@@ -127,7 +127,7 @@ dd<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rnbi
                         <span class="dt">initial_values =</span> <span class="kw">list</span>(<span class="st">&quot;betas&quot;</span> =<span class="st"> </span><span class="kw">poisson</span>()))
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    4.22    0.05    4.26</span>
+<span class="co">#&gt;    4.68    0.08    4.86</span>
 
 fm1
 <span class="co">#&gt; </span>
@@ -153,7 +153,7 @@ fm1
 <span class="co">#&gt; </span>
 <span class="co">#&gt; log-Lik: -10019.07</span></code></pre></div>
 <p>In the call to <code>mixed_model()</code> we specify the argument <code>n_phis</code> which lets the function know how many extra parameters does the distribution of the outcome have. In addition, we also specify that better quality initial values for the fixed effects <code>betas</code> can be obtained by fitting a Poisson regression model to the repeated measurements outcome (ignoring the correlations) with the same design matrix as the fixed-effects design matrix. For the unique elements of the random effects covariance matrix and for the extra parameters <code>phis</code> the default initial values are used.</p>
-<p>In the output, the report phi parameters is on the log scale, because in the definition of <code>log_dens</code> we specified that <code>phis &lt;- exp(phis)</code>.</p>
+<p>In the output, the reported phi parameters is on the log scale, because in the definition of <code>log_dens</code> we specified that <code>phis &lt;- exp(phis)</code>.</p>
 <p>As mentioned above, the internal computations are facilitated if the user also specifies the derivatives of the log density with respect to the linear predictor <code>eta</code> and the extra parameters <code>phis</code>. Hence, in the following we define a new negative binomial family object with these functions also defined:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_negBinom2 &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>) {
     stats &lt;-<span class="st"> </span><span class="kw">make.link</span>(link)
@@ -200,7 +200,7 @@ fm1
                         <span class="dt">initial_values =</span> <span class="kw">list</span>(<span class="st">&quot;betas&quot;</span> =<span class="st"> </span><span class="kw">poisson</span>()))
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    1.39    0.00    1.39</span>
+<span class="co">#&gt;    1.44    0.00    1.44</span>
 
 fm2
 <span class="co">#&gt; </span>
@@ -254,7 +254,7 @@ D22 &lt;-<span class="st"> </span><span class="fl">1.2</span> <span class="co">#
 b &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D11)), <span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D22)))
 <span class="co"># linear predictor</span>
 eta_y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(X <span class="op">%*%</span><span class="st"> </span>betas <span class="op">+</span><span class="st"> </span><span class="kw">rowSums</span>(Z <span class="op">*</span><span class="st"> </span>b[DF<span class="op">$</span>id, ]))
-<span class="co"># we simulate binary longitudinal data</span>
+<span class="co"># we simulate Student's t longitudinal data</span>
 DF<span class="op">$</span>y &lt;-<span class="st"> </span>eta_y <span class="op">+</span><span class="st"> </span>sigma <span class="op">*</span><span class="st"> </span><span class="kw">rt</span>(n <span class="op">*</span><span class="st"> </span>K, <span class="dt">df =</span> <span class="dv">4</span>)</code></pre></div>
 <p>Following we define the custom-made family object for the Student’s t distribution:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">students.t &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">df =</span> <span class="kw">stop</span>(<span class="st">&quot;'df' must be specified&quot;</span>), <span class="dt">link =</span> <span class="st">&quot;identity&quot;</span>) {
