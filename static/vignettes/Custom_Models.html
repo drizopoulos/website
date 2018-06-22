@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-06-16" />
+<meta name="date" content="2018-06-22" />
 
 <title>Custom Models</title>
 
@@ -70,14 +70,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Custom Models</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-06-16</em></h4>
+<h4 class="date"><em>2018-06-22</em></h4>
 
 
 <div id="TOC">
 <ul>
 <li><a href="#user-defined-family-objects">User-Defined Family Objects</a><ul>
-<li><a href="#negative-binomial-mixed-model">Negative Binomial Mixed Model</a></li>
-<li><a href="#students-t-mixed-model">Student’s t Mixed Model</a></li>
+<li><a href="#negative-binomial-mixed-effects-model">Negative Binomial Mixed Effects Model</a></li>
+<li><a href="#students-t-mixed-effects-model">Student’s t Mixed Effects Model</a></li>
+<li><a href="#beta-mixed-effects-model">Beta Mixed-Effects Model</a></li>
 </ul></li>
 </ul>
 </div>
@@ -93,8 +94,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p><code>log_dens</code>: a function that returns the log of the probability density function or the log of the probability mass function of the distribution of the outcome given the random effects. This function should have exactly four arguments named, <code>y</code> the repeated measurements outcome, <code>eta</code> denoting the linear predictor (fixed + random effects), <code>mu_fun</code> the function to calculate the mean from the linear predictor (i.e., the <code>linkinv</code> function), and <code>phis</code> a vector of possible extra dispersion/scale parameters. <strong>Even if <code>phis</code> may not be required, it should always appear as an argument of <code>log_dens</code></strong>. Moreover, when the extra parameters are required, they should be appropriately transformed in order for the optimization of the log-likelihood to be unconstrained. Finally, <code>log_dens</code> should be fully vectorized with respect to <code>eta</code>. That is, for a numeric vector <code>y</code> and a numeric matrix <code>eta</code>, it should return a matrix with the log density evaluated at each column of <code>eta</code>.</p></li>
 </ul>
 <p>For the internal calculations the derivative of <code>log_dens</code> with respect to the linear predictor <code>eta</code> and extra parameters <code>phis</code> (when present) is also required. If it is not given, then it is approximated numerically using a central difference approximation. However, it greatly facilitates stability and speed if the user also specifies these functions. If the user specifies these functions, they should have the names <code>score_eta_fun</code> and <code>score_phis_fun</code>, respectively, and both of them have three arguments named <code>y</code> the numeric vector of the repeated measurements outcome, <code>mu</code> the numeric vector or matrix of the mean of the outcome and <code>phis</code> a numeric vector of the extra parameters.</p>
-<div id="negative-binomial-mixed-model" class="section level2">
-<h2>Negative Binomial Mixed Model</h2>
+<div id="negative-binomial-mixed-effects-model" class="section level2">
+<h2>Negative Binomial Mixed Effects Model</h2>
 <p>We first illustrate the use of a custom-made family object in the case of a negative binomial repeated measurements outcome. We should note however that a family object <code>negative.binomial()</code> is already defined in the package and users could invoke this instead - for more info see the relative online help page for <code>negative.binomial()</code>.We start by simulating some data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">101</span>)
 dd &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">f1 =</span> <span class="kw">factor</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>), <span class="dt">f2 =</span> LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">g =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">rep =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">15</span>,
@@ -104,7 +105,7 @@ dd<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rnbi
 <p>Next we define a new family object for negative binomial data</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_negBinom &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>) {
     stats &lt;-<span class="st"> </span><span class="kw">make.link</span>(link)
-    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis) {
+    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis, eta_zi) {
         <span class="co"># the log density function</span>
         phis &lt;-<span class="st"> </span><span class="kw">exp</span>(phis) <span class="co"># unconstrained optimization of 'phis'</span>
         mu &lt;-<span class="st"> </span><span class="kw">mu_fun</span>(eta)
@@ -127,7 +128,7 @@ dd<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rnbi
                         <span class="dt">initial_values =</span> <span class="kw">list</span>(<span class="st">&quot;betas&quot;</span> =<span class="st"> </span><span class="kw">poisson</span>()))
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    4.68    0.08    4.86</span>
+<span class="co">#&gt;    4.28    0.03    4.32</span>
 
 fm1
 <span class="co">#&gt; </span>
@@ -155,9 +156,9 @@ fm1
 <p>In the call to <code>mixed_model()</code> we specify the argument <code>n_phis</code> which lets the function know how many extra parameters does the distribution of the outcome have. In addition, we also specify that better quality initial values for the fixed effects <code>betas</code> can be obtained by fitting a Poisson regression model to the repeated measurements outcome (ignoring the correlations) with the same design matrix as the fixed-effects design matrix. For the unique elements of the random effects covariance matrix and for the extra parameters <code>phis</code> the default initial values are used.</p>
 <p>In the output, the reported phi parameters is on the log scale, because in the definition of <code>log_dens</code> we specified that <code>phis &lt;- exp(phis)</code>.</p>
 <p>As mentioned above, the internal computations are facilitated if the user also specifies the derivatives of the log density with respect to the linear predictor <code>eta</code> and the extra parameters <code>phis</code>. Hence, in the following we define a new negative binomial family object with these functions also defined:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_negBinom2 &lt;-<span class="st"> </span><span class="cf">function</span> (<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>) {
-    stats &lt;-<span class="st"> </span><span class="kw">make.link</span>(link)
-    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_negBinom2 &lt;-<span class="st"> </span><span class="cf">function</span> () {
+    stats &lt;-<span class="st"> </span><span class="kw">make.link</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>)
+    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis, eta_zi) {
         <span class="co"># the log density function</span>
         phis &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
         mu &lt;-<span class="st"> </span><span class="kw">mu_fun</span>(eta)
@@ -169,7 +170,7 @@ fm1
         <span class="kw">attr</span>(out, <span class="st">&quot;mu_y&quot;</span>) &lt;-<span class="st"> </span>mu
         out
     }
-    score_eta_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis) {
+    score_eta_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis, eta_zi) {
         <span class="co"># the derivative of the log density w.r.t. mu</span>
         phis &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
         mu_phis &lt;-<span class="st"> </span>mu <span class="op">+</span><span class="st"> </span>phis
@@ -179,14 +180,14 @@ fm1
         mu.eta &lt;-<span class="st"> </span>mu
         (comp2 <span class="op">+</span><span class="st"> </span>comp3) <span class="op">*</span><span class="st"> </span>mu.eta
     }
-    score_phis_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis) {
+    score_phis_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis, eta_zi) {
         <span class="co"># the derivative of the log density w.r.t. phis</span>
         phis &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
         mu_phis &lt;-<span class="st"> </span>mu <span class="op">+</span><span class="st"> </span>phis
         comp1 &lt;-<span class="st"> </span><span class="kw">digamma</span>(y <span class="op">+</span><span class="st"> </span>phis) <span class="op">-</span><span class="st"> </span><span class="kw">digamma</span>(phis)
         comp2 &lt;-<span class="st"> </span><span class="kw">log</span>(phis) <span class="op">+</span><span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">log</span>(mu_phis) <span class="op">-</span><span class="st"> </span>phis <span class="op">/</span><span class="st"> </span>mu_phis
         comp3 &lt;-<span class="st"> </span><span class="op">-</span><span class="st"> </span>y <span class="op">/</span><span class="st"> </span>mu_phis
-        comp1 <span class="op">+</span><span class="st"> </span>comp2 <span class="op">+</span><span class="st"> </span>comp3
+        (comp1 <span class="op">+</span><span class="st"> </span>comp2 <span class="op">+</span><span class="st"> </span>comp3) <span class="op">*</span><span class="st"> </span>phis
     }
     <span class="kw">structure</span>(<span class="kw">list</span>(<span class="dt">family =</span> <span class="st">&quot;user Neg Binom&quot;</span>, <span class="dt">link =</span> stats<span class="op">$</span>name, <span class="dt">linkfun =</span> stats<span class="op">$</span>linkfun,
                    <span class="dt">linkinv =</span> stats<span class="op">$</span>linkinv, <span class="dt">log_dens =</span> log_dens,
@@ -200,7 +201,7 @@ fm1
                         <span class="dt">initial_values =</span> <span class="kw">list</span>(<span class="st">&quot;betas&quot;</span> =<span class="st"> </span><span class="kw">poisson</span>()))
 )
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    1.44    0.00    1.44</span>
+<span class="co">#&gt;    1.53    0.00    1.53</span>
 
 fm2
 <span class="co">#&gt; </span>
@@ -215,20 +216,20 @@ fm2
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Random effects covariance matrix:</span>
 <span class="co">#&gt;                StdDev</span>
-<span class="co">#&gt; (Intercept) 0.2346026</span>
+<span class="co">#&gt; (Intercept) 0.2351877</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Fixed effects:</span>
 <span class="co">#&gt; (Intercept)         f12         f13         f2B     f12:f2B     f13:f2B </span>
-<span class="co">#&gt;   1.6331946   0.6032832   1.0155512   1.5444556  -0.4417573  -0.5861456 </span>
+<span class="co">#&gt;   1.6330839   0.6032994   1.0155659   1.5444927  -0.4417942  -0.5861719 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; phi parameters:</span>
-<span class="co">#&gt;  -0.655446 </span>
+<span class="co">#&gt;  -0.6555019 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; log-Lik: -10019.03</span></code></pre></div>
+<span class="co">#&gt; log-Lik: -10019.07</span></code></pre></div>
 <p>We obtain almost identical results, but in half of the computing time in this example. Depending on the size of the data set, the gain in computing time when the derivatives for <code>eta</code> and <code>phis</code> are provided can be much more substantial.</p>
 </div>
-<div id="students-t-mixed-model" class="section level2">
-<h2>Student’s t Mixed Model</h2>
+<div id="students-t-mixed-effects-model" class="section level2">
+<h2>Student’s t Mixed Effects Model</h2>
 <p>We further illustrate the use of custom-made family objects by fitting a linear mixed model but with Student’s t distributed error terms. We start by simulating some data</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
 n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of subjects</span>
@@ -262,20 +263,20 @@ DF<span class="op">$</span>y &lt;-<span class="st"> </span>eta_y <span class="op
     env &lt;-<span class="st"> </span><span class="kw">new.env</span>(<span class="dt">parent =</span> .GlobalEnv)
     <span class="kw">assign</span>(<span class="st">&quot;.df&quot;</span>, df, <span class="dt">envir =</span> env)
     stats &lt;-<span class="st"> </span><span class="kw">make.link</span>(link)
-    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis) {
+    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis, eta_zi) {
         <span class="co"># the log density function</span>
         sigma &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
         out &lt;-<span class="st"> </span><span class="kw">dt</span>(<span class="dt">x =</span> (y <span class="op">-</span><span class="st"> </span>eta) <span class="op">/</span><span class="st"> </span>sigma, <span class="dt">df =</span> .df, <span class="dt">log =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">log</span>(sigma)
         <span class="kw">attr</span>(out, <span class="st">&quot;mu_y&quot;</span>) &lt;-<span class="st"> </span>eta
         out
     }
-    score_eta_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis) {
+    score_eta_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis, eta_zi) {
         <span class="co"># the derivative of the log density w.r.t. mu</span>
         sigma2 &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)<span class="op">^</span><span class="dv">2</span>
         y_mu &lt;-<span class="st"> </span>y <span class="op">-</span><span class="st"> </span>mu
         (y_mu <span class="op">*</span><span class="st"> </span>(.df <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span>(.df <span class="op">*</span><span class="st"> </span>sigma2)) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>y_mu<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>(.df <span class="op">*</span><span class="st"> </span>sigma2))
     }
-    score_phis_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis) {
+    score_phis_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis, eta_zi) {
         sigma &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
         y_mu2_df &lt;-<span class="st"> </span>(y <span class="op">-</span><span class="st"> </span>mu)<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span>.df
         (.df <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>y_mu2_df <span class="op">*</span><span class="st"> </span>sigma<span class="op">^</span>{<span class="op">-</span><span class="dv">2</span>} <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>y_mu2_df <span class="op">/</span><span class="st"> </span>sigma<span class="op">^</span><span class="dv">2</span>) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
@@ -283,7 +284,7 @@ DF<span class="op">$</span>y &lt;-<span class="st"> </span>eta_y <span class="op
     <span class="kw">environment</span>(log_dens) &lt;-<span class="st"> </span><span class="kw">environment</span>(score_eta_fun) &lt;-<span class="st"> </span><span class="kw">environment</span>(score_phis_fun) &lt;-<span class="st"> </span>env
     <span class="kw">structure</span>(<span class="kw">list</span>(<span class="dt">family =</span> <span class="st">&quot;Student's-t&quot;</span>, <span class="dt">link =</span> stats<span class="op">$</span>name, <span class="dt">linkfun =</span> stats<span class="op">$</span>linkfun,
                    <span class="dt">linkinv =</span> stats<span class="op">$</span>linkinv, <span class="dt">log_dens =</span> log_dens, 
-                   <span class="dt">score_eta_fun =</span> score_eta_fun),
+                   <span class="dt">score_eta_fun =</span> score_eta_fun, <span class="dt">score_phis_fun =</span> score_phis_fun),
               <span class="dt">class =</span> <span class="st">&quot;family&quot;</span>)
 }</code></pre></div>
 <p>And we fit the model</p>
@@ -309,13 +310,131 @@ fm
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Fixed effects:</span>
 <span class="co">#&gt;    (Intercept)      sexfemale           time sexfemale:time </span>
-<span class="co">#&gt;     20.0327862     -0.7065144      0.3439576     -0.1323599 </span>
+<span class="co">#&gt;     20.0327862     -0.7065143      0.3439576     -0.1323599 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; phi parameters:</span>
-<span class="co">#&gt;  0.1451972 </span>
+<span class="co">#&gt;  0.1451971 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; log-Lik: -1823.893</span></code></pre></div>
 <p>As was the case also for the negative binomial model, the extra <code>phis</code> parameter has been appropriately transformed to have an unconstrained optimization of the likelihood. Hence, the estimated <code>sigma</code> parameter is <code>exp(fm$phis) =</code> 1.156.</p>
+</div>
+<div id="beta-mixed-effects-model" class="section level2">
+<h2>Beta Mixed-Effects Model</h2>
+<p>As a final illustration we show how a beta mixed effects model can be fitted, i.e., applicable in case of bounded repeated measurements outcomes. We start again by simulating some data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
+n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># number of subjects</span>
+K &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># number of measurements per subject</span>
+t_max &lt;-<span class="st"> </span><span class="dv">15</span> <span class="co"># maximum follow-up time</span>
+
+<span class="co"># we constuct a data frame with the design: </span>
+<span class="co"># everyone has a baseline measurment, and then measurements at random follow-up times</span>
+DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">rep</span>(<span class="kw">seq_len</span>(n), <span class="dt">each =</span> K),
+                 <span class="dt">time =</span> <span class="kw">c</span>(<span class="kw">replicate</span>(n, <span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">sort</span>(<span class="kw">runif</span>(K <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dv">0</span>, t_max))))),
+                 <span class="dt">sex =</span> <span class="kw">rep</span>(<span class="kw">gl</span>(<span class="dv">2</span>, n<span class="op">/</span><span class="dv">2</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>)), <span class="dt">each =</span> K))
+
+<span class="co"># design matrices for the fixed and random effects</span>
+X &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">data =</span> DF)
+Z &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>time, <span class="dt">data =</span> DF)
+
+betas &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">2.2</span>, <span class="op">-</span><span class="fl">0.25</span>, <span class="fl">0.24</span>, <span class="op">-</span><span class="fl">0.05</span>) <span class="co"># fixed effects coefficients</span>
+phi &lt;-<span class="st"> </span><span class="dv">5</span> <span class="co"># precision parameter of the Beta distribution</span>
+D11 &lt;-<span class="st"> </span><span class="fl">0.9</span> <span class="co"># variance of random intercepts</span>
+D22 &lt;-<span class="st"> </span><span class="fl">0.3</span> <span class="co"># variance of random slopes</span>
+
+<span class="co"># we simulate random effects</span>
+b &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D11)), <span class="kw">rnorm</span>(n, <span class="dt">sd =</span> <span class="kw">sqrt</span>(D22)))
+<span class="co"># linear predictor</span>
+eta_y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(X <span class="op">%*%</span><span class="st"> </span>betas <span class="op">+</span><span class="st"> </span><span class="kw">rowSums</span>(Z <span class="op">*</span><span class="st"> </span>b[DF<span class="op">$</span>id, ]))
+<span class="co"># mean</span>
+mu &lt;-<span class="st"> </span><span class="kw">plogis</span>(eta_y)
+<span class="co"># we simulate beta longitudinal data</span>
+DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rbeta</span>(n <span class="op">*</span><span class="st"> </span>K, <span class="dt">shape1 =</span> mu <span class="op">*</span><span class="st"> </span>phi, <span class="dt">shape2 =</span> phi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>mu))
+<span class="co"># we transform to (0, 1)</span>
+DF<span class="op">$</span>y &lt;-<span class="st"> </span>(DF<span class="op">$</span>y <span class="op">*</span><span class="st"> </span>(<span class="kw">nrow</span>(DF) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(DF)</code></pre></div>
+<p>Next we define the custom-made family object as in the case of the Student’s t distribution:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta.fam &lt;-<span class="st"> </span><span class="cf">function</span> () {
+    stats &lt;-<span class="st"> </span><span class="kw">make.link</span>(<span class="st">&quot;logit&quot;</span>)
+    log_dens &lt;-<span class="st"> </span><span class="cf">function</span> (y, eta, mu_fun, phis, eta_zi) {
+        <span class="co"># the log density function</span>
+        phi &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
+        mu &lt;-<span class="st"> </span><span class="kw">mu_fun</span>(eta)
+        mu_phi &lt;-<span class="st"> </span>mu <span class="op">*</span><span class="st"> </span>phi
+        comp1 &lt;-<span class="st"> </span><span class="kw">lgamma</span>(phi) <span class="op">-</span><span class="st"> </span><span class="kw">lgamma</span>(mu_phi)
+        comp2 &lt;-<span class="st"> </span>(mu_phi <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(y) <span class="op">-</span><span class="st"> </span><span class="kw">lgamma</span>(phi <span class="op">-</span><span class="st"> </span>mu_phi)
+        comp3 &lt;-<span class="st"> </span>(phi <span class="op">-</span><span class="st"> </span>mu_phi <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>y)
+        out &lt;-<span class="st"> </span>comp1 <span class="op">+</span><span class="st"> </span>comp2 <span class="op">+</span><span class="st"> </span>comp3
+        <span class="kw">attr</span>(out, <span class="st">&quot;mu_y&quot;</span>) &lt;-<span class="st"> </span>mu
+        out
+    }
+    score_eta_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis, eta_zi) {
+        <span class="co"># the derivative of the log density w.r.t. mu</span>
+        phi &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
+        mu_phi &lt;-<span class="st"> </span>mu <span class="op">*</span><span class="st"> </span>phi
+        comp1 &lt;-<span class="st"> </span><span class="op">-</span><span class="st"> </span><span class="kw">digamma</span>(mu_phi) <span class="op">*</span><span class="st"> </span>phi
+        comp2 &lt;-<span class="st"> </span>phi <span class="op">*</span><span class="st"> </span>(<span class="kw">log</span>(y) <span class="op">+</span><span class="st"> </span><span class="kw">digamma</span>(phi <span class="op">-</span><span class="st"> </span>mu_phi))
+        comp3 &lt;-<span class="st"> </span><span class="op">-</span><span class="st"> </span>phi <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>y)
+        <span class="co"># the derivative of mu w.r.t. eta (this depends on the chosen link function)</span>
+        mu.eta &lt;-<span class="st"> </span>mu <span class="op">-</span><span class="st"> </span>mu <span class="op">*</span><span class="st"> </span>mu
+        (comp1 <span class="op">+</span><span class="st"> </span>comp2 <span class="op">+</span><span class="st"> </span>comp3) <span class="op">*</span><span class="st"> </span>mu.eta
+    }
+    score_phis_fun &lt;-<span class="st"> </span><span class="cf">function</span> (y, mu, phis, eta_zi) {
+        phi &lt;-<span class="st"> </span><span class="kw">exp</span>(phis)
+        mu_phi &lt;-<span class="st"> </span>mu <span class="op">*</span><span class="st"> </span>phi
+        mu1 &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>mu
+        comp1 &lt;-<span class="st"> </span><span class="kw">digamma</span>(phi) <span class="op">-</span><span class="st"> </span><span class="kw">digamma</span>(mu_phi) <span class="op">*</span><span class="st"> </span>mu
+        comp2 &lt;-<span class="st"> </span>mu <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(y) <span class="op">-</span><span class="st"> </span><span class="kw">digamma</span>(phi <span class="op">-</span><span class="st"> </span>mu_phi) <span class="op">*</span><span class="st"> </span>mu1
+        comp3 &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>y) <span class="op">*</span><span class="st"> </span>mu1
+        (comp1 <span class="op">+</span><span class="st"> </span>comp2 <span class="op">+</span><span class="st"> </span>comp3) <span class="op">*</span><span class="st"> </span>phi
+    }
+    <span class="kw">structure</span>(<span class="kw">list</span>(<span class="dt">family =</span> <span class="st">&quot;beta&quot;</span>, <span class="dt">link =</span> stats<span class="op">$</span>name, <span class="dt">linkfun =</span> stats<span class="op">$</span>linkfun,
+                   <span class="dt">linkinv =</span> stats<span class="op">$</span>linkinv, <span class="dt">log_dens =</span> log_dens, 
+                   <span class="dt">score_eta_fun =</span> score_eta_fun, <span class="dt">score_phis_fun =</span> score_phis_fun),
+              <span class="dt">class =</span> <span class="st">&quot;family&quot;</span>)
+}</code></pre></div>
+<p>And we fit the model</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gm &lt;-<span class="st"> </span><span class="kw">mixed_model</span>(y <span class="op">~</span><span class="st"> </span>sex <span class="op">*</span><span class="st"> </span>time, <span class="dt">random =</span> <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>id, <span class="dt">data =</span> DF,
+                  <span class="dt">family =</span> <span class="kw">beta.fam</span>(), <span class="dt">n_phis =</span> <span class="dv">1</span>)
+
+gm
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mixed_model(fixed = y ~ sex * time, random = ~time | id, data = DF, </span>
+<span class="co">#&gt;     family = beta.fam(), n_phis = 1)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model:</span>
+<span class="co">#&gt;  family: beta</span>
+<span class="co">#&gt;  link: logit </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Random effects covariance matrix:</span>
+<span class="co">#&gt;              StdDev    Corr</span>
+<span class="co">#&gt; (Intercept)  0.7187        </span>
+<span class="co">#&gt; time         0.2320  0.3463</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Fixed effects:</span>
+<span class="co">#&gt;    (Intercept)      sexfemale           time sexfemale:time </span>
+<span class="co">#&gt;    -1.68076865    -0.43027100     0.20164743    -0.01401002 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; phi parameters:</span>
+<span class="co">#&gt;  1.379027 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; log-Lik: 1482.692</span></code></pre></div>
+<p>To depict the results of the model we create an effects plot, showing the longitudinal evolution of the average/median male and female. We start by constructing the data frame that contains the values we want to depict, and using it in the <code>effectPlotData()</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nDF &lt;-<span class="st"> </span><span class="kw">with</span>(DF, <span class="kw">expand.grid</span>(<span class="dt">time =</span> <span class="kw">seq</span>(<span class="kw">min</span>(time), <span class="kw">max</span>(time), <span class="dt">length =</span> <span class="dv">25</span>),
+                            <span class="dt">sex =</span> <span class="kw">levels</span>(sex)))
+
+plot_data &lt;-<span class="st"> </span><span class="kw">effectPlotData</span>(gm, nDF)</code></pre></div>
+<p>The figure is created with a call to <code>xyplot()</code> from the <a href="https://cran.r-project.org/package=lattice"><strong>lattice</strong></a> package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;lattice&quot;</span>)
+<span class="kw">xyplot</span>(pred <span class="op">+</span><span class="st"> </span>low <span class="op">+</span><span class="st"> </span>upp <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>sex, <span class="dt">data =</span> plot_data,
+       <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">col =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>,
+       <span class="dt">xlab =</span> <span class="st">&quot;Follow-up Time&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Logit Scale&quot;</span>)
+
+expit &lt;-<span class="st"> </span><span class="cf">function</span> (x) <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))
+<span class="kw">xyplot</span>(<span class="kw">expit</span>(pred) <span class="op">+</span><span class="st"> </span><span class="kw">expit</span>(low) <span class="op">+</span><span class="st"> </span><span class="kw">expit</span>(upp) <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>sex, <span class="dt">data =</span> plot_data,
+       <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">col =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>,
+       <span class="dt">xlab =</span> <span class="st">&quot;Follow-up Time&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Original Scale&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><img src="data:image/png;base64,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" /></p>
 </div>
 </div>
 
