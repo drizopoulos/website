@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-06-13" />
+<meta name="date" content="2018-07-03" />
 
 <title>Methods for MixMod Objects</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Methods for MixMod Objects</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-06-13</em></h4>
+<h4 class="date"><em>2018-07-03</em></h4>
 
 
 <div id="TOC">
@@ -82,6 +82,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#fitted-values-and-residuals">Fitted Values and Residuals</a></li>
 <li><a href="#effect-plots">Effect Plots</a></li>
 <li><a href="#comparing-two-models">Comparing Two Models</a></li>
+<li><a href="#predictions">Predictions</a></li>
+<li><a href="#simulate">Simulate</a></li>
 </ul></li>
 </ul>
 </div>
@@ -182,17 +184,17 @@ DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rbin
 <span class="co">#&gt; converged: TRUE</span></code></pre></div>
 <p>The output is rather self-explanatory. However, just note that the fixed-effects coefficients are on the linear predictor scale, and hence are the corresponding log-odds for the intercept and log-odds ratios for the rest of the parameters. The <code>summary()</code> only shows the estimated coefficients, standard errors and p-values, but no confidence intervals. These can be separately obtained using the <code>confint()</code> method, i.e.,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(<span class="kw">confint</span>(fm))
-<span class="co">#&gt;                     2.5 %    97.5 %</span>
-<span class="co">#&gt; (Intercept)    0.06729962 0.2358477</span>
-<span class="co">#&gt; sexfemale      0.12274967 0.7815624</span>
-<span class="co">#&gt; time           1.16444341 1.4523190</span>
-<span class="co">#&gt; sexfemale:time 0.86021510 1.1683115</span></code></pre></div>
+<span class="co">#&gt;                     2.5 %     Value    97.5 %</span>
+<span class="co">#&gt; (Intercept)    0.06729962 0.1259860 0.2358477</span>
+<span class="co">#&gt; sexfemale      0.12274967 0.3097362 0.7815624</span>
+<span class="co">#&gt; time           1.16444341 1.3004397 1.4523190</span>
+<span class="co">#&gt; sexfemale:time 0.86021510 1.0024965 1.1683115</span></code></pre></div>
 <p>By default the confidence intervals are produced for the fixed effects. Hence, taking the exp we obtain the confidence intervals for the corresponding odds-ratios. In addition, by default, the level of the confidence intervals is 95%. The following piece of code produces 90% confidence intervals for the variances of the random intercepts and slopes, and for their covariance:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">confint</span>(fm, <span class="dt">parm =</span> <span class="st">&quot;var-cov&quot;</span>, <span class="dt">level =</span> <span class="fl">0.90</span>)
-<span class="co">#&gt;                         5 %      95 %</span>
-<span class="co">#&gt; var.(Intercept)  0.06950694 3.9970863</span>
-<span class="co">#&gt; cov.(Int)_time  -0.04285652 0.9474592</span>
-<span class="co">#&gt; var.time         0.02770139 1.3373452</span></code></pre></div>
+<span class="co">#&gt;                         5 %      Value       95 %</span>
+<span class="co">#&gt; var.(Intercept)  0.06950694 0.52709131 0.69278283</span>
+<span class="co">#&gt; cov.(Int)_time  -0.04285652 0.11302036 0.47390226</span>
+<span class="co">#&gt; var.time         0.02770139 0.06192966 0.05342255</span></code></pre></div>
 <p>The estimated variance-covariance matrix of the maximum likelihood estimates of all parameters is returned using the <code>vcov()</code> method, e.g.,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vcov</span>(fm)
 <span class="co">#&gt;                 (Intercept)    sexfemale         time sexfemale:time</span>
@@ -279,12 +281,25 @@ expit &lt;-<span class="st"> </span><span class="cf">function</span> (x) <span c
        <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">col =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>,
        <span class="dt">xlab =</span> <span class="st">&quot;Follow-up time&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Subject-Specific Probabilities&quot;</span>)</code></pre></div>
 <p><img src="data:image/png;base64,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" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAArlBMVEUAAAAAAC4AADoAAFIAAGYAOjoAOpAAXJEAZrY6AAA6ADo6AGY6OgA6OpA6ZmY6gK86kLY6kNtmAABmAC5mADpmAGZmOpBmZgBmZmZmkJBmo5Fmo8xmtrZmtv+QOgCQOjqQOmaQtpCQxcyQ2/+2XAC2ZgC2kDq2xXO225C25cy2///bgC7bkDrbtrbb/7bb////AAD/o1L/tmb/xXP/25D/5ZH/5cz//7b//9v///+TlVm2AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAO6klEQVR4nO2dDX/bthGH2TfPTppm1tK9pXbXJOq2TK0dRams7//FRoCkBAJ3ONzhQFIy/r/WjkzgQDzCG3EA2ByqomrmvoGlqwIiVAERqoAIVUCEKiBCFRChCohQBUSoAiJUARGqgAhVQIQqIEIVEKEKiFAFRKgCIlQBEaqACFVAhCogQhUQoQqIUAVEqAIiVAERqoAIVUCEKiBCFRChCojQGQB6um++/Qhe2d00zdUDdOHlRySevYLGA3QGgNbX5j9IW/jPh/3KkIHidVeweJCWD2j/5n33vYda34IxNs0PbXgoXncFiwdq+YB2fWZDPf0M/fVw+O3BxIHidVeweKDOGdD+zffN12BeMUCDNSweoHMGtHvx/rD/Eap8cUB4PEDnDMgIQRcFhMcDtHxAkUb6EAMEx7tAQHg3v2277N0rdBwExjNX8HiAzgDQfoUNFDcNcsUCAuPZK2g8QGcAaF6NAe1XtwZv6jD8OWgMaH31sLtBR/bPUiNA+9XdYdvc2VasqlMAaN3C2VRAR3lV7Hq/unrYr2oVO8pvpNuHlKf7yuckzW4etyW54l7StczKcwVEyAvc1rGrB858UlrCFwNo+/X7jWmkZYQuH9DTfTuQbofRwm7+8gGZcZABJBwoXj6goQStZQ9jlw+ob4M27dMGT805SgLI9GJN+oT2ycofpVTQsgiQUBVQBVQBkYDa4aFtgYy43Tw/G19Wb9OyAf71f03zOtf+wktQFqAvKwJPKUCDs4g9UJwcEBm5LCD2o0YM0Oebf7Y19/Xnm6Yx9/yhsb9tBtqaQlUVyLIx9c1/h9hS+3xA69MYivuwGgf01bv2Vk2O2v8//Km97/YPJgPm9+ebOCG8BA2xpfZzShBbcUCvjz/efvnLO/vbZKBrST61uZIAOsaW2l9MI21u1/nR3rKpA20GPrVf8PGPbEDH2FL7CwXUNgvf/Lv7hj/19VkIaIgttb+YcdAoA8cPx2+YEFGCMuwvswTZFuFT07cRCT19pA16m2d/mYC6L7fte4de5o8PxPeMATrGltpfJiDTRnz1rr3p4zgl3onFBop9bKl9QRt0GgeVH0mnakEPqzmqgCgr5yhdQMflkOAOiHLr1Ga3nDgO6vY4GIFLI2fPRjnLacH6PQ4HbFHu7NkoZzktWLfHwQhenj17NspZhtw+kNsQAcRr8AQqaDnt1j3HoXUZbgDHWC1BRsb1bAS4nisgI7N4wQiYk97VRvpgSlDXgW/wEvTMu/mtnY3eYm2QWXoG7oBQzobTci4IUNbDKi84YaxZJqAJEksyNe56KyDPkD8yWRigoZrNVsWCgdvCALUDoM31YXfDXmHGDH9Glr1x0O1ha1a5ctcozp6NcpaDgeKwYbhEYgLNbjl41IhvMs5LTKDZLY+DmWUd69s5qhj2VL0wQOYpAt9knJ0YHh+ddlgaoLKJodHxaZkK6AAMfoweHxUsR1MVBUNnFFUSQyLDfIoA4j/lpc4ocqww48b4KAMSPAanzigyrDAV5aM+T+B8SIzjfojMKDKs5OvERxuQ+yExjvsBnVF03Km7G2Cziy4gh4+qZdE8QdqM4mme1e65CwqYKiCXj/JM0+hjYqzjvyIzis7jR3GvxuOIjy6g8cfEWCmBHCpP93f2gf+YqLLj0OOzNMchIrfYtM1R2MepZcPDs7yBojnEM2yEHUD2hCGlNij89gI+SwPUNdLBnlUHkGYbBAGK35+mcgaKfjdfppFO4bMwQOhA8dTN253jOlUsABRWsKUBwkrQMEdkPKtqA8UkPjqAwK5Ksw1iWkmMEwJSshympAYI6cW4VpKiJPFRApRhebYJM/+uwQqmcn/IWDCnDeLfgyyaI4SPijtAD9DQi/FvQhbtJIzP/P4Sr5EWng+oAKiUZVVA8g11vOCBUD75gHL9JUvwauAVbGkDxdKJIYrwWRagTVu5ZK00LxteqY/xWRQg4+3hLw3iJDaE9gGpWU4Sz+N2CtYNgtjrFjiJ9YEZfJYEqBsEyTp6Tja8gVu0gpUAxHRJzgFo9DHORx8Q12c7OSAen1yvf/g3rs92ZkBEBdMHxPbZpgFyPKvtP8PTc9KzwSxABbz+TMtJjkN3B4t5L8ALLcchyUcbEN+pnRTMmbSHjxgSZoOsYFmAQD5lAHlun9FN5HhWaT7qgNzLRTyr26tfgecRWTYS+GQAIviUKkFmWj9c/XEegETLIvgl6MEuYBBY8ZXCRw6IKkClGmn7jsBzAESmJwNkViduw3GO283fAmOltMT8MaLg/jLkd5kiQN3qzfDNLI5n1QwUhY10KqAyOw6FC2tAr0aZRZzpfEoAki6sAf1i/KNKkwK5ofAx4nhoogVIvPJoHKzzyu9u2EeVpoRJK0CF9qyKVx55wQr65r0ChIYa2xIB0lx5NJlXI7mCsS3TRnJWHs0FSNEykRaW3sIACfnMv/LInQ/KOMuVFTphlkNouY/jRYLTW1gJcsXgowQow/JoylV+4DYnMIePBFAaH1kVmwIQp4JpAMpcmuUE20xzPA6LjwBQYgGSPYtNUIKw7xMxkd1G5i7NmqKRdjOP9Cjl9s2fHyAwQLF989lLsyYYB6XwkVlOkCKgmEZHAANHn6QCgncbxFwvmYDy166lBRudDbjmnYJHFaC4a2ppgOA56dGROdvvWCWoGRUgMADj/phSWNyXNCc92pL5r/84gGj3JFXBWPdHhk4bI/Zh+Z5VbE7aBbS5ZbVBZAvNuT86tA8o33LSnLS7Z/WvD9xGepCEDw9QidWPSXPSDqD1HbsX6yWpYDxARVY/Js1JnxrpfqQk8ayK+DABcRIs183LShDgVkia6k8IA9tTWtyXFszxrKoBSltVJAaktfrRC9aSuHpYs7fV0YkJCxADUKHVj+Ng3cuwzekKPMGJRYdAiavSpAPF2BC64VgOunmzF0HJ9XxiAPEpCii2wSoDkD0cyDxsqACKPWMkL2sUA0INDinnlCCVM8watwDh1wSWaaUsHclog1QOFmjiFSzDMq1oBWNaDnsxpcULMT55lmlpLu4rNeVKTXLILUOBmD18uuUpAGXxWRwg/aNKsypYWjZEfMSN9EH5qNLx4m12geUDwg4B8S3Juvmu+1I8qtTjUwJQIh8NQMOsod4q1/GhkYJNL1xAyXyySpDake3ZfBKykbA4FJx6lrVB3XHJaidQZfPhAmI4bmXPYsIFHkhi+XyYwxCOY1J1HDQ+DTi2FQFdqCDcdMeKxXLcFppyNQ/8kf1iYzdh1giIc3+xBBXPD7LejG100p7YL6bOh7fyqMTSLCeYPdjENNPBCSfe8ZvOSV5j96Q+n3RA/jHCtGW2Z9VWIrsywX+JoQcoHAU0Q5Lu/bJuN+H+wmvj9o6ZILsE2Zno7tD2mOsZ3As0AHLvl3e79P2Fl/LSEwC66ynFAUFPan5ianyiXv8oH7LyyAB1zU/kNGB4Qt9LzH2rQeZ8Cha9ofloA7Itjy0ew8sRRpf6dik8liJI7HHEpwwggk/KWQd8QO3wZr8yZSdcQnbyrK5J37wqH9ShhI1H+6sJ6QrGQVs7V7a7yZowGx2Pkc0HcyjF+Og6tbWnXMfFJ986AshNT9gfSAGJDrwdrDxq86GyIeczC6DHcf3i20Etw8rAMwsgvdGPbxmW/xIX3lcyCyB+zDTLkEI8iwdUQo7lxu+8xtNx3Co916S9StMcWvYevYHiI7XMCXZcCy0GJPgmUyz7ExPBK5IEaQoeNU4T0tIVZtp4oIkUS2e6uUqwBAkT08cDZONRic8cI+kCfLz7G9PJS08GCDmBSikxgfyqdcSTNF+aaDk9GHYClVJiArkPMT6dvFRFbdBCXiMaWPYbHo3WTgKo7AlUIjkPMcp9gKiKYSdQjU8D5m3JzJM7DloAIOwEKveYwOvAKzQVoBKWdYJ5pwGHu1km6cXmsZwUDH8JZIGiP1ZBy2zPqhG826fQWzJTNLvlcTBkt08F1Avb7VMB9cJ2+9RGuhe622fubn5Gy1AbFC7idPas9v8UJSbQ7JbDXky02+ccJQKUJdyW5MpoonuqNDMDi21VQIStiwDkHtHV8Ofthbd0RoDGYk8JRRO+QEBbwav8ngMg4Y5DKuGLAdTv9uEPhC5X4Jw0e8fhBUvHq3HB8kpQ9xgqe9nqZcpvg+xC+9oGneQOFE+jxFrFjio3nXAhqoAIeb1YrWK+oBIk6uVBl7SV8daC3aKd24bj2UtoxCkFVrFw0pkWOFdttUWs7Vf97sYwXncJizipQECCIgR7O6yQUwc3zQ+9CymI113CIk4rEJBgrgP2lxk9/QyPqn6zp+aC8bpLWMRpBQHirzCLAdq/+R5xA6CABnNYxCkF9mKClhEHZPYo7n+EiiQBCI84pbTGQTggIwRdHBAecUppAYo00ocYICTeMgGhR1OkCO3mTZe4e4WOg+B45hIecUo5gPCjKVIEuqStNtjI3AKC49lLaMQp5QDCj6Z4zhr5xbCjKZ6zXEDo0RTPWR4g+GiK5yyvDUKOpnjGcgBFjqZ4xnLHQfKjKS5YdcqVUAVEqAIiVAERqoAIVUCEKiBCFRChCojQtICG40FOE3LmLfcr7vzc9u7AjyTUxICCpxgJoMngGFVAhGYDtO1W8w+Auo92osUute1D9rN4d7sXv9wMq//tmobfV2bu/KdV+8fhjPSNbH8AobkAGQrGg9sDGj7aDaHN9XG97RHQTXPXL1Lu/ri3gL5+34b+9qP1lZuprPBIhGzNBKgDYGegDKDjR7M8cv33q4fhyNgTIBNgcypWHaDbw/DjrtRk8Sy92OBZsvm6s/l3Pr755eXHIaMnQCZAv7r0BGiYJG5/dNdEHquoZipBXUY6Osf8m0yvb3evfn/zfnA8ndogk/0ooGAEoaNZAYUlqK1Fv14f1n++v+vaXAagQgtBFtYGHXYv/3Z72Hw3nFptW5Y2+10btPbbIAdQqb5/Yb1Y+6OltG1OIK8enu6bO9thnXqx2xBQ55BZq5ejZY2DDp1LxemtzZKln0wd/IfzRpj1MA5yAdk6qe+POZOHVf3eKVUVEKEKiNCZAJpPFRChCohQBUSoAiJUARGqgAhVQIQqIEIVEKEKiFAFRKgCIvR/unbobuBnhdgAAAAASUVORK5CYII=" /></p>
-<p>The <code>effectPlotData()</code> function also allows to compute marginal predictions using the marginalized coefficients described above. This is achieved by setting <code>marginal = TRUE</code> in the respective call (due to the require computing time, plot not shown):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_data_m &lt;-<span class="st"> </span><span class="kw">effectPlotData</span>(fm, nDF, <span class="dt">marginal =</span> <span class="ot">TRUE</span>)
+<p>The <code>effectPlotData()</code> function also allows to compute marginal predictions using the marginalized coefficients described above. This is achieved by setting <code>marginal = TRUE</code> in the respective call (due to the required computing time, plot not shown):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_data_m &lt;-<span class="st"> </span><span class="kw">effectPlotData</span>(fm, nDF, <span class="dt">marginal =</span> <span class="ot">TRUE</span>, <span class="dt">cores =</span> <span class="dv">4</span>)
 
-<span class="kw">xyplot</span>(<span class="kw">expit</span>(pred) <span class="op">+</span><span class="st"> </span><span class="kw">expit</span>(low) <span class="op">+</span><span class="st"> </span><span class="kw">expit</span>(upp) <span class="op">~</span><span class="st"> </span>time <span class="op">|</span><span class="st"> </span>sex, <span class="dt">data =</span> plot_data_m,
-       <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">col =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">lwd =</span> <span class="dv">2</span>,
-       <span class="dt">xlab =</span> <span class="st">&quot;Follow-up time&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Marginal Probabilities&quot;</span>)</code></pre></div>
+<span class="co"># we put the two groups in the same panel</span>
+my.panel.bands &lt;-<span class="st"> </span><span class="cf">function</span>(x, y, upper, lower, fill, col, subscripts, ..., font, 
+                           fontface) {
+    upper &lt;-<span class="st"> </span>upper[subscripts]
+    lower &lt;-<span class="st"> </span>lower[subscripts]
+    <span class="kw">panel.polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(upper, <span class="kw">rev</span>(lower)), <span class="dt">col =</span> fill, <span class="dt">border =</span> <span class="ot">FALSE</span>, ...)
+}
+
+<span class="kw">xyplot</span>(<span class="kw">expit</span>(pred) <span class="op">~</span><span class="st"> </span>time, <span class="dt">group =</span> sex, <span class="dt">data =</span> plot_data_m, 
+       <span class="dt">upper =</span> <span class="kw">expit</span>(plot_data_m<span class="op">$</span>upp), <span class="dt">low =</span> <span class="kw">expit</span>(plot_data_m<span class="op">$</span>low), 
+       <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), 
+       <span class="dt">fill =</span> <span class="kw">c</span>(<span class="st">&quot;#0000FF80&quot;</span>, <span class="st">&quot;#FF000080&quot;</span>),
+       <span class="dt">panel =</span> <span class="cf">function</span> (x, y, ...) {
+           <span class="kw">panel.superpose</span>(x, y, <span class="dt">panel.groups =</span> <span class="st">'my.panel.bands'</span>, ...)
+           <span class="kw">panel.xyplot</span>(x, y, <span class="dt">lwd =</span> <span class="dv">2</span>,  ...)
+}, <span class="dt">xlab =</span> <span class="st">&quot;Follow-up time&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Marginal Probabilities&quot;</span>)</code></pre></div>
 </div>
 <div id="comparing-two-models" class="section level2">
 <h2>Comparing Two Models</h2>
@@ -297,6 +312,123 @@ expit &lt;-<span class="st"> </span><span class="cf">function</span> (x) <span c
 <span class="co">#&gt;       AIC    BIC log.Lik  LRT df p.value</span>
 <span class="co">#&gt; gm 730.94 746.57 -359.47                </span>
 <span class="co">#&gt; fm 731.66 731.66 -358.83 1.29  1  0.2566</span></code></pre></div>
+</div>
+<div id="predictions" class="section level2">
+<h2>Predictions</h2>
+<p>Using the <code>predict()</code> method we can calculate predictions for new subjects. As an example, we treat subject 1 from the <code>DF</code> dataset as a new patient (in the code below we change his <code>id</code> variable):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred_DF &lt;-<span class="st"> </span>DF[DF<span class="op">$</span>id <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, ][<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]
+pred_DF<span class="op">$</span>id &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;N&quot;</span>, <span class="kw">as.character</span>(pred_DF<span class="op">$</span>id))
+pred_DF
+<span class="co">#&gt;   id      time  sex y</span>
+<span class="co">#&gt; 1 N1 0.0000000 male 0</span>
+<span class="co">#&gt; 2 N1 0.1424363 male 0</span>
+<span class="co">#&gt; 3 N1 1.7055512 male 0</span>
+<span class="co">#&gt; 4 N1 9.1391210 male 0</span></code></pre></div>
+<p>We start by computing predictions based only on the fixed-effects part of the model; because of the nonlinear link function, these predictions are of subjects with random effects value equal to zero, which is not to the average predictions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fm, <span class="dt">newdata =</span> pred_DF, <span class="dt">type_pred =</span> <span class="st">&quot;response&quot;</span>,
+        <span class="dt">type =</span> <span class="st">&quot;mean_subject&quot;</span>, <span class="dt">se.fit =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; $pred</span>
+<span class="co">#&gt;         1         2         3         4 </span>
+<span class="co">#&gt; 0.1118895 0.1156621 0.1647183 0.5815852 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $se.fit</span>
+<span class="co">#&gt;         1         2         3         4 </span>
+<span class="co">#&gt; 0.3199119 0.3162100 0.2874263 0.4608707</span></code></pre></div>
+<p>Population averaged predictions can be obtained by first calculating the marginalized coefficients (using <code>marginal_Coefs()</code>) and multiplying them with the fixed effects design matrix; this is achieved using the option <code>type = &quot;marginal&quot;</code> (due to the required computing time, predictions not shown):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fm, <span class="dt">newdata =</span> pred_DF, <span class="dt">type_pred =</span> <span class="st">&quot;response&quot;</span>,
+        <span class="dt">type =</span> <span class="st">&quot;marginal&quot;</span>, <span class="dt">se.fit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>Finally, we calculate subject-specific predictions; the standard errors are calculated with a Monte Carlo scheme (for details check the online help file):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fm, <span class="dt">newdata =</span> pred_DF, <span class="dt">type_pred =</span> <span class="st">&quot;response&quot;</span>,
+        <span class="dt">type =</span> <span class="st">&quot;subject_specific&quot;</span>, <span class="dt">se.fit =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; $pred</span>
+<span class="co">#&gt;          1          2          3          4 </span>
+<span class="co">#&gt; 0.07623721 0.07729536 0.08982069 0.17702658 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $se.fit</span>
+<span class="co">#&gt;          1          2          3          4 </span>
+<span class="co">#&gt; 0.03050864 0.03071506 0.03491426 0.11869586 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $low</span>
+<span class="co">#&gt;          1          2          3          4 </span>
+<span class="co">#&gt; 0.03921410 0.04013640 0.04605767 0.05164671 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $upp</span>
+<span class="co">#&gt;         1         2         3         4 </span>
+<span class="co">#&gt; 0.1499965 0.1523295 0.1781380 0.5064422 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $success_rate</span>
+<span class="co">#&gt; [1] 0.4833333</span></code></pre></div>
+<p>Suppose now that we want predictions at future time points at which no responses <code>y</code> have been recorded, e.g.,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">future_Times &lt;-<span class="st"> </span>pred_DF[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;sex&quot;</span>)]
+future_Times<span class="op">$</span>time &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)
+future_Times
+<span class="co">#&gt;   id time  sex</span>
+<span class="co">#&gt; 1 N1    3 male</span>
+<span class="co">#&gt; 2 N1    4 male</span>
+<span class="co">#&gt; 3 N1    5 male</span></code></pre></div>
+<p>Predictions at these time points can be calculated by provide this data frame in the <code>newdata2</code> argument of <code>predict()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fm, <span class="dt">newdata =</span> pred_DF, <span class="dt">newdata2 =</span> future_Times, <span class="dt">type_pred =</span> <span class="st">&quot;response&quot;</span>,
+        <span class="dt">type =</span> <span class="st">&quot;subject_specific&quot;</span>, <span class="dt">se.fit =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; $pred</span>
+<span class="co">#&gt;          1          2          3          4 </span>
+<span class="co">#&gt; 0.07623721 0.07729536 0.08982069 0.17702658 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $pred2</span>
+<span class="co">#&gt;          1          2          3 </span>
+<span class="co">#&gt; 0.08078333 0.09203400 0.10467312 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $se.fit</span>
+<span class="co">#&gt;          1          2          3          4 </span>
+<span class="co">#&gt; 0.03050864 0.03071506 0.03491426 0.11869586 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $se.fit2</span>
+<span class="co">#&gt;          1          2          3 </span>
+<span class="co">#&gt; 0.04169858 0.04932497 0.05910452 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $low</span>
+<span class="co">#&gt;          1          2          3          4 </span>
+<span class="co">#&gt; 0.03921410 0.04013640 0.04605767 0.05164671 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $upp</span>
+<span class="co">#&gt;         1         2         3         4 </span>
+<span class="co">#&gt; 0.1499965 0.1523295 0.1781380 0.5064422 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $low2</span>
+<span class="co">#&gt;          1          2          3 </span>
+<span class="co">#&gt; 0.04982712 0.05069234 0.05062539 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $upp2</span>
+<span class="co">#&gt;         1         2         3 </span>
+<span class="co">#&gt; 0.2077120 0.2286854 0.2629862</span></code></pre></div>
+</div>
+<div id="simulate" class="section level2">
+<h2>Simulate</h2>
+<p>The <code>simulate()</code> method can be used to simulate response outcome data from a fitted mixed model. For example, we simulate two realization of our dichotomous outcome:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">simulate</span>(fm, <span class="dt">nsim =</span> <span class="dv">2</span>, <span class="dt">seed =</span> <span class="dv">123</span>), <span class="dv">10</span>)
+<span class="co">#&gt;       [,1] [,2]</span>
+<span class="co">#&gt;  [1,]    1    0</span>
+<span class="co">#&gt;  [2,]    0    0</span>
+<span class="co">#&gt;  [3,]    1    0</span>
+<span class="co">#&gt;  [4,]    1    1</span>
+<span class="co">#&gt;  [5,]    1    1</span>
+<span class="co">#&gt;  [6,]    1    0</span>
+<span class="co">#&gt;  [7,]    1    1</span>
+<span class="co">#&gt;  [8,]    1    0</span>
+<span class="co">#&gt;  [9,]    0    0</span>
+<span class="co">#&gt; [10,]    0    0</span></code></pre></div>
+<p>By setting <code>acount_MLEs_var = TRUE</code> in the call to <code>simulate()</code> we also account for the variability in the maximum likelihood estimates in the simulation of new responses. This is achieved by simulating each time a new response vector using a realization for the parameters from a multivariate normal distribution with mean the MLEs and covariance matrix the covariance matrix of the MLEs:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">simulate</span>(fm, <span class="dt">nsim =</span> <span class="dv">2</span>, <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">acount_MLEs_var =</span> <span class="ot">TRUE</span>), <span class="dv">10</span>)
+<span class="co">#&gt;       [,1] [,2]</span>
+<span class="co">#&gt;  [1,]    0    0</span>
+<span class="co">#&gt;  [2,]    1    0</span>
+<span class="co">#&gt;  [3,]    1    0</span>
+<span class="co">#&gt;  [4,]    0    0</span>
+<span class="co">#&gt;  [5,]    0    0</span>
+<span class="co">#&gt;  [6,]    1    0</span>
+<span class="co">#&gt;  [7,]    0    0</span>
+<span class="co">#&gt;  [8,]    1    0</span>
+<span class="co">#&gt;  [9,]    0    0</span>
+<span class="co">#&gt; [10,]    0    1</span></code></pre></div>
 </div>
 </div>
 

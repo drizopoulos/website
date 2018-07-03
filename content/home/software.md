@@ -22,6 +22,7 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[GLMMadaptive Basics](vignettes/GLMMadaptive_Basics.html)]
 [[Methods for MixMod Objects](vignettes/MixMod_Objects.html)]
 [[Custom Models](vignettes/Custom_Models.html)]
+[[Zero-Inflated & Two-Part Models](vignettes/Zero-Inflated_Models.html)]
 
 - **JMbayes**: Joint Models for longitudinal and time-to-event data under a Bayesian approach  
 [[GitHub](https://github.com/drizopoulos/JMbayes)] 

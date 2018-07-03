@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-06-13" />
+<meta name="date" content="2018-07-03" />
 
 <title>GLMMadaptive Basics</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">GLMMadaptive Basics</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-06-13</em></h4>
+<h4 class="date"><em>2018-07-03</em></h4>
 
 
 <div id="TOC">
@@ -285,7 +285,7 @@ DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rpoi
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cbind</span>(<span class="st">'unpenalized'</span> =<span class="st"> </span><span class="kw">fixef</span>(gm1), <span class="st">'penalized'</span> =<span class="st"> </span><span class="kw">fixef</span>(gm2))
 <span class="co">#&gt;                unpenalized   penalized</span>
 <span class="co">#&gt; (Intercept)     3.03545929  2.94238986</span>
-<span class="co">#&gt; sexfemale      -0.79302156 -0.82073287</span>
+<span class="co">#&gt; sexfemale      -0.79302156 -0.82073289</span>
 <span class="co">#&gt; time            0.24028826  0.24043929</span>
 <span class="co">#&gt; sexfemale:time -0.05104033 -0.05118503</span></code></pre></div>
 <p>In this example we observe small differences. The users have the option to alter the specification of the Student’s t penalty by directly specifying the mean, scale and degrees of freedom arguments of the distribution.</p>
