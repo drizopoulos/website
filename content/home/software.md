@@ -19,6 +19,7 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 - **GLMMadaptive**: Generalized Linear Mixed Models using Adaptive Gaussian Quadrature  
 [[GitHub](https://github.com/drizopoulos/GLMMadaptive)] 
 [[CRAN](https://cran.r-project.org/package=GLMMadaptive)]
+[[website](https://drizopoulos.github.io/GLMMadaptive/)]
 [[GLMMadaptive Basics](vignettes/GLMMadaptive_Basics.html)]
 [[Methods for MixMod Objects](vignettes/MixMod_Objects.html)]
 [[Custom Models](vignettes/Custom_Models.html)]
