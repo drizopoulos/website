@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-07-13" />
+<meta name="date" content="2018-09-18" />
 
 <title>Methods for MixMod Objects</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Methods for MixMod Objects</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>2018-07-13</em></h4>
+<h4 class="date"><em>2018-09-18</em></h4>
 
 
 <div id="TOC">
@@ -244,7 +244,7 @@ DF<span class="op">$</span>y &lt;-<span class="st"> </span><span class="kw">rbin
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_coefs</span>(fm)
 <span class="co">#&gt;    (Intercept)      sexfemale           time sexfemale:time </span>
 <span class="co">#&gt;        -1.6016        -1.0881         0.1766         0.0506</span></code></pre></div>
-<p>The function calculates the marginal probabilities in our case (because we have a binary outcome) using a Monte Carlo procedure with number of samples determined by the <code>M</code> argument.</p>
+<p>The function calculates the marginal log odds ratios in our case (because we have a binary outcome) using a Monte Carlo procedure with number of samples determined by the <code>M</code> argument.</p>
 <p>Standard errors for the marginalized coefficients are obtained by setting <code>std_errors = TRUE</code> in the call to <code>marginal_coefs()</code>, and require a double Monte Carlo procedure for which argument <code>K</code> comes also into play. To speed up computations, the outer Monte Carlo procedure is performed in parallel using package <strong>parallel</strong> and number of cores specified in the <code>cores</code> argument (due to the required computing time, these standard errors are not displayed):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">marginal_coefs</span>(fm, <span class="dt">std_errors =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
@@ -358,14 +358,14 @@ pred_DF
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $success_rate</span>
 <span class="co">#&gt; [1] 0.4833333</span></code></pre></div>
-<p>Suppose now that we want predictions at future time points at which no responses <code>y</code> have been recorded, e.g.,</p>
+<p>Suppose now that we want predictions at time points at which no responses <code>y</code> have been recorded, e.g.,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">future_Times &lt;-<span class="st"> </span>pred_DF[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;sex&quot;</span>)]
-future_Times<span class="op">$</span>time &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)
+future_Times<span class="op">$</span>time &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">10</span>)
 future_Times
 <span class="co">#&gt;   id time  sex</span>
 <span class="co">#&gt; 1 N1    3 male</span>
 <span class="co">#&gt; 2 N1    4 male</span>
-<span class="co">#&gt; 3 N1    5 male</span></code></pre></div>
+<span class="co">#&gt; 3 N1   10 male</span></code></pre></div>
 <p>Predictions at these time points can be calculated by provide this data frame in the <code>newdata2</code> argument of <code>predict()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(fm, <span class="dt">newdata =</span> pred_DF, <span class="dt">newdata2 =</span> future_Times, <span class="dt">type_pred =</span> <span class="st">&quot;response&quot;</span>,
         <span class="dt">type =</span> <span class="st">&quot;subject_specific&quot;</span>, <span class="dt">se.fit =</span> <span class="ot">TRUE</span>)
@@ -375,7 +375,7 @@ future_Times
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $pred2</span>
 <span class="co">#&gt;          1          2          3 </span>
-<span class="co">#&gt; 0.08078333 0.09203400 0.10467312 </span>
+<span class="co">#&gt; 0.08078333 0.09203400 0.19265735 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $se.fit</span>
 <span class="co">#&gt;          1          2          3          4 </span>
@@ -383,7 +383,7 @@ future_Times
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $se.fit2</span>
 <span class="co">#&gt;          1          2          3 </span>
-<span class="co">#&gt; 0.04169858 0.04932497 0.05910452 </span>
+<span class="co">#&gt; 0.04169858 0.04932497 0.13338745 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $low</span>
 <span class="co">#&gt;          1          2          3          4 </span>
@@ -395,11 +395,11 @@ future_Times
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $low2</span>
 <span class="co">#&gt;          1          2          3 </span>
-<span class="co">#&gt; 0.04982712 0.05069234 0.05062539 </span>
+<span class="co">#&gt; 0.04982712 0.05069234 0.05126023 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $upp2</span>
 <span class="co">#&gt;         1         2         3 </span>
-<span class="co">#&gt; 0.2077120 0.2286854 0.2629862</span></code></pre></div>
+<span class="co">#&gt; 0.2077120 0.2286854 0.5668449</span></code></pre></div>
 </div>
 <div id="simulate" class="section level2">
 <h2>Simulate</h2>
