@@ -224,9 +224,9 @@ anova(fit2, fit1)
 # b
 # the model without nonlinear terms
 
-fit3 <- coxph(Surv(time, status) ~ sex * (age + ph.karno), data = lung)
+fit3 <- coxph(Surv(time, status) ~ sex + age + ph.karno, data = lung)
 
-anova(fit3, fit1)
+anova(fit3, fit2)
 
 # c
 # the final model is 
@@ -246,71 +246,77 @@ abline(h = coef(fit4)[2], col = "red", lwd = 2)
 plot(check_PH, var = 3)
 abline(h = coef(fit4)[3], col = "red", lwd = 2)
 
-# partion the time axis at 170 days
-lung_b170 <- lung
-lung_b170$status[lung_b170$time > 170] <- 1
-lung_a170 <- lung[lung$time > 170, ]
+# we split the dataset at 100 and 270 days, 
+# using the survSplit() function
+lung2 <- survSplit(Surv(time, status) ~ sex + age + ph.karno, data = lung,
+                   cut = c(100, 270), episode = "time_group")
 
-fit4_b170 <- coxph(Surv(time, status) ~ sex + age + ph.karno, data = lung_b170)
-fit4_a170 <- coxph(Surv(time, status) ~ sex + age + ph.karno, data = lung_a170)
+# we fit a model that stratifies by the 'time_group' variable, 
+# and we include the interaction of the statifying factor with the two
+# offending variables, i.e., 'age' and 'ph.karno';
+# this will give us separate coefficients per time period
+fit5 <- coxph(Surv(tstart, time, status) ~ sex + (age + ph.karno):strata(time_group),
+              data = lung2)
 
-check_PH_b170 <- cox.zph(fit4_b170)
+summary(fit5)
 
-plot(check_PH_b170, var = 1)
-abline(h = coef(fit4_b170)[1], col = "red", lwd = 2)
+# we check again the PH assumption; 
+# we define first a helper function
+plt_zph <- function (object, var) {
+    plot(cox.zph(object), var = var)
+    abline(h = coef(object)[var], col = "red", lwd = 2)
+}
 
-plot(check_PH_b170, var = 2)
-abline(h = coef(fit4_b170)[2], col = "red", lwd = 2)
+# check PH for sex
+plt_zph(fit5, var = 1)
 
-plot(check_PH_b170, var = 3)
-abline(h = coef(fit4_b170)[3], col = "red", lwd = 2)
+# check PH for age
+opar <- par(no.readonly = TRUE, mfrow = c(2, 2), oma = c(3, 3, 2, 3), 
+            mar = c(2, 0, 0, 0), mgp = c(3, 0.4, 0), tcl = -0.25)
+plt_zph(fit5, var = 2)
+plt_zph(fit5, var = 3)
+plt_zph(fit5, var = 4)
+par(opar)
 
-check_PH_a170 <- cox.zph(fit4_a170)
-
-plot(check_PH_a170, var = 1)
-abline(h = coef(fit4_a170)[1], col = "red", lwd = 2)
-
-plot(check_PH_a170, var = 2)
-abline(h = coef(fit4_a170)[2], col = "red", lwd = 2)
-
-plot(check_PH_a170, var = 3)
-abline(h = coef(fit4_a170)[3], col = "red", lwd = 2)
+# check PH for ph.karno
+opar <- par(no.readonly = TRUE, mfrow = c(2, 2), oma = c(3, 3, 2, 3), 
+            mar = c(2, 0, 0, 0), mgp = c(3, 0.4, 0), tcl = -0.25)
+plt_zph(fit5, var = 5)
+plt_zph(fit5, var = 6)
+plt_zph(fit5, var = 7)
+par(opar)
 
 # Q2
-# before 170 days
-ND_b170 <- with(lung_b170, expand.grid(
-    sex = levels(sex), age = median(age), ph.karno = mean(ph.karno)
-))
+ND <- with(lung, expand.grid(sex = levels(sex), age = median(age), 
+                             ph.karno = mean(ph.karno), time_group = 1:3))
 
-probs_b170 <- survfit(fit4_b170, newdata = ND_b170)
+probs <- survfit(fit5, newdata = ND)
 
-probs_b170
+probs
 
-plot(probs_b170)
+plot(probs)
 
-# after 170 days
-ND_a170 <- with(lung_a170, expand.grid(
-    sex = levels(sex), age = median(age), ph.karno = mean(ph.karno)
-))
+# survival at 200 days; we only need the second partion from 100 to 270 days
+probs_200 <- survfit(fit5, newdata = ND[ND$time_group == 2, ])
 
-probs_a170 <- survfit(fit4_a170, newdata = ND_a170)
+summary(probs_200, times = 200)
 
-probs_a170
+# survival at 400, 600 and 800 days; we only need the third partion 
+# from 270 days to the end of the study
+probs_400 <- survfit(fit5, newdata = ND[ND$time_group == 3, ])
 
-plot(probs_a170)
-
-summary(probs_a170, times = c(200, 400, 600, 800))
+summary(probs_400, times = c(400, 600, 800))
 
 # Q3
 lung$ph.ecog2 <- lung$ph.ecog
 lung$ph.ecog2[lung$ph.ecog2 > 0] <- 1
 
-fit5 <- coxph(Surv(time, status) ~ sex + age + ph.karno + strata(ph.ecog2), data = lung)
+fit6 <- coxph(Surv(time, status) ~ sex + age + ph.karno + strata(ph.ecog2), data = lung)
 
-summary(fit5)
+summary(fit6)
 
 # Q4
 
-fit6 <- coxph(Surv(time, status) ~ (sex + age + ph.karno) * strata(ph.ecog2), data = lung)
+fit7 <- coxph(Surv(time, status) ~ (sex + age + ph.karno) * strata(ph.ecog2), data = lung)
 
-anova(fit5, fit6)
+anova(fit6, fit7)
