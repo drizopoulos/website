@@ -25,6 +25,8 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[Multiple Comparisons for MixMod Objects](vignettes/Multiple_Comparisons_MixMod.html)]
 [[Custom Models](vignettes/Custom_Models.html)]
 [[Zero-Inflated & Two-Part Models](vignettes/Zero-Inflated_Models.html)]
+[[Dynamic Predictions](vignettes/Dyn_Preds_GLMMadaptive.html)]
+
 
 - **JMbayes**: Joint Models for longitudinal and time-to-event data under a Bayesian approach  
 [[GitHub](https://github.com/drizopoulos/JMbayes)] 
