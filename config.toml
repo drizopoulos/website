@@ -27,7 +27,7 @@ defaultContentLanguageInSubdir = false
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "DRizopoulos.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
   email = "d.rizopoulos@erasmusmc.nl"
-  address = "Building Na Room 2414, Erasmus MC, Wytemaweg 80, 3015 CN Rotterdam, the Netherlands"
+  address = "Building Na Room 2815, Erasmus MC, Wytemaweg 80, 3015 CN Rotterdam, the Netherlands"
   skype = "d.rizopoulos"
   telegram = ""
 
