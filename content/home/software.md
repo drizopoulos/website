@@ -22,6 +22,7 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[website](https://drizopoulos.github.io/GLMMadaptive/)]
 [[GLMMadaptive Basics](vignettes/GLMMadaptive_Basics.html)]
 [[Methods for MixMod Objects](vignettes/MixMod_Objects.html)]
+[[Goodness-of-Fit for MixMod Objects](vignettes/Goodness_of_Fit_MixMod.html)]
 [[Multiple Comparisons for MixMod Objects](vignettes/Multiple_Comparisons_MixMod.html)]
 [[Custom Models](vignettes/Custom_Models.html)]
 [[Zero-Inflated & Two-Part Models](vignettes/Zero-Inflated_Models.html)]
