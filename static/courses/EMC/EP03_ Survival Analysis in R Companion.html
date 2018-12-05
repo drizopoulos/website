@@ -11,7 +11,7 @@
 
 <meta name="author" content="Dimitris Rizopoulos" />
 
-<meta name="date" content="2018-09-27" />
+<meta name="date" content="2018-12-01" />
 
 <title>EP03: Survival Analysis in R Companion</title>
 
@@ -124,7 +124,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">EP03: Survival Analysis in R Companion</h1>
 <h4 class="author"><em>Dimitris Rizopoulos</em></h4>
-<h4 class="date"><em>September 27, 2018</em></h4>
+<h4 class="date"><em>December 01, 2018</em></h4>
 
 </div>
 
@@ -501,7 +501,7 @@ xyplot(pred + lo + up ~ age | drug, data = ND, type = &quot;l&quot;,
 <pre class="r"><code>fit_weib &lt;- survreg(Surv(Time, death) ~ drug * gender, data = aids.id)</code></pre>
 <p>Next, we construct the residuals based on their definition</p>
 <pre class="r"><code>fitted_values &lt;- fit_weib$linear.predictors
-resids &lt;- (fit_weib$y[, 1] - fitted_values) / fit_weib$scale</code></pre>
+resids &lt;- (log(fit_weib$y[, 1]) - fitted_values) / fit_weib$scale</code></pre>
 <p>We then compute the Kaplan-Meier estimate of these residuals, and we plot it. Lines 3-5 of the code below are used to superimpose in the graph the assumed Weibull distribution.</p>
 <pre class="r"><code>resKM &lt;- survfit(Surv(resids, death) ~ 1, data = aids.id)
 plot(resKM, mark.time = FALSE, xlab = &quot;AFT Residuals&quot;, ylab = &quot;Survival Probability&quot;)
@@ -542,7 +542,7 @@ summary(fit)</code></pre>
 ## sexfemale        0.6244     1.6014    0.4043    0.9644
 ## age              1.0438     0.9581    1.0265    1.0613
 ## 
-## Concordance= 0.629  (se = 0.026 )
+## Concordance= 0.629  (se = 0.024 )
 ## Rsquare= 0.101   (max possible= 0.991 )
 ## Likelihood ratio test= 33.25  on 3 df,   p=3e-07
 ## Wald test            = 34.87  on 3 df,   p=1e-07
@@ -605,7 +605,7 @@ summary(fit)</code></pre>
 ##           exp(coef) exp(-coef) lower .95 upper .95
 ## sexfemale    0.5219      1.916    0.3403    0.8006
 ## 
-## Concordance= 0.537  (se = 0.014 )
+## Concordance= 0.537  (se = 0.016 )
 ## Rsquare= 0.024   (max possible= 0.991 )
 ## Likelihood ratio test= 7.73  on 1 df,   p=0.005
 ## Wald test            = 8.87  on 1 df,   p=0.003
@@ -760,7 +760,7 @@ summary(fit)</code></pre>
 ## drugD-penicil     0.900     1.1111    0.6361     1.273
 ## log(serBilir)     2.957     0.3382    2.4571     3.559
 ## 
-## Concordance= 0.816  (se = 0.03 )
+## Concordance= 0.816  (se = 0.021 )
 ## Rsquare= 0.396   (max possible= 0.985 )
 ## Likelihood ratio test= 157.3  on 3 df,   p=&lt;2e-16
 ## Wald test            = 155.7  on 3 df,   p=&lt;2e-16
@@ -791,7 +791,7 @@ summary(fit_int)</code></pre>
 ## log(serBilir)            2.9909     0.3343    2.4815     3.605
 ## age:strata(sex)female    1.0182     0.9822    0.9783     1.060
 ## 
-## Concordance= 0.817  (se = 0.03 )
+## Concordance= 0.817  (se = 0.021 )
 ## Rsquare= 0.397   (max possible= 0.985 )
 ## Likelihood ratio test= 158.1  on 4 df,   p=&lt;2e-16
 ## Wald test            = 156.8  on 4 df,   p=&lt;2e-16
@@ -875,7 +875,7 @@ summary(fit_tv_coef)</code></pre>
 ## ph.karno:strata(time_group)time_group=1    0.9832
 ## ph.karno:strata(time_group)time_group=2    1.0199
 ## 
-## Concordance= 0.641  (se = 0.032 )
+## Concordance= 0.641  (se = 0.025 )
 ## Rsquare= 0.076   (max possible= 0.988 )
 ## Likelihood ratio test= 26.3  on 3 df,   p=8e-06
 ## Wald test            = 27.23  on 3 df,   p=5e-06
@@ -914,7 +914,7 @@ summary(td_Cox)</code></pre>
 ##     exp(coef) exp(-coef) lower .95 upper .95
 ## CD4    0.8266       1.21    0.7883    0.8668
 ## 
-## Concordance= 0.691  (se = 0.022 )
+## Concordance= 0.691  (se = 0.018 )
 ## Rsquare= 0.062   (max possible= 0.786 )
 ## Likelihood ratio test= 90.15  on 1 df,   p=&lt;2e-16
 ## Wald test            = 61.74  on 1 df,   p=4e-15
@@ -953,7 +953,7 @@ summary(marginal_model)</code></pre>
 ##     exp(coef) exp(-coef) lower .95 upper .95
 ## age     1.019     0.9814     1.005     1.033
 ## 
-## Concordance= 0.551  (se = 0.026 )
+## Concordance= 0.551  (se = 0.025 )
 ## Rsquare= 0.018   (max possible= 0.999 )
 ## Likelihood ratio test= 4.21  on 1 df,   p=0.04
 ## Wald test            = 6.96  on 1 df,   p=0.008
@@ -983,7 +983,7 @@ summary(frailty_model)</code></pre>
 ## Iterations: 6 outer, 20 Newton-Raphson
 ##      Variance of random effect= 5e-07   I-likelihood = -737.3 
 ## Degrees of freedom for terms= 1 0 
-## Concordance= 0.554  (se = 0.026 )
+## Concordance= 0.554  (se = 0.554 )
 ## Likelihood ratio test= 4.21  on 1 df,   p=0.04</code></pre>
 <p>In this particular example, we observe that the heterogeneity between the different institutions (quantified by the variance of the frailty term) is rather minimal.</p>
 <div align="right">
@@ -1022,7 +1022,7 @@ summary(fit1)</code></pre>
 ## drugD-penicil    0.7891      1.267    0.3768    1.6530
 ## age              0.9080      1.101    0.8686    0.9492
 ## 
-## Concordance= 0.73  (se = 0.056 )
+## Concordance= 0.73  (se = 0.042 )
 ## Rsquare= 0.069   (max possible= 0.625 )
 ## Likelihood ratio test= 22.32  on 2 df,   p=1e-05
 ## Wald test            = 18.54  on 2 df,   p=9e-05
@@ -1044,7 +1044,7 @@ summary(fit2)</code></pre>
 ## drugD-penicil    0.8504     1.1759    0.6064     1.192
 ## age              1.0468     0.9553    1.0295     1.064
 ## 
-## Concordance= 0.629  (se = 0.026 )
+## Concordance= 0.629  (se = 0.024 )
 ## Rsquare= 0.089   (max possible= 0.991 )
 ## Likelihood ratio test= 29.15  on 2 df,   p=5e-07
 ## Wald test            = 29.04  on 2 df,   p=5e-07
