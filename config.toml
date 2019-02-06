@@ -1,6 +1,6 @@
 baseurl = "http://www.drizopoulos.com/"  # End your URL with a `/` trailing slash.
 title = "DRizopoulos"
-copyright = "&copy; 2018 Dimitris Rizopoulos"
+copyright = "&copy; 2019 Dimitris Rizopoulos"
 theme = "hugo-academic"
 enableEmoji = true
 footnotereturnlinkcontents = "<sup>^</sup>"
@@ -27,7 +27,7 @@ defaultContentLanguageInSubdir = false
   gravatar = false  # Get your avatar from Gravatar.com? (true/false)
   avatar = "DRizopoulos.jpg"  # Specify an avatar image (in `static/img/` folder) or delete value to disable avatar.
   email = "d.rizopoulos@erasmusmc.nl"
-  address = "Building Na Room 2815, Erasmus MC, Wytemaweg 80, 3015 CN Rotterdam, the Netherlands"
+  address = "Building Na Room 2815, Erasmus MC, Dr. Molewaterplein 40, 3015 GD Rotterdam, the Netherlands"
   skype = "d.rizopoulos"
   telegram = ""
 
