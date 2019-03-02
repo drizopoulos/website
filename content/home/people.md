@@ -16,13 +16,9 @@ weight = 3
 
 The current composition of my research group:
 
-- **Eleni-Rosalina Andrinopoulou**: Elrozy is a post-Doc working on several extensions of joint models. Currently on time-varying association structures, and a combination of shared random effects joint models with joint latent class models. More info on her GitHub page.  
-[[GitHub](https://github.com/ERandrinopoulou)]
-[[twitter](https://twitter.com/ERandrinopoulou)]
+- **Sara Baart**: Sara is a post-Doc student working on extending joint models in studies with special types of designs, and in particular in case-cohort designs.
 
-- **Sara Baart**: Sara is a PhD student working on fitting joint models in studies with special types of designs, and in particular in case-cohort designs.
-
-- **Nicole Erler**: Nicole is a PhD student working on methods for analyzing longitudinal outcomes with missing baseline and time-varying covariates. She currently also writes an R package for implementing a full Bayesian anlysis in such settings under the sequential approach. More info on her GitHub page.  
+- **Nicole Erler**: Nicole is a post-Doc PhD student working on methods for analyzing longitudinal outcomes with missing baseline and time-varying covariates. She currently also writes an R package for implementing a full Bayesian anlysis in such settings under the sequential approach. More info on her GitHub page.  
 [[GitHub](https://github.com/nerler)]
 [[twitter](https://twitter.com/n_erler)]
 
@@ -31,6 +27,9 @@ The current composition of my research group:
 
 - **Floor van Oudenhoven**: Floor is a PhD student working in novel applications and methodology of joint models in clinical trials. Her motivation comes from Alzheimer's disease.
 
-- **Grigorios Papageorgiou**: Greg is a PhD student working on adapting joint models to incorporate time-varying interventions during follow-up and assess their performance.  
+- **Grigorios Papageorgiou**: Greg is a PhD student working on adapting joint models to incorporate time-varying interventions during follow-up and assess their performance.
 
-- **Anirudh Tomer**: Anirudh is a PhD student working in developing new methods for personalized screening and active surveilance. He works closely with the [PRIAS project](https://www.prias-project.org/). 
+- **Hongchao Qi**: Hongchao is a PhD student working on extensions of power priors methodology in lonigitudinal clinical trials. 
+- **Anirudh Tomer**: Anirudh is a PhD student working in developing new methods for personalized screening and active surveilance. He works closely with the [PRIAS project](https://www.prias-project.org/).
+
+- **Meng Yuan**: Meng is a PhD student working in developing methodology and software for Bayesian multivariate mixed effects models.
