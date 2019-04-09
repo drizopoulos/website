@@ -9,6 +9,6 @@ location = "Rotterdam, Netherlands"
 selected = false
 math = true
 
-url_slides = " https://emcbiostatistics.shinyapps.io/HealthSciencesDay2019_Dimitris/"
+url_slides = "https://emcbiostatistics.shinyapps.io/HealthSciencesDay2019_Dimitris/"
 
 +++
