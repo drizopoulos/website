@@ -39,6 +39,8 @@ list of recent and upcoming courses
 
 - JSM 2019, Denver, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2017/onlineprogram/ActivityDetails.cfm?SessionID=214046)] [[slides](courses/Int/JMwithR_JSM_2019.pdf)] [[R script](courses/Int/JMbasics_JSM_2019.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2019.R)]
+- Jheronimus Academy of Data Science 2019, Den Bosch, Netherlands  
+[[course link](https://www.jads.nl/data-science-in-health.html)] [[slides](courses/Int/JMwithR_JADS_2019.pdf)] [[R script](courses/Int/JMbasics_JADS_2019.R)] [[Solutions practicals](courses/Int/Solutions_JADS_2019.R)]
 - ENAR 2018, Atlanta, USA  
 [[course link](https://enar.org/meetings/spring2018/program/Preliminary_Program.pdf)] [[slides](courses/Int/JMwithR_ENAR_2018.pdf)] [[R script](courses/Int/JMbasics_ENAR_2018.R)] [[Solutions practicals](courses/Int/Solutions_ENAR_2018.R)]
 - Faculty of Medicine, University of Santiago de Compostela, 2018, Spain  
