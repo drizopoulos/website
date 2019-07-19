@@ -9,6 +9,6 @@ publication = "Medical Decision Making, to appear."
 publication_short = "Medical Decision Making (2019)"
 selected = true
 title = "Personalized decision making for biopsies in prostate cancer active surveillance programs"
-url_pdf = "pdf/papers/MDM_AS.pdf"
+url_pdf = "https://journals.sagepub.com/doi/10.1177/0272989X19861963"
 url_project = "project/AS_Scrn/"
 +++
