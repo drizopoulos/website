@@ -27,7 +27,9 @@ The current composition of my research group:
 
 - **Floor van Oudenhoven**: Floor is a PhD student working in novel applications and methodology of joint models in clinical trials. Her motivation comes from Alzheimer's disease.
 
-- **Grigorios Papageorgiou**: Greg is a PhD student working on adapting joint models to incorporate time-varying interventions during follow-up and assess their performance.
+- **Grigorios Papageorgiou**: Greg is a PhD student working on adapting joint models to incorporate time-varying interventions during follow-up and assess their performance.  [[webpage](https://gregpapageorgiou.com/)
+[[GitHub](https://github.com/gpapageorgiou)]
+[[twitter](https://twitter.com/gr_papageorgiou)]
 
 - **Hongchao Qi**: Hongchao is a PhD student working on extensions of power priors methodology in lonigitudinal clinical trials. 
 - **Anirudh Tomer**: Anirudh is a PhD student working in developing new methods for personalized screening and active surveilance. He works closely with the [PRIAS project](https://www.prias-project.org/).
