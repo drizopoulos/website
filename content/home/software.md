@@ -20,14 +20,11 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[GitHub](https://github.com/drizopoulos/GLMMadaptive)] 
 [[CRAN](https://cran.r-project.org/package=GLMMadaptive)]
 [[website](https://drizopoulos.github.io/GLMMadaptive/)]
-[[GLMMadaptive Basics](vignettes/GLMMadaptive_Basics.html)]
-[[Methods for MixMod Objects](vignettes/MixMod_Objects.html)]
-[[Goodness-of-Fit for MixMod Objects](vignettes/Goodness_of_Fit_MixMod.html)]
-[[Multiple Comparisons for MixMod Objects](vignettes/Multiple_Comparisons_MixMod.html)]
-[[Custom Models](vignettes/Custom_Models.html)]
-[[Zero-Inflated & Two-Part Models](vignettes/Zero-Inflated_Models.html)]
-[[Dynamic Predictions](vignettes/Dyn_Preds_GLMMadaptive.html)]
 
+- **cvGEE**: Cross-Validated Predictions and Caclulation of Proper Scoring rules for GEE  
+[[GitHub](https://github.com/drizopoulos/cvGEE)] 
+[[CRAN](https://cran.r-project.org/package=cvGEE)]
+[[website](https://drizopoulos.github.io/cvGEE/)]
 
 - **JMbayes**: Joint Models for longitudinal and time-to-event data under a Bayesian approach  
 [[GitHub](https://github.com/drizopoulos/JMbayes)] 
