@@ -37,6 +37,8 @@ I am the cordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
+- SACEMA 2019, Stellenbosch, S. Africa  
+[[course link](http://www.sacema.org/node/Joint-Modeling-2019)] [[slides](courses/Int/JMwithR_SACEMA_2019.pdf)] [[R script](courses/Int/JMbasics_SACEMA_2019.R)] [[Solutions practicals](courses/Int/Solutions_SACEMA_2019.R)]
 - JSM 2019, Denver, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2019/onlineprogram/ActivityDetails.cfm?SessionID=217957)] [[slides](courses/Int/JMwithR_JSM_2019.pdf)] [[R script](courses/Int/JMbasics_JSM_2019.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2019.R)]
 - Jheronimus Academy of Data Science 2019, Den Bosch, Netherlands  
