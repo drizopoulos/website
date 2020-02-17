@@ -194,14 +194,19 @@ defaultContentLanguageInSubdir = false
   weight = 8
 
 [[menu.main]]
+  name = "Inaugural Speech"
+  url = "#inaugural_speech"
+  weight = 9
+
+[[menu.main]]
   name = "CV"
   url = "#CV"
-  weight = 9
+  weight = 10
 
 [[menu.main]]
   name = "Contact"
   url = "#contact"
-  weight = 10
+  weight = 11
 
 # Taxonomies.
 [taxonomies]

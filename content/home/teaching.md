@@ -37,6 +37,8 @@ I am the cordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
+- Jheronimus Academy of Data Science 2020, Den Bosch, Netherlands  
+[[course link](https://www.jads.nl/data-science-in-health.html)] [[slides](courses/Int/JMwithR_JADS_2020.pdf)] [[R script](courses/Int/JMbasics_JADS_2020.R)] [[Solutions practicals](courses/Int/Solutions_JADS_2020.R)]
 - SACEMA 2019, Stellenbosch, S. Africa  
 [[course link](http://www.sacema.org/node/Joint-Modeling-2019)] [[slides](courses/Int/JMwithR_SACEMA_2019.pdf)] [[R script](courses/Int/JMbasics_SACEMA_2019.R)] [[Solutions practicals](courses/Int/Solutions_SACEMA_2019.R)]
 - JSM 2019, Denver, USA  

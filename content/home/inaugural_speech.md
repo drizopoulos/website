@@ -5,13 +5,13 @@
 date = "2017-06-23T00:00:00"
 draft = false
 
-title = "CV"
+title = "Inaugural Speech"
 subtitle = ""
 widget = "custom"
 
 # Order that this section will appear in.
-weight = 10
+weight = 9
 
 +++
 
-A full list of my publications and grants can be found in my [CV](pdf/CV.pdf).
+A trailer of my inaugural address is available [here](https://youtu.be/OAu8Amd5gWI).
