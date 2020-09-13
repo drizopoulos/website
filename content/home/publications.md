@@ -2,7 +2,7 @@
 # Recent Publications widget.
 # This widget displays recent publications from `content/publication/`.
 
-date = "2016-04-20T00:00:00"
+date = "2020-09-13T00:00:00"
 draft = false
 
 title = "Recent Publications"

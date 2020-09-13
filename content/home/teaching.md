@@ -2,7 +2,7 @@
 # An example of using the custom widget to create your own homepage section.
 # To create more sections, duplicate this file and edit the values below as desired.
 
-date = "2017-06-23T00:00:00"
+date = "2020-09-13T00:00:00"
 draft = false
 
 title = "Teaching"
@@ -14,7 +14,7 @@ weight = 5
 
 +++
 
-I am the cordinator for the following courses at Erasmus MC:
+I am the coordinator for the following courses at Erasmus MC:
 
 - CE08: Repeated Measurements  
 <font size="3">*In the GitHub repository a [shiny](http://shiny.rstudio.com/) app that replicates all analysis in the course*</font>  

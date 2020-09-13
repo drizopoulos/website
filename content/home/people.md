@@ -16,13 +16,15 @@ weight = 3
 
 The current composition of my research group:
 
-- **Pedro Manuel Miranda Afonso**: Pedro is a PhD student working on extensions of joint models for recurrent event data and spatial correlations with application in cystic fibrosis.
-
 - **Sara Baart**: Sara is a post-Doc student working on extending joint models in studies with special types of designs, and in particular in case-cohort designs.
 
-- **Nicole Erler**: Nicole is a post-Doc PhD student working on methods for analyzing longitudinal outcomes with missing baseline and time-varying covariates. She currently also writes an R package for implementing a full Bayesian anlysis in such settings under the sequential approach. More info on her GitHub page.  
+- **Anja Ruten-Budde**: Anja is a post-Doc student working on combinations of joint models with machine learning techniques.
+
+- **Nicole Erler**: Nicole is a post-Doc student working on methods for analyzing longitudinal outcomes with missing baseline and time-varying covariates. She currently also writes an R package for implementing a full Bayesian anlysis in such settings under the sequential approach. More info on her GitHub page.  
 [[GitHub](https://github.com/nerler)]
 [[twitter](https://twitter.com/n_erler)]
+
+- **Pedro Manuel Miranda Afonso**: Pedro is a PhD student working on extensions of joint models for recurrent event data and spatial correlations with application in cystic fibrosis.
 
 - **Aglina Lika**: Aglina is a PhD student working in developing methodology and software for Bayesian multivariate mixed effects models.
 
