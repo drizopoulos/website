@@ -16,15 +16,15 @@ weight = 4
 
 The major [R](https://cran.r-project.org/) packages I have developed and currently maintain
 
+- **JMbayes2**: Extended Joint Models for Longitudinal and Time-to-Event Data   
+[[GitHub](https://github.com/drizopoulos/JMbayes2/)] 
+[[CRAN](https://cran.r-project.org/package=JMbayes2)]
+[[website](https://drizopoulos.github.io/JMbayes2/)]
+
 - **GLMMadaptive**: Generalized Linear Mixed Models using Adaptive Gaussian Quadrature  
 [[GitHub](https://github.com/drizopoulos/GLMMadaptive)] 
 [[CRAN](https://cran.r-project.org/package=GLMMadaptive)]
 [[website](https://drizopoulos.github.io/GLMMadaptive/)]
-
-- **cvGEE**: Cross-Validated Predictions and Caclulation of Proper Scoring rules for GEE  
-[[GitHub](https://github.com/drizopoulos/cvGEE)] 
-[[CRAN](https://cran.r-project.org/package=cvGEE)]
-[[website](https://drizopoulos.github.io/cvGEE/)]
 
 - **JMbayes**: Joint Models for longitudinal and time-to-event data under a Bayesian approach  
 [[GitHub](https://github.com/drizopoulos/JMbayes)] 
@@ -51,4 +51,7 @@ The major [R](https://cran.r-project.org/) packages I have developed and current
 [[sample_analysis_abilities](/Rpgm/ltm_scoring.R)]
 [[sample_analysis_information](/Rpgm/ltm_Info.R)]
 
-
+- **cvGEE**: Cross-Validated Predictions and Caclulation of Proper Scoring rules for GEE  
+[[GitHub](https://github.com/drizopoulos/cvGEE)] 
+[[CRAN](https://cran.r-project.org/package=cvGEE)]
+[[website](https://drizopoulos.github.io/cvGEE/)]
