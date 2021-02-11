@@ -32,7 +32,7 @@ I am the coordinator for the following courses at Erasmus MC:
 [[slides](courses/EMC/EP03.pdf)]
 [[practicals](courses/EMC/EP03_practicals.pdf)]
 [[solutions_practicals](courses/EMC/EP03_solutions.R)]
-[[Survival Analysis in R Companion](courses/EMC/EP03_ Survival Analysis in R Companion.html)]
+[[Survival Analysis in R Companion](courses/EMC/Survival Analysis in R Companion.html)]
 
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
