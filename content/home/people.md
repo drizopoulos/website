@@ -24,12 +24,9 @@ The current composition of my research group:
 [[GitHub](https://github.com/nerler)]
 [[twitter](https://twitter.com/n_erler)]
 
-- **Pedro Manuel Miranda Afonso**: Pedro is a PhD student working on extensions of joint models for recurrent event data and spatial correlations with application in cystic fibrosis.
+- **Pedro Manuel Miranda Afonso**: Pedro is a PhD student working on extensions of joint models for recurrent event data and spatial correlations with applications in cystic fibrosis.
 
 - **Aglina Lika**: Aglina is a PhD student working in developing methodology and software for Bayesian multivariate mixed effects models.
-
-- **Katya Mauff**: Katya is a PhD student working on novel computational approaches for multivariate joint models with multiple longitudinal outcomes.  
-[[twitter](https://twitter.com/katya_mauff)]
 
 - **Floor van Oudenhoven**: Floor is a PhD student working in novel applications and methodology of joint models in clinical trials. Her motivation comes from Alzheimer's disease.
 
@@ -38,6 +35,7 @@ The current composition of my research group:
 [[GitHub](https://github.com/gpapageorgiou)]
 [[twitter](https://twitter.com/gr_papageorgiou)]
 
+- **Teun Petersen**: Teun is a PhD student working in developing new methods for personalized screening with applications in cardiology.
+
 - **Hongchao Qi**: Hongchao is a PhD student working on extensions of power priors methodology in lonigitudinal clinical trials.
 
-- **Anirudh Tomer**: Anirudh is a PhD student working in developing new methods for personalized screening and active surveilance. He works closely with the [PRIAS project](https://www.prias-project.org/).
