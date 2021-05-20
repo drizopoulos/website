@@ -37,6 +37,8 @@ I am the coordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
+- Swiss Clinical Trial Organization, Bern, switzerland  
+[[course link](https://www.scto.ch/de/network/scto-platforms/statistics-and-methodology.html)] [[slides](courses/Int/JMwithR_Bern_2021.pdf)] [[R script](courses/Int/JMbasics_Bern_2021.R)] [[Solutions practicals](courses/Int/Solutions_Bern_2021.R)]
 - Jheronimus Academy of Data Science 2020, Den Bosch, Netherlands  
 [[course link](https://www.jads.nl/data-science-in-health.html)] [[slides](courses/Int/JMwithR_JADS_2020.pdf)] [[R script](courses/Int/JMbasics_JADS_2020.R)] [[Solutions practicals](courses/Int/Solutions_JADS_2020.R)]
 - SACEMA 2019, Stellenbosch, S. Africa  
