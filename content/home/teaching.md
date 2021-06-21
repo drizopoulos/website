@@ -37,6 +37,8 @@ I am the coordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
+- ISCB 2021, Lyon, France  
+[[course link](http://www.iscb2021.info/en/pages/iscb-2021-programme)] [[slides](courses/Int/JMwithR_ISCB_2021.pdf)] [[Solutions practicals](courses/Int/Solutions_ISCB_2021.R)]
 - Swiss Clinical Trial Organization, Bern, switzerland  
 [[course link](https://www.scto.ch/de/network/scto-platforms/statistics-and-methodology.html)] [[slides](courses/Int/JMwithR_Bern_2021.pdf)] [[R script](courses/Int/JMbasics_Bern_2021.R)] [[Solutions practicals](courses/Int/Solutions_Bern_2021.R)]
 - Jheronimus Academy of Data Science 2020, Den Bosch, Netherlands  
