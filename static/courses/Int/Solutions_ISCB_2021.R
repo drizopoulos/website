@@ -30,7 +30,7 @@ jointFit1.p1 <- jm(survFit.p1, lmeFit.p1, time_var = "year")
 summary(jointFit1.p1)
 
 # Hazard Ratios
-stab <- summary(jointFit.p1)$Survival
+stab <- summary(jointFit1.p1)$Survival
 exp(stab[c(1,3,4)])
 
 

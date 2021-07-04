@@ -30,7 +30,7 @@ jointFit1.p1 <- jm(survFit.p1, lmeFit.p1, time_var = "year")
 summary(jointFit1.p1)
 
 # Hazard Ratios
-stab <- summary(jointFit.p1)$Survival
+stab <- summary(jointFit1.p1)$Survival
 exp(stab[c(1,3,4)])
 
 
@@ -49,7 +49,7 @@ compare_jm(jointFit1.p1, jointFit2.p1)
 
 # the linear mixed model
 lmeFit.p2 <- lme(log(serBilir) ~ ns(year, 3, B = c(0, 14.4)), data = pbc2,
-    random = ~ ns(year, 3, B = c(0, 14.4)) | id, 
+    random = ~ ns(year, 3, B = c(0, 14.4)) | id,
     control = lmeControl(opt = "optim"))
 
 # create the indicator for the composite event
@@ -71,7 +71,7 @@ jointFit2.p2 <- update(jointFit1.p2, n_iter = 8500L, n_burnin = 3500L,
 summary(jointFit2.p2)
 
 jointFit3.p2 <- update(jointFit2.p2,
-functional_forms = ~ value(log(serBilir)) + 
+functional_forms = ~ value(log(serBilir)) +
     slope(log(serBilir), direction = "back", eps = 1))
 
 summary(jointFit3.p2)
@@ -136,7 +136,7 @@ for (i in seq_len(n)) {
     Lpred <- predict(jointFit.p3, newdata = dataP155[1:i, ],
                     times = seq(0, 10, length.out = 51),
                     return_newdata = TRUE)
-    
+
     plot(Lpred, Spred)
 }
 
