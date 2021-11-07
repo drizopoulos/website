@@ -37,6 +37,8 @@ I am the coordinator for the following courses at Erasmus MC:
 I have been also teaching short-courses in joint modeling in international conferences. A 
 list of recent and upcoming courses
 
+- ISCB, Czech National Group 2021, Prague, Czech Republic 
+[[course link](https://sites.google.com/view/iscb-czechia/iscb-courses-in-biostatistics/2021)] [[slides](courses/Int/JMwithR_Prague_2021.pdf)] [[Solutions practicals](courses/Int/Solutions_Prague_2021.R)]
 - Inserm Workshop Survival Analysis 2021, Bordeaux, France  
 [[slides](courses/Int/JMwithR_Inserm_2021.pdf)] [[Solutions practicals](courses/Int/Solutions_Inserm_2021.R)]
 - ISCB 2021, Lyon, France  
