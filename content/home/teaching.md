@@ -34,7 +34,7 @@ I am the coordinator for the following courses at Erasmus MC:
 [[solutions_practicals](courses/EMC/EP03_solutions.R)]
 [[Survival Analysis in R Companion](courses/EMC/Survival Analysis in R Companion.html)]
 
-I have been also teaching short-courses in joint modeling in international conferences. A 
+I have also been teaching short-courses in joint modeling in international conferences. A 
 list of recent courses
 
 - ISCB, Czech National Group 2021, Prague, Czech Republic 
