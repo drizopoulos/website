@@ -7,5 +7,8 @@ src/*.o
 src/*.so
 src/*.dll
 inst/doc
-public
+/public/
+/resources/
 website.Rproj
+.DS_Store
+Thumbs.db
