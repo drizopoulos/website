@@ -1,7 +1,7 @@
 +++
 # About/Biography widget.
 
-date = "2020-09-13T00:00:00"
+date = "2022-04-04T00:00:00"
 draft = false
 
 widget = "about"
@@ -39,6 +39,5 @@ weight = 1
 
 # Biography
 
-I am a professor of biostatistics at the Erasmus Medical Center Rotterdam. My research focuses on joint models for longitudinal and time-to-event data with applications in biomarker identification, precision medicine, screening and 
-active surveilance. I currently serve as a co-Editor for [Biostatistics](https://academic.oup.com/biostatistics) [[twitter handle](https://twitter.com/biostatistics)].
+I am a professor of biostatistics at the Erasmus Medical Center Rotterdam. My research focuses on joint models for longitudinal and time-to-event data with applications in biomarker identification, precision medicine, precision screening and active surveillance. I currently serve as a co-Editor for [Biostatistics](https://academic.oup.com/biostatistics) [[twitter handle](https://twitter.com/biostatistics)].
 

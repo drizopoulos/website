@@ -1,9 +1,9 @@
 +++
 # Date this page was created.
-date = "2017-06-20"
+date = "2022-04-04"
 
 # Project title.
-title = "Personalized Active Surveilance and Screening"
+title = "Personalized Active Surveillance and Screening"
 
 # Project summary to display on homepage.
 summary = "Novel methods for optimally planning when to collect longitudinal measurements or event information."

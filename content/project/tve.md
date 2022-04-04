@@ -1,6 +1,6 @@
 +++
 # Date this page was created.
-date = "2017-06-20"
+date = "2022-04-04"
 
 # Project title.
 title = "Individualized Predictions, Time-varying Effects and Time-varying Covariates"
