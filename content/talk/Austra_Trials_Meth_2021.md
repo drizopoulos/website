@@ -10,6 +10,6 @@ location = "Melbourne, Australia"
 selected = false
 math = true
 
-url_slides = "pdf/ATM_2021.pdf"
+url_slides = "pdf/Slides/ATM_2021.pdf"
 
 +++
