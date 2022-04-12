@@ -17,13 +17,13 @@ weight = 5
 I am the coordinator for the following courses at Erasmus MC:
 
 - CE08: Repeated Measurements  
-<font size="3">*In the GitHub repository a [shiny](http://shiny.rstudio.com/) app that replicates all analysis in the course*</font>  
+<font size="3">*In the GitHub repository a [shiny](https://shiny.rstudio.com/) app that replicates all analysis in the course*</font>  
 [[course link](https://www.nihes.com/course/ce08_repeated_measurements/)]
 [[GitHub](https://github.com/drizopoulos/Repeated_Measurements)]
 [[slides](courses/EMC/CE08.pdf)]
 
 - ESP72: Joint Models for Longitudinal and Survival Data  
-[[course link](http://erasmussummerprogramme.nl/summer-programme-courses/?ct=ESP72&pg=Courses)]
+[[course link](https://erasmussummerprogramme.nl/summer-programme-courses/?ct=ESP72&pg=Courses)]
 [[slides](courses/EMC/ESP72.pdf)]
 [[solutions_practicals](courses/EMC/ESP72_solutions.R)]
 
@@ -48,7 +48,7 @@ list of recent courses
 - Swiss Clinical Trial Organization 2021, Bern, Switzerland  
 [[course link](https://www.scto.ch/de/network/scto-platforms/statistics-and-methodology.html)] [[slides](courses/Int/JMwithR_Bern_2021.pdf)] [[R script](courses/Int/JMbasics_Bern_2021.R)] [[Solutions practicals](courses/Int/Solutions_Bern_2021.R)]
 - SACEMA 2019, Stellenbosch, S. Africa  
-[[course link](http://www.sacema.org/node/Joint-Modeling-2019)] [[slides](courses/Int/JMwithR_SACEMA_2019.pdf)] [[R script](courses/Int/JMbasics_SACEMA_2019.R)] [[Solutions practicals](courses/Int/Solutions_SACEMA_2019.R)]
+[[course link](https://www.sacema.org/node/Joint-Modeling-2019)] [[slides](courses/Int/JMwithR_SACEMA_2019.pdf)] [[R script](courses/Int/JMbasics_SACEMA_2019.R)] [[Solutions practicals](courses/Int/Solutions_SACEMA_2019.R)]
 - JSM 2019, Denver, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2019/onlineprogram/ActivityDetails.cfm?SessionID=217957)] [[slides](courses/Int/JMwithR_JSM_2019.pdf)] [[R script](courses/Int/JMbasics_JSM_2019.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2019.R)]
 - Jheronimus Academy of Data Science 2019, Den Bosch, Netherlands  
@@ -64,11 +64,11 @@ list of recent courses
 - JSM 2017, Baltimore, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2017/onlineprogram/ActivityDetails.cfm?SessionID=214046)] [[slides](courses/Int/JMwithR_JSM_2017.pdf)] [[R script](courses/Int/JMbasics_JSM_2017.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2017.R)]
 - EMR-IBS, 2017, Thessaloniki, Greece  
-[[course link](http://stat-athens.aueb.gr/~emribs/page/EMR2017/rizopoulos.htm)] [[slides](courses/Int/JMwithR_EMR_2017.pdf)] [[R script](courses/Int/JMbasics_EMR_2017.R)] [[Solutions practicals](courses/Int/Solutions_EMR_2017.R)]
+[[course link](https://stat-athens.aueb.gr/~emribs/page/EMR2017/rizopoulos.htm)] [[slides](courses/Int/JMwithR_EMR_2017.pdf)] [[R script](courses/Int/JMbasics_EMR_2017.R)] [[Solutions practicals](courses/Int/Solutions_EMR_2017.R)]
 - ISCB 2016, Birmingham, UK  
-[[course link](http://www.birmingham.ac.uk/facilities/mds-cpd/conferences/iscb-2016/programme/pre-conference-courses.aspx)] [[slides](courses/Int/JMwithR_ISCB_2016.pdf)] [[R script](courses/Int/JMbasics_ISCB_2016.R)] [[Solutions practicals](courses/Int/Solutions_ISCB_2016.R)]
+[[course link](https://www.birmingham.ac.uk/facilities/mds-cpd/conferences/iscb-2016/programme/pre-conference-courses.aspx)] [[slides](courses/Int/JMwithR_ISCB_2016.pdf)] [[R script](courses/Int/JMbasics_ISCB_2016.R)] [[Solutions practicals](courses/Int/Solutions_ISCB_2016.R)]
 - JSM 2016, Chicago, USA  
 [[course link](https://ww2.amstat.org/meetings/jsm/2016/onlineprogram/ActivityDetails.cfm?SessionID=212624)] [[slides](courses/Int/JMwithR_JSM_2016.pdf)] [[R script](courses/Int/JMbasics_JSM_2016.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2016.R)]
 - IBC 2016, Victoria, Canada  
-[[course link](http://2016.biometricconference.org/2016ibc-short-course-offerings/)] [[slides](courses/Int/JMwithR_IBC_2016.pdf)] [[R script](courses/Int/JMbasics_IBC_2016.R)] [[Solutions practicals](courses/Int/Solutions_IBC_2016.R)]
+[[course link](https://2016.biometricconference.org/2016ibc-short-course-offerings/)] [[slides](courses/Int/JMwithR_IBC_2016.pdf)] [[R script](courses/Int/JMbasics_IBC_2016.R)] [[Solutions practicals](courses/Int/Solutions_IBC_2016.R)]
 
