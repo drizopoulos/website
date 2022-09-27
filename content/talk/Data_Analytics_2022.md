@@ -8,8 +8,7 @@ event_url = "https://www.lumc.nl/"
 location = "Leiden, the Netherlands"
 
 selected = false
-math = true
+math = false
 
 url_slides = "pdf/Slides/LUMC_2022.pdf"
-
 +++
