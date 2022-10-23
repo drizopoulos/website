@@ -16,23 +16,28 @@ weight = 5
 
 I am the coordinator for the following courses at Erasmus MC:
 
-- CE08: Repeated Measurements  
+- Repeated Measurements  
 <font size="3">*In the GitHub repository a [shiny](https://shiny.rstudio.com/) app that replicates all analysis in the course*</font>  
 [[course link](https://www.nihes.com/course/ce08_repeated_measurements/)]
 [[GitHub](https://github.com/drizopoulos/Repeated_Measurements)]
 [[slides](courses/EMC/CE08.pdf)]
 
-- ESP72: Joint Models for Longitudinal and Survival Data  
+- Joint Models for Longitudinal and Survival Data  
 [[course link](https://erasmussummerprogramme.nl/summer-programme-courses/?ct=ESP72&pg=Courses)]
 [[slides](courses/EMC/ESP72.pdf)]
 [[solutions_practicals](courses/EMC/ESP72_solutions.R)]
 
-- EP03: Biostatistical Methods II: Survival Analysis  
-[[course link](https://www.nihes.com/course/ep03_biostatistical_methods_ii_classical_regression_models/)]
+- Survival Analysis  
+[[course link](https://www.nihes.com/course/ck030_biostatistics_ii/)]
 [[slides](courses/EMC/EP03.pdf)]
 [[practicals](courses/EMC/EP03_practicals.pdf)]
 [[solutions_practicals](courses/EMC/EP03_solutions.R)]
-[[Survival Analysis in R Companion](courses/EMC/Survival Analysis in R Companion.html)]
+[[Survival Analysis in R Companion](courses/EMC/Basic_Surivival_Analysis_in_R.html)]
+
+- Basic Concepts for Probability and Statistics & Variable Selection
+[[course link](https://www.nihes.com/course/ck020_biostatistics_i/)]
+[[slides basic concepts](courses/EMC/CK020.pdf)]
+[[slides variable selection](courses/EMC/CK020b.pdf)]
 
 I have also been teaching short-courses in joint modeling in international conferences. A 
 list of recent courses
