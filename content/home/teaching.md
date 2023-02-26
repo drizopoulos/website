@@ -42,7 +42,9 @@ I am the coordinator for the following courses at Erasmus MC:
 I have also been teaching short-courses in joint modeling in international conferences. A 
 list of recent courses
 
-- ASA, Lifetime Data Science Section Webinar 2023 
+- ASA, Risk Analysis Section Webinar 2023 
+[[course link](https://www.amstat.org/education/web-based-lectures#JMLSD)] [[slides](courses/Int/JMwithR_ASA_2023.pdf)]
+- ASA, Lifetime Data Science Section Webinar 2022 
 [[course link](https://www.amstat.org/education/web-based-lectures#JMLSD)] [[slides](courses/Int/JMwithR_ASA_2022.pdf)]
 - ISCB, Czech National Group 2021, Prague, Czech Republic 
 [[course link](https://sites.google.com/view/iscb-czechia/iscb-courses-in-biostatistics/2021)] [[slides](courses/Int/JMwithR_Prague_2021.pdf)] [[Solutions practicals](courses/Int/Solutions_Prague_2021.R)]
