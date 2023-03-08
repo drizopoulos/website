@@ -43,7 +43,7 @@ I have also been teaching short-courses in joint modeling in international confe
 list of recent courses
 
 - ASA, Risk Analysis Section Webinar 2023 
-[[course link](https://www.amstat.org/education/web-based-lectures#JMLSD)] [[slides](courses/Int/JMwithR_ASA_2023.pdf)]
+[[course link](https://www.amstat.org/education/web-based-lectures#JMLSD)] [[slides](courses/Int/JMwithR_ASA_2023.pdf)] [[Solutions practical](courses/Int/Solutions_ASA-Risk-Analysis_2023.R)]
 - ASA, Lifetime Data Science Section Webinar 2022 
 [[course link](https://www.amstat.org/education/web-based-lectures#JMLSD)] [[slides](courses/Int/JMwithR_ASA_2022.pdf)]
 - ISCB, Czech National Group 2021, Prague, Czech Republic 
