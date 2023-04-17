@@ -22,7 +22,5 @@ The current composition of my research group:
 
 - **Teun Petersen**: Teun is a PhD student working in developing new methods for personalized screening with applications in cardiology.
 
-- **Hongchao Qi**: Hongchao is a PhD student working on extensions of power priors methodology in lonigitudinal clinical trials.
-
 - **Zhenwei Yang**: Zhenwei is a PhD student working on applications of joint models in personalized scheduling with applications in prostate cancer research.
 
