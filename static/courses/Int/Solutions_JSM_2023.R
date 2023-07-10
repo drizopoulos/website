@@ -6,7 +6,6 @@
 # JMbayes2 by running the command: install.packages("JMbayes2")                #
 ################################################################################
 
-
 # load package JMbayes2
 library("JMbayes2")
 
