@@ -10,6 +10,6 @@ location = "Milan, Italy"
 selected = false
 math = true
 
-url_slides = "pdf/Slides/JSM_2023.pdf"
+url_slides = "html/JMbayes2_ISCB/index.html"
 
 +++
