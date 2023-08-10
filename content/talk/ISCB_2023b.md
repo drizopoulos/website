@@ -11,5 +11,4 @@ selected = false
 math = true
 
 url_slides = "html/JMbayes2_ISCB/index.html"
-
 +++
