@@ -1,5 +1,5 @@
 +++
-date = "2023-08-15"
+date = "2023-08-30"
 title = "Extended Joint Models under the Bayesian Approach using JMbayes2"
 abstract = ""
 abstract_short = ""
