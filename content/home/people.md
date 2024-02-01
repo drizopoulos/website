@@ -22,6 +22,8 @@ The current composition of my research group:
 
 - **Aglina Lika**: Aglina is a PhD student working in developing methodology and software for Bayesian multivariate mixed effects models.
 
+- **Fridtjof Petersen**: Fridtjof is a PhD student working in extending joint models to the setting of intensive longitudinal data.
+
 - **Teun Petersen**: Teun is a PhD student working in developing new methods for personalized screening with applications in cardiology.
 
 - **Zhenwei Yang**: Zhenwei is a PhD student working on applications of joint models in personalized scheduling with applications in prostate cancer research.
