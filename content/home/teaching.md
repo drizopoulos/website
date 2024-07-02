@@ -42,6 +42,8 @@ I am the coordinator for the following courses at Erasmus MC:
 I have also been teaching short-courses in joint modeling in international conferences. A 
 list of recent courses
 
+- ISCB 2024, Thessaloniki, Greece  
+[[course link](https://iscb2024.info/pre-conference-courses/#a2)] [[slides](courses/Int/JMwithR_ISCB_2024.pdf)] [[Solutions practicals](courses/Int/Solutions_ISCB_2024.R)]
 - JSM 2023, Toronto, Canada  
 [[course link](https://ww2.aievolution.com/JSMAnnual/index.cfm?do=ev.viewEv&ev=5563)] [[slides](courses/Int/JMwithR_JSM_2023.pdf)] [[R script](courses/Int/JMbasics_JSM_2019.R)] [[Solutions practicals](courses/Int/Solutions_JSM_2023.R)]
 - ASA, Risk Analysis Section Webinar 2023 
