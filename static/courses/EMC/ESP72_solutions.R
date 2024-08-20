@@ -6,7 +6,6 @@
 # JMbayes2 by running the command: install.packages("JMbayes2")                #
 ################################################################################
 
-
 # load package JMbayes2
 library("JMbayes2")
 
@@ -48,15 +47,16 @@ compare_jm(jointFit1.p1, jointFit2.p1)
 ###############
 
 # the linear mixed model
-lmeFit.p2 <- lme(log(serBilir) ~ ns(year, 3, B = c(0, 14.4)), data = pbc2,
-    random = ~ ns(year, 3, B = c(0, 14.4)) | id,
-    control = lmeControl(opt = "optim"))
+lmeFit.p2 <- lme(log(serBilir) ~ ns(year, 3, B = c(0, 14.4)),
+                 data = pbc2,
+                 random = ~ ns(year, 3, B = c(0, 14.4)) | id,
+                 control = lmeControl(opt = "optim"))
 
 # create the indicator for the composite event
 pbc2.id$status2 <- as.numeric(pbc2.id$status != "alive")
 
 # the Cox model
-survFit.p2 <- coxph(Surv(years, status2) ~ 1, data = pbc2.id, x = TRUE)
+survFit.p2 <- coxph(Surv(years, status2) ~ 1, data = pbc2.id)
 
 # the joint model
 jointFit1.p2 <- jm(survFit.p2, lmeFit.p2, time_var = "year")
@@ -65,8 +65,10 @@ summary(jointFit1.p2)
 
 
 # the joint model that include both terms
-jointFit2.p2 <- update(jointFit1.p2, n_iter = 8500L, n_burnin = 3500L,
-    functional_forms = ~ value(log(serBilir)) + slope(log(serBilir)))
+jointFit2.p2 <-
+    update(jointFit1.p2, n_iter = 8500L, n_burnin = 3500L,
+           functional_forms = ~ value(log(serBilir)) +
+               slope(log(serBilir)))
 
 summary(jointFit2.p2)
 
@@ -77,8 +79,9 @@ functional_forms = ~ value(log(serBilir)) +
 summary(jointFit3.p2)
 
 
-jointFit4.p2 <- update(jointFit2.p2,
-                       functional_forms = ~ area(log(serBilir)))
+jointFit4.p2 <-
+    update(jointFit2.p2,
+           functional_forms = ~ area(log(serBilir)))
 
 summary(jointFit4.p2)
 
@@ -92,7 +95,7 @@ lmeFit.p3 <- lme(pro ~ time + time:treat, data = prothro,
     random = ~ time | id)
 
 # the Cox model
-survFit.p3 <- coxph(Surv(Time, death) ~ treat, data = prothros, x = TRUE)
+survFit.p3 <- coxph(Surv(Time, death) ~ treat, data = prothros)
 
 # the joint model
 jointFit.p3 <- jm(survFit.p3, lmeFit.p3, time_var = "time")
@@ -102,7 +105,8 @@ summary(jointFit.p3)
 
 # the data of Patient 155
 dataP155 <- prothro[prothro$id == 155, ]
-dataP155$Time <- dataP155$death <- NULL
+dataP155$Time <- 0.001 # first measurement pred
+dataP155$death <- 0
 
 
 # survival probabilities using the first measurement
@@ -129,11 +133,13 @@ plot(Lpred, Spred)
 # dynamic predictions, each time an extra measurement
 n <- nrow(dataP155)
 for (i in seq_len(n)) {
-    Spred <- predict(jointFit.p3, newdata = dataP155[1:i, ],
+    dd <- dataP155[1:i, ]
+    dd$Time <- max(dd$time) + 0.001
+    Spred <- predict(jointFit.p3, newdata = dd,
                     process = "event",
                     times = seq(0, 10, length.out = 51),
                     return_newdata = TRUE)
-    Lpred <- predict(jointFit.p3, newdata = dataP155[1:i, ],
+    Lpred <- predict(jointFit.p3, newdata = dd,
                     times = seq(0, 10, length.out = 51),
                     return_newdata = TRUE)
 
@@ -142,15 +148,18 @@ for (i in seq_len(n)) {
 
 
 # ROC at 3 years with 1 year window
-roc <- tvROC(jointFit.p3, newdata = prothro, Tstart = 3, Dt = 1)
+roc <- tvROC(jointFit.p3, newdata = prothro,
+             Tstart = 3, Dt = 1)
 roc
 plot(roc)
 # AUC at 3 years with 1 year window
 tvAUC(roc)
 
 # Calibration plot at 3 years with 1 year window
-calibration_plot(jointFit.p3, newdata = prothro, Tstart = 3, Dt = 1)
+calibration_plot(jointFit.p3, newdata = prothro,
+                 Tstart = 3, Dt = 1)
 
 # Brier score at 3 years with 1 year window
-tvBrier(jointFit.p3, newdata = prothro, Tstart = 3, Dt = 1)
+tvBrier(jointFit.p3, newdata = prothro,
+        Tstart = 3, Dt = 1)
 
