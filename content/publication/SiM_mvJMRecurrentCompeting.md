@@ -25,5 +25,5 @@ publication = "Statistics in Medicine, to appear"
 publication_short = "Statistics in Medicine, to appear"
 selected = true
 title = "A joint model for (un)bounded longitudinal markers, competing risks, and recurrent events using patient registry data"
-url_pdf = "https://doi.org/10.1002/sim.10010"
+url_pdf = "https://doi.org/10.1002/sim.70057"
 +++
