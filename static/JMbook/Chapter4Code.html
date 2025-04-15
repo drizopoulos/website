@@ -1,0 +1,210 @@
+<html>
+
+<head>
+<style type="text/css">
+a:link 	  { color: blue }
+a:visited { color: blue }
+a:active  { color: blue }
+a:hover {color: red}
+</style>
+<title>Joint Modeling of Longitudinal and Survival Data in R</title>
+<base href="http://jmr.r-forge.r-project.org/" />
+</head>
+
+<body style="background-color:#F8F8FF">
+<pre>
+<span style="color:red">
+# Load packages JM and lattice</span>
+library("JM")
+library("lattice")
+<span style="color:red"><a name="Section4.2">
+###############
+# Section 4.2 #
+###############
+</a>
+# Time-dependent Cox model for the AIDS dataset</span>
+td.Cox <- coxph(Surv(start, stop, event) ~ drug + CD4, data = aids)
+
+td.Cox
+<span style="color:red">
+# Joint model fit for the AIDS dataset</span>
+lmeFit.aids <- lme(CD4 ~ obstime + obstime:drug,
+    random = ~ obstime | patient, data = aids)
+
+coxFit.aids <- coxph(Surv(Time, death) ~ drug, data = aids.id, x = TRUE)
+
+jointFit.aids <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH")
+
+summary(jointFit.aids)
+
+<span style="color:red"><a name="Section4.3.5">
+#################
+# Section 4.3.5 #
+#################
+</a>
+# Joint model fits to reproduce the results of Tables 4.1 and 4.2
+
+# joint models fits based on the standard Gauss-Hermite quadrature rule</span>
+jointFit.aids9 <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-GH", GHk = 9)
+jointFit.aids13 <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-GH", GHk = 13)
+jointFit.aids15 <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-GH", GHk = 15)
+<span style="color:red">
+# joint models fits based on the pseudo-adaptive Gauss-Hermite quadrature rule</span>
+jointFit.aids3a <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH", GHk = 3)
+jointFit.aids5a <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH", GHk = 5)
+jointFit.aids15a <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH", GHk = 15)
+
+<span style="color:red"><a name="Section4.3.7">
+#################
+# Section 4.3.7 #
+#################
+</a>
+# Note: The following code is based on the non publicly available
+# Aortic Valve dataset, and therefore it is not executable</span>
+
+lmeFit.av <- lme(sqrt(AoGradient) ~ ns(time, 3) * TypeOp + Age,
+  data = AoValv, random = list(id = pdDiag(form = ~ ns(time, 3))))
+
+coxFit.av <- coxph(Surv(Time, death) ~ TypeOp, data = AoValv.id, x = TRUE)
+
+jointFit.av <- jointModel(lmeFit.av, coxFit.av, timeVar = "time",
+  method = "piecewise-PH-aGH", verbose = TRUE)
+
+
+lmeFit2.av <- lme(sqrt(AoGradient) ~ ns(time, 3) * TypeOp + I(Age/15),
+  data = AoValv, random = list(id = pdDiag(form = ~ ns(time, 3))))
+
+jointFit2.av <- jointModel(lmeFit2.av, coxFit.av, timeVar = "time",
+  method = "piecewise-PH-aGH", verbose = TRUE)
+
+summary(jointFit2.av)
+<span style="color:red"><a name="Section4.4.1">
+#################
+# Section 4.4.1 #
+#################
+</a>
+# Marginal Wald tests for the regression coefficients of the
+# longitudinal submodel</span>
+anova(jointFit.aids, process = "Longitudinal")
+<span style="color:red">
+# Multivariate Wald test for simultaneously testing all
+# regression coefficients of the survival submodel</span>
+anova(jointFit.aids, process = "Event", L = diag(2))
+<span style="color:red">
+# Likelihood ratio test for the treatment effect in the survival
+# submodel</span>
+lmeFit.aids <- lme(CD4 ~ obstime + obstime:drug,
+    random = ~ obstime | patient, data = aids)
+
+coxFit2.aids <- coxph(Surv(Time, death) ~ 1, data = aids.id, x = TRUE)
+
+jointFit2.aids <- jointModel(lmeFit.aids, coxFit2.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH")
+
+anova(jointFit2.aids, jointFit.aids)
+<span style="color:red">
+# Score test for the association parameter</span>
+lmeFitML.aids <- update(lmeFit.aids, method = "ML")
+
+pwc <- piecewiseExp.ph(coxFit.aids)
+
+init <- list(betas = fixef(lmeFitML.aids), sigma = lmeFitML.aids$sigma,
+    D = getVarCov(lmeFitML.aids), gammas = coef(pwc)[1], alpha = 0,
+    xi = exp(coef(pwc)[-1]))
+
+JMScoreTest <- jointModel(lmeFitML.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH", init = init,
+    only.EM = TRUE, iter.EM = 0)
+
+score.vector <- JMScoreTest$Score
+inv.Hessian <- vcov(JMScoreTest)
+ScoreStat <- c(t(score.vector) %*% inv.Hessian %*% score.vector)
+cbind("Statistic" = ScoreStat, "df" = 1,
+  "p-value" = pchisq(ScoreStat, 1, lower.tail = FALSE))
+
+<span style="color:red"><a name="Section4.4.2">
+#################
+# Section 4.4.2 #
+#################
+</a>
+# Note: The following code is based on the non publicly available
+# Aortic Valve dataset, and therefore it is not executable
+
+# Confidence intervals for the regression coefficients in the
+# longitudinal submodel</span>
+confint(jointFit2.av, parm = "Longitudinal")
+<span style="color:red">
+# Confidence intervals for the hazard ratios in the
+# survival submodel</span>
+exp(confint(jointFit2.av, parm = "Event"))
+<span style="color:red">
+# Predictions and associated 95% pointwise confidence intervals
+# for the average longitudinal evolutions.</span>
+DF <- with(AoValv, expand.grid(
+  time = seq(min(time), max(time), length = 30),
+  TypeOp = levels(TypeOp),
+  Age = median(AoValv.id$Age)))
+
+Ps <- predict(jointFit2.av, newdata = DF, interval = "confidence",
+    return = TRUE)
+xyplot(pred + low + upp ~ time | TypeOp, data = Ps,
+    type = "l", col = 1, lty = c(1,2,2), lwd = 2,
+    ylab = expression(sqrt("Aortic Gradient")), xlab = "Time (years)")
+
+<span style="color:red"><a name="Section4.5">
+###############
+# Section 4.5 #
+###############
+</a>
+# Note: The following code is based on the non publicly available
+# Aortic Valve dataset, and therefore it is not executable
+
+# posterior means</span>
+head(ranef(jointFit2.av))
+<span style="color:red"># posterior modes</span>
+head(ranef(jointFit2.av, type = "mode"))
+<span style="color:red">
+# posterior variances</span>
+attr(ranef(jointFit2.av, postVar = TRUE),
+    "postVar")[[1]]
+<span style="color:red">
+# inverse Hessian matrix</span>
+attr(ranef(jointFit2.av, type = "mode", postVar = TRUE),
+    "postVar")[[1]]
+
+
+<span style="color:red"><a name="Section4.7">
+###############
+# Section 4.7 #
+###############
+</a>
+# Calculations for the ISNI</span>
+WeibFit.aids <- survreg(Surv(Time, death) ~ drug, data = aids.id,
+    x = TRUE)
+
+init.list <- list(betas = fixef(lmeFit.aids), sigma = lmeFit.aids$sigma,
+  D = getVarCov(lmeFit.aids), gammas = -coef(WeibFit.aids)/WeibFit.aids$scale,
+  sigma.t = WeibFit.aids$scale, alpha = 0)
+
+ISNI.aids <- jointModel(lmeFit.aids, WeibFit.aids, timeVar = "obstime",
+  method = "weibull-PH-aGH", iter.EM = 0, only.EM = TRUE,
+  init = init.list)
+
+H <- ISNI.aids$Hessian
+H.inv <- solve(H)
+pBetas <- head(grep("Y.", colnames(H), fixed = TRUE), -1)
+pAlpha <- which(colnames(H) == "T.alpha")
+isni <- - c(H.inv[pBetas, pBetas] %*% H[pBetas, pAlpha])
+se.betas <- sqrt(diag(vcov(lmeFit.aids)))
+round(cbind(ISNI = isni, rISNI = isni/se.betas), 3)
+</pre>
+
+</body>
+</html> 

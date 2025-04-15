@@ -1,0 +1,93 @@
+<html>
+
+<head>
+<style type="text/css">
+a:link 	  { color: blue }
+a:visited { color: blue }
+a:active  { color: blue }
+a:hover {color: red}
+</style>
+<title>Joint Modeling of Longitudinal and Survival Data in R</title>
+<base href="http://jmr.r-forge.r-project.org/" />
+</head>
+
+<body style="background-color:#F8F8FF">
+<pre>
+<span style="color:red">
+# Load packages JM and lattice</span>
+library("JM")
+library("lattice")
+
+<span style="color:red"><a name="Section1.2">
+###############
+# Section 1.2 #
+###############
+</a>
+# Figure 1.1</span>
+PBC.samp <- subset(pbc2, id %in% c(38,134,70,82, 51,90,68,93,
+    39,148,173,200, 216,242,269,290))
+
+xyplot(log(serBilir) ~ year | id, data = PBC.samp,
+    type = c("p", "smooth"), lwd = 2, layout = c(4, 4),
+    as.table = TRUE, ylab = "log serum Bilirubin",
+    xlab = "Time (years)")
+
+<span style="color:red">
+# Figure 1.2</span>
+AIDS.samp <- subset(aids, patient %in% c(82,152,213,236,332,
+     335,353,407,410,452))
+KM <- survfit(Surv(Time, death) ~ 1, data = aids.id)
+
+par(mfrow = c(1, 2))
+plot(KM, mark.time = FALSE, ylab = "Survival Probability",
+    xlab = "Time (months)")
+plot(CD4 ~ obstime, data = AIDS.samp, type = "n",
+    xlab = "Time (months)", ylab = expression(sqrt("CD4 Cell Count")))
+for (i in unique(AIDS.samp$patient))
+    lines(CD4 ~ obstime, data = AIDS.samp[AIDS.samp$patient == i, ],
+        lty = match(i, unique(AIDS.samp$patient)))
+
+<span style="color:red">
+# Figure 1.3</span>
+p1 <- dotplot(id ~ I(time - Time), data = prothro,
+    subset = death == 0, xlab = "Time (years)",
+    ylab = "", main = "Follow-up Times before Censoring", xlim = c(-15, 0.5),
+    scales = list(y = list(at = c(5, 25), labels = c("", ""))))
+
+p2 <- dotplot(id ~ I(time - Time), data = prothro,
+    subset = death == 1, xlab = "Time (years)",
+    ylab = "", main = "Follow-up Times before Death", xlim = c(-15, 0.5),
+    scales = list(y = list(at = c(5, 25), labels = c("", ""))))
+
+plot(p1, split = c(1, 1, 2, 1), more = TRUE)
+plot(p2, split = c(2, 1, 2, 1), more = FALSE)
+
+<span style="color:red">
+# Figure 1.4</span>
+xyplot(pro ~ time | treat, groups = id, data = prothro,
+    type = "l", col = 1, xlab = "Time (years)", ylab = "Prothrombin Index")
+
+<span style="color:red">
+# Figure 1.5
+# Note: The following code is based on the non publickly available
+# Aortic Valve dataset, and therefore it is not executable</span>
+fm <- lmList(sqrt(AoGradient) ~ time | id, data = AoValv, na.action = na.exclude)
+cf <- coef(fm)
+names(cf) <- c("b0", "b1")
+cf$id <- row.names(cf)
+DataAV <- merge(cf, AoValv.id, by = "id")
+
+f1 <- xyplot(b0 ~ Time, data = DataAV,
+    type = c("p", "smooth"), col = 1, xlab = "Event Time",
+    ylab = "Intercepts")
+
+f2 <- xyplot(b1 ~ Time, data = DataAV,
+    type = c("p", "smooth"), col = 1, xlab = "Event Time",
+    ylab = "Slopes")
+
+plot(f1, split = c(1, 1, 2, 1), more = TRUE)
+plot(f2, split = c(2, 1, 2, 1), more = FALSE)
+</pre>
+
+</body>
+</html> 

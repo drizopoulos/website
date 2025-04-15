@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<style type="text/css">
+a:link 	  { color: blue }
+a:visited { color: blue }
+a:active  { color: blue }
+a:hover {color: red}
+</style>
+<title>Joint Modeling of Longitudinal and Survival Data in R</title>
+<!--<base href="http://jmr.r-forge.r-project.org/" />-->
+</head>
+
+<body style="background-color:#F8F8FF">
+<pre>
+<span style="color:red">
+# Load packages JM</span>
+library("JM")
+<span style="color:red">
+# indicator for the composite event</span>
+pbc2.id$status2 <- as.numeric(pbc2.id$status != "alive")
+
+<span style="color:red"><a name="Section3.2.1">
+#################
+# Section 3.2.1 #
+#################
+</a></span>
+S.KM <- survfit(Surv(years, status2) ~ 1, data = pbc2.id)
+H.NA <- survfit(Surv(years, status2) ~ 1, data = pbc2.id,
+    type = "fleming-harrington")
+
+par(mfrow = c(1, 2))
+plot(S.KM, xlab = "Time (years)", ylab = "Survival Probability",
+    main = "Kaplan-Meier Estimator", mark.time = FALSE)
+plot(H.NA, xlab = "Time (years)", ylab = "Cumulative Hazard",
+    main = "Nelson-Aalen Estimator", fun = "cumhaz", mark.time = FALSE)
+
+<span style="color:red"><a name="Section3.3.1">
+#################
+# Section 3.3.1 #
+#################
+</a></span>
+coxFit <- coxph(Surv(years, status2) ~ drug + age + sex,
+    data = pbc2.id)
+
+summary(coxFit)
+
+<span style="color:red"><a name="Section3.5">
+###############
+# Section 3.5 #
+###############
+</a></span>
+tdCox.pro <- coxph(Surv(start, stop, event) ~ pro + treat,
+    data = prothro)
+
+summary(tdCox.pro)
+</pre>
+
+</body>
+</html> 

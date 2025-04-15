@@ -1,0 +1,323 @@
+<html>
+
+<head>
+<style type="text/css">
+a:link 	  { color: blue }
+a:visited { color: blue }
+a:active  { color: blue }
+a:hover {color: red}
+</style>
+<title>Joint Modeling of Longitudinal and Survival Data in R</title>
+<!--<base href="http://jmr.r-forge.r-project.org/" />-->
+</head>
+
+<body style="background-color:#F8F8FF">
+
+<pre>
+<span style="color:red">
+# Load packages JM and lcmm</span>
+library("JM")
+library("lcmm") <span style="color:red"># this can be installed using install.packages("lcmm")</span>
+
+<span style="color:red"># indicator for the composite event for the PBC dataset</span>
+pbc2$status2 <- as.numeric(pbc2$status != "alive")
+pbc2.id$status2 <- as.numeric(pbc2.id$status != "alive")
+
+<span style="color:red"><a name="Section5.1.1">
+#################
+# Section 5.1.1 #
+#################
+</a></span>
+lmeFit.pbc <- lme(log(serBilir) ~ drug * (year + I(year^2)),
+    random = ~ year + I(year^2) | id, data = pbc2)
+
+coxFit.pbc <- coxph(Surv(years, status2) ~ drug + hepatomegaly,
+    data = pbc2.id, x = TRUE)
+
+jointFit.pbc <- jointModel(lmeFit.pbc, coxFit.pbc, timeVar = "year",
+    method = "piecewise-PH-aGH",
+    interFact = list(value = ~ hepatomegaly, data = pbc2.id))
+
+summary(jointFit.pbc)
+
+<span style="color:red"><a name="Section5.1.2">
+#################
+# Section 5.1.2 #
+#################
+</a></span>
+prothro$t0 <- as.numeric(prothro$time == 0)
+lmeFit.pro <- lme(pro ~ treat * (ns(time, 3) + t0),
+    random = list(id = pdDiag(form = ~ ns(time, 3))),
+    data = prothro)
+
+coxFit.pro <- coxph(Surv(Time, death) ~ treat, data = prothros,
+    x = TRUE)
+
+<span style="color:red"># standard joint model fit m_i(t)</span>
+jointFit.pro <- jointModel(lmeFit.pro, coxFit.pro, timeVar = "time",
+    method = "piecewise-PH-aGH")
+
+<span style="color:red"># lagged effect m_i(t - c), with c = 2</span>
+jointFit2.pro <- update(jointFit.pro, lag = 2)
+
+<span style="color:red"># confidence intervals for the coefficients in the survival submodel</span>
+confint(jointFit.pro, parm = "Event")
+confint(jointFit2.pro, parm = "Event")
+
+<span style="color:red"># compare the two models using AIC and BIC</span>
+anova(jointFit.pro, jointFit2.pro, test = FALSE)
+
+<span style="color:red"><a name="Section5.1.3">
+#################
+# Section 5.1.3 #
+#################
+</a>
+# update the fit from Section 5.1.1 and exclude the
+# interaction factors</span>
+jointFit2.pbc <- update(jointFit.pbc, interFact = NULL)
+
+<span style="color:red"># list with formulas to compute the slope</span>
+dform <- list(fixed = ~ I(2*year) + drug + I(2*year):drug,
+    indFixed = 3:6, random = ~ I(2*year), indRandom = 2:3)
+
+<span style="color:red"># joint model with time-dependent slopes</span>
+jointFit3.pbc <- update(jointFit2.pbc, parameterization = "both",
+    derivForm = dform)
+
+summary(jointFit3.pbc)
+
+<span style="color:red"># marginal Wald tests or the coefficients in the survival submodel</span>
+anova(jointFit3.pbc, process = "Event")
+
+<span style="color:red"><a name="Section5.1.4">
+#################
+# Section 5.1.4 #
+#################
+</a>
+# list with formulas to compute the cumulative effect</span>
+iform <- list(fixed = ~ -1 + year + I(year * (drug == "D-penicil"))
+    + I(year^2/2) + I(year^3/3) + I(year^2/2 * (drug == "D-penicil"))
+    + I(year^3/3 * (drug == "D-penicil")),
+    indFixed = 1:6,
+    random = ~ -1 + year + I(year^2/2) + I(year^3/3),
+    indRandom = 1:3)
+
+<span style="color:red"># joint model with cumulative effect</span>
+jointFit4.pbc <- update(jointFit3.pbc, parameterization = "slope",
+    derivForm = iform)
+
+summary(jointFit4.pbc)
+
+
+<span style="color:red"># function to compute weighted cumulative effects</span>
+g <- function (u, pow = 0) {
+    f <- function (t)
+        integrate(function (s) s^pow * dnorm(t - s), 0, t)$value
+    sapply(u, f)
+}
+
+<span style="color:red"># list with formulas to compute the weighted cumulative effect</span>
+iformW <- list(fixed = ~ -1 + I(g(year)) +
+    I(g(year) * (drug == "D-penicil")) +
+    I(g(year, 1)) + I(g(year, 2)) +
+    I(g(year, 1) * (drug == "D-penicil")) +
+    I(g(year, 2) * (drug == "D-penicil")),
+    indFixed = 1:6,
+    random = ~ -1 + I(g(year)) + I(g(year, 1)) + I(g(year, 2)),
+    indRandom = 1:3)
+
+<span style="color:red"># joint model with weighted cumulative effect</span>
+jointFit5.pbc <- update(jointFit3.pbc, parameterization = "slope",
+    derivForm = iformW)
+
+summary(jointFit5.pbc)
+
+<span style="color:red"><a name="Section5.1.5">
+#################
+# Section 5.1.5 #
+#################
+</a>
+# re-fit the mixed model with only random intercepts and
+# random slopes</span>
+lmeFit2.pbc <- lme(log(serBilir) ~ year * drug,
+    random = ~ year | id, data = pbc2)
+
+<span style="color:red"># list with formulas to compute the slope</span>
+dform2 <- list(fixed = ~ 1, indFixed = 3,
+    random = ~ 1, indRandom = 2)
+
+<span style="color:red"># joint model with the slope term</span>
+jointFit6.pbc <- update(jointFit3.pbc, lmeObject = lmeFit2.pbc,
+    parameterization = "slope", derivForm = dform2)
+
+summary(jointFit6.pbc)
+
+<span style="color:red"># list with formulas to compute the re-scaled slope</span>
+dform3 <- list(fixed = ~ -1 + I(rep(1/0.18, length(drug))),
+    random = ~ -1 + I(rep(1/0.18, length(drug))),
+    indFixed = 3, indRandom = 2)
+
+<span style="color:red"># joint model with the re-scaled slope term</span>
+jointFit7.pbc <- update(jointFit6.pbc, derivForm = dform3)
+
+summary(jointFit7.pbc)
+
+<span style="color:red"><a name="Section5.2">
+###############
+# Section 5.2 #
+###############
+</a>
+# construct the 'start', 'stop' and 'event' variables</span>
+pbc <- pbc2[c("id", "serBilir", "drug", "year", "years",
+    "status2", "spiders")]
+
+pbc$start <- pbc$year
+
+splitID <- split(pbc[c("start", "years")], pbc$id)
+pbc$stop <- unlist(lapply(splitID,
+    function (d) c(d$start[-1], d$years[1]) ))
+
+pbc$event <- with(pbc, ave(status2, id,
+    FUN = function (x) c(rep(0, length(x)-1), x[1]) ))
+
+
+<span style="color:red"># time-dependent Cox model fit to be included in jointModel()</span>
+tdCox.pbc <- coxph(Surv(start, stop, event) ~ drug * spiders + cluster(id),
+        data = pbc, x = TRUE, model = TRUE)
+
+<span style="color:red"># joint model fit with exogenous covariate</span>
+jointFit8.pbc <- jointModel(lmeFit.pbc, tdCox.pbc, timeVar = "year",
+    method = "spline-PH-aGH")
+
+summary(jointFit8.pbc)
+
+<span style="color:red"># time-dependent Cox model fit, including log serum bilirubin</span>
+tdCox2.pbc <- coxph(Surv(start, stop, event) ~ drug * spiders +
+    log(serBilir), data = pbc)
+
+tdCox2.pbc
+
+<span style="color:red"># confidence intervals for hazard ratios under the joint and
+# Cox models</span>
+exp(confint(jointFit8.pbc, parm = "Event"))
+exp(confint(tdCox2.pbc))
+
+<span style="color:red"><a name="Section5.3">
+###############
+# Section 5.3 #
+###############
+</a></span>
+lmeFit.pbc <- lme(log(serBilir) ~ drug * (year + I(year^2)),
+    random = ~ year + I(year^2) | id, data = pbc2)
+
+coxFit2.pbc <- coxph(Surv(years, status2) ~ drug + strata(hepatomegaly),
+    data = pbc2.id, x = TRUE)
+
+jointFit9.pbc <- jointModel(lmeFit.pbc, coxFit2.pbc, timeVar = "year",
+    method = "spline-PH-aGH")
+
+summary(jointFit9.pbc)
+
+<span style="color:red"># Wald test for stratification factors</span>
+wald.strata(jointFit9.pbc)
+
+
+<span style="color:red"># include interactions with strata</span>
+coxFit3.pbc <- coxph(Surv(years, status2) ~ drug * hepatomegaly +
+    strata(hepatomegaly), data = pbc2.id, x = TRUE)
+
+jointFit10.pbc <- update(jointFit9.pbc, survObject = coxFit3.pbc,
+    interFact = list(value = ~ hepatomegaly, data = pbc2.id))
+
+summary(jointFit10.pbc)
+
+<span style="color:red"># plot of marginal survival functions for the two strata</span>
+plot(jointFit9.pbc, 3, lwd = 3)
+
+<span style="color:red"><a name="Section5.4">
+###############
+# Section 5.4 #
+###############
+</a>
+# latent class joint models are fitted with the functions
+# from the 'lcmm' package
+
+# latent class joint model with 3 classes
+# Note: version 1.4-3 of lcmm used in the book does not automatically exclude missing
+# data, and does not create dummy variables for factors; the user is required to do
+# these operations manually</span>
+aidsLC <- aids[c("patient", "CD4", "obstime", "drug", "Time", "death")]
+aidsLC$drug <- c(aidsLC$drug) - 1
+aidsLC <- aidsLC[complete.cases(aidsLC), ]
+
+lcjmFit.aids <- Jointlcmm(fixed = CD4 ~ obstime + drug,
+    mixture = ~ obstime + drug, random = ~ obstime,
+    classmb = ~ drug, subject = "patient", ng = 3, data = aidsLC,
+    survival = Surv(Time, death) ~ mixture(drug),
+    hazard = "6-quant-piecewise", hazardtype = "Specific")
+
+summary(lcjmFit.aids)
+
+<span style="color:red"># posterior probabilities</span>
+postprob(lcjmFit.aids)
+
+<span style="color:red"><a name="Section5.5.1">
+#################
+# Section 5.5.1 #
+#################
+</a>
+# convert data to the competing risks long format</span>
+pbc2.idCR <- crLong(pbc2.id, statusVar = "status",
+    censLevel = "alive", nameStrata = "CR")
+
+
+lmeFit.pbc <- lme(log(serBilir) ~ drug * (year + I(year^2)),
+    random = ~ year + I(year^2) | id, data = pbc2)
+
+coxFit4.pbc <- coxph(Surv(years, status2) ~ (drug + age) * CR + strata(CR),
+        data = pbc2.idCR, x = TRUE)
+
+<span style="color:red"># joint model for competing risks data</span>
+jointFit11.pbc <- jointModel(lmeFit.pbc, coxFit4.pbc,
+    timeVar = "year", method = "spline-PH-aGH", CompRisk = TRUE,
+    interFact = list(value = ~ CR, data = pbc2.idCR))
+
+summary(jointFit11.pbc)
+
+<span style="color:red"># include time-dependent slopes and interaction terms</span>
+dform <- list(fixed = ~ I(2*year) * drug, indFixed = 3:6,
+    random = ~ I(2*year), indRandom = 2:3)
+
+jointFit12.pbc <- update(jointFit11.pbc,
+    parameterization = "both", derivForm = dform,
+    interFact = list(value = ~ CR, slope = ~ CR, data = pbc2.idCR))
+
+summary(jointFit12.pbc)
+
+<span style="color:red"># likelihood ratio test</span>
+anova(jointFit11.pbc, jointFit12.pbc)
+
+<span style="color:red"><a name="Section5.6">
+###############
+# Section 5.6 #
+###############
+</a></span>
+lmeFit.aids <- lme(CD4 ~ obstime + obstime:drug,
+    random = ~ obstime | patient, data = aids)
+
+coxFit.aids <- coxph(Surv(Time, death) ~ drug + gender + AZT,
+    data = aids.id, x = TRUE)
+
+<span style="color:red"># joint model with Weibull baseline hazard under PH formulation</span>
+jointFit3.aids <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime")
+
+<span style="color:red"># joint model with Weibull baseline hazard under AFT formulation</span>
+jointFit4.aids <- update(jointFit3.aids, method = "weibull-AFT-aGH")
+
+<span style="color:red"># compare the two models using AIC and BIC</span>
+anova(jointFit3.aids, jointFit4.aids, test = FALSE)
+</pre>
+
+</body>
+</html> 

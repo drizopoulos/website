@@ -1,0 +1,52 @@
+<html>
+
+<head>
+<style type="text/css">
+a:link 	  { color: blue }
+a:visited { color: blue }
+a:active  { color: blue }
+a:hover {color: red}
+</style>
+<title>Joint Modeling of Longitudinal and Survival Data in R</title>
+<base href="http://jmr.r-forge.r-project.org/" />
+</head>
+
+<body style="background-color:#F8F8FF">
+<pre>
+<span style="color:red">
+# Load packages JM</span>
+library("JM")
+
+<span style="color:red"><a name="Section2.2.2">
+#################
+# Section 2.2.2 #
+#################
+</a>
+# random-intercepts model for the AIDS dataset</span>
+lmeFit.int <- lme(CD4 ~ obstime, random = ~ 1 | patient,
+    data = aids)
+
+summary(lmeFit.int)
+<span style="color:red">
+# marginal covariance matrix for Patient 12</span>
+margCov.int <- getVarCov(lmeFit.int, individuals = 12,
+    type = "marginal")
+
+margCov.int
+cov2cor(margCov.int[[1]])
+<span style="color:red">
+# random-intercepts and random-slopes model for the AIDS dataset</span>
+lmeFit.slp <- lme(CD4 ~ obstime, random = ~ obstime | patient, data = aids)
+
+summary(lmeFit.slp)
+<span style="color:red">
+# marginal covariance matrix for Patient 12</span>
+margCov.slp <- getVarCov(lmeFit.slp, individuals = 12,
+    type = "marginal")
+
+margCov.slp
+cov2cor(margCov.slp[[1]])
+</pre>
+
+</body>
+</html> 

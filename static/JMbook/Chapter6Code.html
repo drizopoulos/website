@@ -1,0 +1,267 @@
+<html>
+
+<head>
+<style type="text/css">
+a:link 	  { color: blue }
+a:visited { color: blue }
+a:active  { color: blue }
+a:hover {color: red}
+</style>
+<title>Joint Modeling of Longitudinal and Survival Data in R</title>
+<base href="http://jmr.r-forge.r-project.org/" />
+</head>
+
+<body style="background-color:#F8F8FF">
+
+<pre>
+<span style="color:red">
+# Load packages JM and lattice</span>
+library("JM")
+library("lattice")
+
+<span style="color:red">
+# indicator for the composite event for the PBC dataset</span>
+pbc2$status2 <- as.numeric(pbc2$status != "alive")
+pbc2.id$status2 <- as.numeric(pbc2.id$status != "alive")
+
+<span style="color:red"><a name="Section6.1.1">
+#################
+# Section 6.1.1 #
+#################
+</a></span>
+lmeFit.aids <- lme(CD4 ~ obstime + obstime:drug,
+    random = ~ obstime | patient, data = aids)
+
+coxFit.aids <- coxph(Surv(Time, death) ~ drug, data = aids.id,
+    x = TRUE)
+
+jointFit.aids <- jointModel(lmeFit.aids, coxFit.aids,
+    timeVar = "obstime", method = "piecewise-PH-aGH")
+
+
+<span style="color:red"># default plots</span>
+par(mfrow = c(2, 2))
+plot(jointFit.aids)
+
+<span style="color:red"># marginal residuals</span>
+resMargY.aids <- residuals(jointFit.aids, process = "Longitudinal",
+    type = "Marginal")
+
+<span style="color:red"># marginal fitted values</span>
+fitMargY.aids <- fitted(jointFit.aids, process = "Longitudinal",
+    type = "Marginal")
+
+
+<span style="color:red"># function to produce scatteplots with superimposed smooth line</span>
+plotResid <- function (x, y, col.loess = "black", ...) {
+    plot(x, y, ...)
+    lines(lowess(x, y), col = col.loess, lwd = 2)
+    abline(h = 0, lty = 3, col = "grey", lwd = 2)
+}
+
+<span style="color:red"># scatteplot of marginal residuals vs marginal fitted values</span>
+plotResid(fitMargY.aids, resMargY.aids, xlab = "Fitted Values",
+    ylab = "Marginal Residuals")
+
+<span style="color:red"><a name="Section6.1.2">
+#################
+# Section 6.1.2 #
+#################
+</a>
+# martingale residuals</span>
+martRes <- residuals(jointFit.aids, process = "Event")
+
+<span style="color:red"># subject-specific fitted values for the longitudinal outcome</span>
+mi.t <- fitted(jointFit.aids, process = "Longitudinal",
+    type = "EventTime")
+
+<span style="color:red"># scatteplot of martingale residuals vs subject-specific fitted values</span>
+plotResid(mi.t, martRes, col.loess = "grey62",
+    ylab = "Martingale Residuals",
+    xlab = "Subject-Specific Fitted Values Longitudinal Outcome")
+
+<span style="color:red"># the same scatterplot per treatment group</span>
+xyplot(martRes ~ mi.t | drug, data = aids, type = c("p", "smooth"),
+    col = "black", lwd = 3, ylab = "Martingale Residuals",
+    xlab = "Subject-Specific Fitted Values Longitudinal Outcome")
+
+
+<span style="color:red"># Cox-Snell residuals</span>
+resCST <- residuals(jointFit.aids, process = "Event",
+    type = "CoxSnell")
+
+<span style="color:red"># Kaplan-Meier estimate of the survival function of the
+# Cox-Snell residuals</span>
+sfit <- survfit(Surv(resCST, death) ~ 1, data = aids.id)
+plot(sfit, mark.time = FALSE, conf.int = TRUE,
+    xlab = "Cox-Snell Residuals", ylab = "Survival Probability",
+    main = "Survival Function of Cox-Snell Residuals")
+
+<span style="color:red"># superimpose the survival function of the unit exponential
+# distribution</span>
+curve(exp(-x), from = 0, to = max(aids.id$Time), add = TRUE,
+    col = "grey62", lwd = 2)
+
+
+<span style="color:red"># Kaplan-Meier estimate of the survival function of the
+# Cox-Snell residuals per treatment group</span>
+sfit <- survfit(Surv(resCST, death) ~ drug, data = aids.id)
+plot(sfit, mark.time = FALSE, xlab = "Cox-Snell Residuals",
+    ylab = "Survival Probability",
+    main = "Survival Function of Cox-Snell Residuals")
+
+<span style="color:red">#survival function of the unit exponential distribution</span>
+curve(exp(-x), from = 0, to = max(aids.id$Time), add = TRUE,
+    col = "grey62", lwd = 2)
+
+<span style="color:red"><a name="Section6.2">
+###############
+# Section 6.2 #
+###############
+</a>
+# a joint mode for the PBC dataset</span>
+lmeFit2.pbc <- lme(log(serBilir) ~ year * drug,
+    random = ~ year | id, data = pbc2)
+
+coxFit.pbc <- coxph(Surv(years, status2) ~ drug + hepatomegaly,
+    data = pbc2.id, x = TRUE)
+
+jointFit2.pbc <- jointModel(lmeFit2.pbc, coxFit.pbc, timeVar = "year",
+    method = "piecewise-PH-aGH")
+
+<span style="color:red"># subject-specific residuals and fitted values</span>
+resSubY.pbc <- residuals(jointFit2.pbc, process = "Longitudinal",
+    type = "stand-Subject")
+fitSubY.pbc <- fitted(jointFit2.pbc, process = "Longitudinal",
+    type = "Subject")
+
+<span style="color:red"># marginal residuals and fitted values</span>
+resMargY.pbc <- residuals(jointFit2.pbc, process = "Longitudinal",
+    type = "stand-Marginal")
+fitMargY.pbc <- fitted(jointFit2.pbc, process = "Longitudinal",
+    type = "Marginal")
+
+<span style="color:red"># scatterplots of subject-specific and marginal residuals vs
+# fitted values</span>
+par(mfrow = c(1,2))
+plotResid(fitSubY.pbc, resSubY.pbc, xlab = "Fitted Values",
+    ylab = "Subject-Specific Residuals")
+plotResid(fitMargY.pbc, resMargY.pbc, xlab = "Fitted Values",
+    ylab = "Marginal Residuals")
+
+<span style="color:red"><a name="Section6.3.1">
+#################
+# Section 6.3.1 #
+#################
+</a>
+# multiple-imputation residuals</span>
+set.seed(123) <span style="color:red"># we set the seed for reproducibility</span>
+resMI.aids <- residuals(jointFit.aids, process = "Longitudinal",
+    type = "Marginal", MI = TRUE)
+
+<span style="color:red"># extract the residuals and fitted values corresponding to
+# missing cases</span>
+fitMargYmiss.aids <- resMI.aids$fitted.valsM
+resMargYmiss.aids <- resMI.aids$resid.valsM
+
+
+<span style="color:red"># scatterplot of observed + multiply imputed residuals
+# and fitted values</span>
+M <- ncol(resMargYmiss.aids) <span style="color:red"># number of imputations</span>
+resMargYmi.aids <- c(resMargY.aids, resMargYmiss.aids)
+fitMargYmi.aids <- c(fitMargY.aids, rep(fitMargYmiss.aids, M))
+plot(range(fitMargYmi.aids), range(resMargYmi.aids), type = "n",
+    xlab = "Fitted Values",
+    ylab = "MI Standardized Marginal Residuals")
+abline(h = 0, lty = 2)
+points(rep(fitMargYmiss.aids, M), resMargYmiss.aids, cex = 0.5,
+    col = "grey")
+points(fitMargY.aids, resMargY.aids)
+
+<span style="color:red"># loess smoother based on observed data alone</span>
+lines(lowess(fitMargY.aids, resMargY.aids), lwd = 2)
+
+<span style="color:red"># loess smoother based on observed + multiply imputed data</span>
+datResid <- data.frame(
+    resid = resMargYmi.aids,
+    fitted = fitMargYmi.aids,
+    weight = c(rep(1, length(resMargY.aids)),
+        rep(1/M, length(resMargYmiss.aids)))
+)
+fitLoess.aids <- loess(resid ~ fitted, data = datResid,
+    weights = weight)
+nd.aids <- data.frame(fitted = seq(min(fitMargYmi.aids),
+    max(fitMargYmi.aids), length.out = 100))
+prdLoess.aids <- predict(fitLoess.aids, nd.aids)
+lines(nd.aids$fit, prdLoess.aids, lwd = 2, lty = 2)
+
+<span style="color:red"><a name="Section6.3.2">
+#################
+# Section 6.3.2 #
+#################
+</a>
+# construct data to fit the visiting process model</span>
+diff.time <- with(pbc2, tapply(year, id, diff))
+prev.y <- with(pbc2, tapply(log(serBilir), id, head, -1))
+one.visit <- sapply(diff.time, length) == 0
+diff.time[one.visit] <- prev.y[one.visit] <- NA
+
+dataVT <- data.frame(
+    "id" = rep(names(prev.y), sapply(prev.y, length)),
+    "diff.Times" = unlist(diff.time),
+    "prev.y" = unlist(prev.y),
+    "event" = 1)
+
+<span style="color:red"># fit of the Weibull model with a Gamma frailty for
+# the visiting process</span>
+WeibFrl <- weibull.frailty(Surv(diff.Times, event) ~ prev.y,
+    id = "id", data = dataVT)
+
+summary(WeibFrl)
+
+
+<span style="color:red"># calculate multiply imputed residuals using the visiting
+# process model</span>
+set.seed(123) # we set the seed for reproducibility
+resMI.pbc <- residuals(jointFit2.pbc, type = "stand-Marginal",
+    MI = TRUE, M = 10, time.points = WeibFrl)
+
+<span style="color:red"># extract the residuals and fitted values corresponding to
+# missing cases</span>
+fitMargYmiss.pbc <- unlist(resMI.pbc$fitted.valsM)
+resMargYmiss.pbc <- unlist(resMI.pbc$resid.valsM)
+
+<span style="color:red"># dataset containing observed + multiply imputed residuals
+# and fitted values</span>
+M <- length(resMI.pbc$fitted.valsM)
+datResid <- data.frame(
+    resid = c(resMargY.pbc, resMargYmiss.pbc),
+    fitted = c(fitMargY.pbc, fitMargYmiss.pbc),
+    weight = c(rep(1, length(resMargY.pbc)),
+        rep(1/M, length(resMargYmiss.pbc))))
+
+datResid <- datResid[complete.cases(datResid), ]
+
+<span style="color:red"># loess smoother based on observed + multiply imputed data</span>
+fitLoess.pbc <- loess(resid ~ fitted, data = datResid,
+    weights = weight)
+nd.pbc <- data.frame(fitted = seq(min(datResid$fitted, na.rm = TRUE),
+    max(datResid$fitted, na.rm = TRUE), len = 100))
+
+prdLoess.pbc <- predict(fitLoess.pbc, nd.pbc)
+
+<span style="color:red"># scatterplot of observed + multiply imputed residuals
+# and fitted values</span>
+plot(range(fitMargYmiss.pbc, na.rm = TRUE),
+    range(resMargYmiss.pbc, na.rm = TRUE),
+    type = "n", xlab = "Fitted Values",
+    ylab = "Standardized Marginal Residuals")
+abline(h = 0, lty = 2)
+points(fitMargY.pbc, resMargY.pbc)
+points(fitMargYmiss.pbc, resMargYmiss.pbc, col = "grey")
+lines(lowess(fitMargY.pbc, resMargY.pbc), lwd = 2)
+lines(nd.pbc$fit, prdLoess.pbc, lwd = 2, lty = 2)
+</pre>
+
+</body>
+</html> 
