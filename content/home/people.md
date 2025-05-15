@@ -16,15 +16,15 @@ weight = 3
 
 The current composition of my research group:
 
-- **Pedro Manuel Miranda Afonso**: Pedro is a PhD student working on extensions of joint models for recurrent event data and spatial correlations with applications in cystic fibrosis.
+- **Pedro Manuel Miranda Afonso**: Pedro works on extensions of joint models for recurrent event data and spatial correlations with applications in cystic fibrosis.
 
-- **Nina van Gerwen**: Nina is a PhD student working in causal dynamic predictions using joint models and machine learning.
+- **Arnau Garcia Fernandez**: Arnau works in combinations of joint models and machine learning.
 
-- **Aglina Lika**: Aglina is a PhD student working in developing methodology and software for Bayesian multivariate mixed effects models.
+- **Nina van Gerwen**: Nina works in causal dynamic predictions using joint models and machine learning.
 
-- **Fridtjof Petersen**: Fridtjof is a PhD student working in extending joint models to the setting of intensive longitudinal data.
+- **Aglina Lika**: Aglina works in developing methodology and software for Bayesian multivariate mixed effects models.
 
-- **Teun Petersen**: Teun is a PhD student working in developing new methods for personalized screening with applications in cardiology.
+- **Fridtjof Petersen**: Fridtjof works in extending joint models to the setting of intensive longitudinal data.
 
-- **Zhenwei Yang**: Zhenwei is a PhD student working on applications of joint models in personalized scheduling with applications in prostate cancer research.
+- **Zhenwei Yang**: Zhenwei works on applications of joint models in personalized scheduling with applications in prostate cancer research.
 
