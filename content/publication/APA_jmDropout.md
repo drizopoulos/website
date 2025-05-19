@@ -8,6 +8,6 @@ publication_types = ["2"]
 publication = "Psychological Assessment, to appear"
 publication_short = "Psychological Assessment, to appear"
 selected = true
-title = "Risk-profile based monitoring intervals for multivariate longitudinal biomarker measurements and competing events with applications in stable heart failure"
+title = "Predicting dropout in intensive longitudinal data: Extending the joint model for auto-correlated data"
 url_pdf = "https://doi.org/10.1037/pas0001397"
 +++
