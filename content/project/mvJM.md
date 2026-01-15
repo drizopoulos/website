@@ -1,6 +1,6 @@
 +++
 # Date this page was created.
-date = "2022-04-04"
+date = "2026-01-15"
 
 # Project title.
 title = "Multivariate Joint Models"
