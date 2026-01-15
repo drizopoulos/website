@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Joint Models</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dimitris Rizopoulos" />
+    <meta name="date" content="2026-01-15" />
+    <script src="libs/header-attrs-2.30/header-attrs.js"></script>
+    <link href="libs/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view-0.2.6/tile-view.js"></script>
+    <script src="libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide-custom
+count: false
+
+
+
+&lt;!-- &lt;h1&gt;JMbayes2&lt;/h1&gt; --&gt;
+&lt;div style="font-size: 50pt; font-weight: 900; color: var(--nord4); margin-top: 60px;"&gt;
+Joint Models
+&lt;/div&gt;
+
+&lt;div style="font-size: 26pt; color: var(--nord9); font-weight: 300; margin-top:40px;"&gt;
+for analyzing incomplete longitudinal data
+&lt;/div&gt;
+
+&lt;div id = "author"&gt;
+&lt;div style = "font-size: 30pt; font-weight: bolder; color: var(--nord4);"&gt;Dimitris Rizopoulos&lt;/div&gt;
+&lt;div style = "color: var(--nord9);"&gt;Department of Biostatistics&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id="contact"&gt;
+&lt;a href="mailto:d.rizopoulos@erasmusmc.nl"&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; d.rizopoulos@erasmusmc.nl&lt;/a&gt; &amp;emsp;
+&lt;a href="https://github.com/drizopoulos"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;
+&lt;/div&gt;
+
+---
+layout: true
+
+&lt;link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" /&gt;
+&lt;link href="fontawesome-free-5.14.0-web/css/all.css" rel="stylesheet"&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;
+&lt;a href="https://github.com/drizopoulos"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&lt;a href = "https://www.drizopoulos.com/"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; www.drizopoulos.com&lt;/a&gt;
+&lt;/span&gt;&lt;/div&gt; 
+
+
+---
+
+## What is a Joint Model
+
+
+
+&lt;img src="JM.gif" alt="DynPreds" style="margin:0px 0px 0px 0px; width:480px;"&gt;
+
+---
+
+## A Bit of History
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Joint models have been around for many years...&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+*&lt;font color = "#EBCB8B"&gt;Two parallel trajectories&lt;/font&gt;*
+
+.pull-left[
+**Longitudinal Outcomes**
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+non-random dropout
+&lt;/div&gt;
+]
+
+.pull-right[
+**Event Process**
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+endogenous time-varying covariates
+&lt;/div&gt;
+]
+
+---
+
+## Missing Data Perspective
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Participants do not adhere to measurement schedules or completely dropout from the study&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Implications&lt;/font&gt;
+
+- less data than originally planned `\(\Rightarrow\)` &lt;font color = "#B48EAD"&gt;efficiency loss&lt;/font&gt;
+- unequal number of measurements `\(\Rightarrow\)` &lt;font color = "#B48EAD"&gt;restrictions in analysis methods&lt;/font&gt;
+- missingness depends on outcome `\(\Rightarrow\)` &lt;strong&gt;&lt;font color = "#BF616A"&gt;Potential Bias&lt;/font&gt;&lt;/strong&gt;
+
+---
+
+## Missing Data Mechanisms
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Missing Completely At Random&lt;/strong&gt;: no relation to outcome
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Missing At Random&lt;/strong&gt;: related to &lt;font color = "#D08770"&gt;observed&lt;/font&gt; responses
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Missing Not At Random&lt;/strong&gt;: related to &lt;font color = "#BF616A"&gt;unobserved&lt;/font&gt; responses
+&lt;/div&gt;
+
+---
+
+## Analysis with Incomplete Data
+
+&lt;div style = "width: 75%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Statistical analysis should be at least valid under MAR&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+.pull-left[
+&lt;strong&gt;&lt;font color = "#D08770"&gt;Valid under MAR&lt;/font&gt;&lt;/strong&gt;
+- marginal likelihood-based models
+- random effects models
+- multiple imputation
+]
+
+.pull-right[
+&lt;strong&gt;&lt;font color = "#BF616A"&gt;Biased under MAR&lt;/font&gt;&lt;/strong&gt;
+- generalized estimating equations
+- misspecified likelihood-based methods
+- single imputation
+]
+
+---
+
+## Analysis with Incomplete Data
+
+&lt;div style = "width: 55%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;For MNAR we need specialized models&lt;/strong&gt;
+&lt;/div&gt;
+
+&lt;br&gt;
+
+.pull-left[
+**Conditional Models**
+&lt;button class="modal-button" href="#SMs"&gt;&lt;strong&gt;Selection Models&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="SMs" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; sudden change in outcome causes dropout&lt;/li&gt;
+    &lt;li&gt; discrete time&lt;/li&gt;
+    &lt;li&gt; &lt;font color = "#BF616A"&gt;limited software availability&lt;/font&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#PMs"&gt;&lt;strong&gt;Pattern Mixture Models&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="PMs" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; analysis per dropout pattern&lt;/li&gt;
+    &lt;li&gt; discrete time&lt;/li&gt;
+    &lt;li&gt; &lt;font color = "#BF616A"&gt;limited software availability&lt;/font&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+.pull-right[
+**Shared Parameter Models**
+&lt;button class="modal-button" href="#JMs"&gt;&lt;strong&gt;Joint Models&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="JMs" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+    &lt;li&gt; characteristics of the longitudinal profiles dictate dropout&lt;/li&gt;
+    &lt;li&gt; can handle intermittent missing data&lt;/li&gt;
+    &lt;li&gt; &lt;font color = "#A3BE8C"&gt;available software&lt;/font&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+]
+
+---
+
+## Analysis with Incomplete Data
+
+&lt;div style = "width: 65%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;General Recommendation: Use Sensitivity Analysis&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+- If results agree `\(\Rightarrow\)` &lt;font color = "#B48EAD"&gt;more certainty about the conclusions&lt;/font&gt;
+
+- If results differ `\(\Rightarrow\)` &lt;font color = "#BF616A"&gt;external (subject matter) decision-making&lt;/font&gt;
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 70%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Basic assumption: &lt;font color = "#BF616A"&gt;Conditional Independence&lt;/font&gt;&lt;/strong&gt; &lt;br&gt; The random effects \(\color{var(--nord11)}{\mathbf b}\) explain all interrelationships
+&lt;/div&gt;
+
+.footnote[
+[&lt;i class = "fas fa-book"&gt;&lt;/i&gt; Rizopoulos (2012)](https://www.crcpress.com/product/isbn/9781439872864)
+]
+
+--
+
+&lt;br&gt;
+* `\(\mathcal{Y}\)`: Longitudinal outcome
+* `\(\mathcal{T}\)`: Time-to-Dropout process
+
+--
+
+`\begin{align*}
+p\{\mathcal{Y},\, \mathcal{T} \mid \color{var(--nord11)}{\mathbf b}\} = 
+p\{\mathcal{Y} \mid \color{var(--nord11)}{\mathbf b}\} \; 
+p\{\mathcal{T} \mid \color{var(--nord11)}{\mathbf b}\}
+\end{align*}`
+
+---
+
+## Joint Models for MNAR
+
+&lt;img src="JM.gif" alt="DynPreds" style="margin:0px 0px 0px 0px; width:480px;"&gt;
+
+---
+
+## Joint Models for MNAR
+
+*&lt;font color = "#EBCB8B"&gt;More formally&lt;/font&gt;*
+
+&lt;br&gt;
+
+`\begin{eqnarray*}
+y(t) &amp; = &amp; \color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})} = \bbox[#2E3440, 5pt]{\mathbf x(t)^\top \boldsymbol \beta} + \mathbf z(t)^\top \color{var(--nord11)}{\mathbf b} + \varepsilon(t), \quad \varepsilon(t) \sim \mathcal{N}(0, \sigma^2)\\&amp;&amp;\\
+h(t) &amp; = &amp; h_0(t) \exp \Bigl \{ \mathbf w^\top \boldsymbol \gamma + \alpha f\{\color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}\} \Bigr \}\\&amp;&amp;\\
+\color{var(--nord11)}{\mathbf b} &amp; \sim &amp; \mathcal{N}(\mathbf 0, \mathbf D)
+\end{eqnarray*}`
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 45%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Function f(.) links the two outcomes &lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Some options are&lt;/font&gt;
+
+- Current value
+
+`\begin{eqnarray*}
+f\{\color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}\} = \color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}
+\end{eqnarray*}`
+
+---
+
+## Joint Models for MNAR
+
+&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 45%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Function f(.) links the two outcomes &lt;/strong&gt;
+&lt;/div&gt;
+
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Some options are&lt;/font&gt;
+
+- Current slope / Velocity
+
+`\begin{eqnarray*}
+f\{\color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}\} = \frac{d}{dt}\color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}
+\end{eqnarray*}`
+
+---
+
+## Joint Models for MNAR
+
+&lt;img src="index_files/figure-html/unnamed-chunk-3-1.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 45%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Function f(.) links the two outcomes &lt;/strong&gt;
+&lt;/div&gt;
+
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Some options are&lt;/font&gt;
+
+- Area / Average
+
+`\begin{eqnarray*}
+f\{\color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}\} = \frac{1}{\Delta t} \int \limits_{t - \Delta t}^t\color{var(--nord14)}{\eta(s, \color{var(--nord11)}{\mathbf b})} \; ds
+\end{eqnarray*}`
+
+---
+
+## Joint Models for MNAR
+
+&lt;img src="index_files/figure-html/unnamed-chunk-4-1.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 45%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Function f(.) links the two outcomes &lt;/strong&gt;
+&lt;/div&gt;
+
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Some options are&lt;/font&gt;
+
+- Difference
+
+`\begin{eqnarray*}
+f\{\color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})}\} = \color{var(--nord14)}{\eta(t, \color{var(--nord11)}{\mathbf b})} -\color{var(--nord14)}{\eta(t  - \Delta t, \color{var(--nord11)}{\mathbf b})}
+\end{eqnarray*}`
+
+---
+
+## Joint Models for MNAR
+
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 65%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;Do all participants dropout for the same reasons?&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;MAR vs. MNAR&lt;/font&gt;
+
+- patients relocate to another country &lt;font color = "#B48EAD"&gt;(MCAR)&lt;/font&gt;
+- patients are excluded from the study when their longitudinal response exceeds
+    a threshold &lt;font color = "#B48EAD"&gt;(MAR)&lt;/font&gt;
+- patients do not fill in the questionnaire because they do not feel well &lt;strong&gt;&lt;font color = "#BF616A"&gt;(MNAR)&lt;/font&gt;&lt;/strong&gt;
+
+---
+
+## Joint Models for MNAR
+
+&lt;div style = "width: 65%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;How can we use this information if available?&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;We use a survival submodel for the dropout&lt;/font&gt;
+
+- subject drops out at time `\(T_i\)` and `\(\delta_i = 0\)` `\(\Rightarrow\)` &lt;font color = "#B48EAD"&gt;MCAR/MAR dropout&lt;/font&gt;
+
+- subject drops out at time `\(T_i\)` and `\(\delta_i = 1\)` `\(\Rightarrow\)` &lt;font color = "#BF616A"&gt;MNAR dropout&lt;/font&gt;
+
+
+.footnote[
+`\(T_i\)` event time used in the survival submodel
+&lt;br/&gt;
+`\(\delta_i\)` event indicator used in the survival submodel
+]
+
+---
+
+## JMs Extensions
+
+&lt;br&gt;
+
+.pull-left[
+**Longitudinal Process**
+- multiple outcomes
+- continuous, discrete, left-censored
+- flexible models (splines, etc.)
+]
+
+.pull-right[
+**Event Process**
+- competing risks
+- multi-state processes
+- recurrent events
+]
+
+---
+class: center, middle, animated, fadeIn
+
+# From Theory to Practice: &lt;br&gt;JMbayes2
+
+---
+
+## A New R Package
+
+.nord0box[
+**&lt;span style="font-size: 1.5rem;"&gt;&amp;#8680;&lt;/span&gt; 
+Learning from the lessons of the past we created a new R package**
+]
+
+--
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Our aims&lt;/font&gt;
+&lt;br&gt;
+
+.pull-left[
+* versatile
+* user-friendly
+* fast
+* complete
+]
+
+.pull-right[
+&lt;div style = "color: var(--nord3);"&gt;
+&lt;ul&gt;
+&lt;li&gt;cover (almost) all extensions&lt;/li&gt;
+&lt;li&gt;straightforward syntax&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;C++&lt;/strong&gt; implementation &lt;/li&gt;
+&lt;li&gt;support functions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+]
+
+---
+
+## An Example
+
+&lt;div style = "width: 55%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;AIDS dataset: a Randomized Clinical Trial&lt;/strong&gt;
+&lt;/div&gt;
+
+
+--
+
+&lt;br&gt;
+
+- 467 HIV infected patients who had failed zidovudine therapy (AZT)
+
+- Compare the efficacy and safety of two alternative drugs, didanosine (ddI) &amp; zalcitabine (ddC)
+
+- &lt;font color = "#EBCB8B"&gt;Outcome:&lt;/font&gt; CD4 cell count
+  + measured at baseline, 2, 6, 12 and 18 months
+
+---
+
+## An Example
+
+&lt;br&gt;
+
+
+``` r
+library("JMbayes2")
+fm1 &lt;- lme(CD4 ~ ns(obstime, 3), data = aids, 
+           random = list(patient = pdDiag(~ ns(obstime, 3))))
+CoxFit &lt;- coxph(Surv(Time, death) ~ 1, data = aids.id)
+
+jointFit1 &lt;- jm(CoxFit, fm1, time_var = "obstime", n_iter = 5000L)
+```
+
+---
+
+## An Example
+
+.scroll450[
+
+``` r
+summary(jointFit1)
+```
+
+```
+## 
+## Call:
+## JMbayes2::jm(Surv_object = CoxFit, Mixed_objects = fm1, time_var = "obstime", 
+##     n_iter = 5000L)
+## 
+## Data Descriptives:
+## Number of Groups: 467		Number of events: 188 (40.3%)
+## Number of Observations:
+##   CD4: 1405
+## 
+##                   DIC      WAIC      LPML
+## marginal     8438.162  8692.677 -4351.293
+## conditional 17161.434 16920.135 -9038.563
+## 
+## Random-effects covariance matrix:
+##                                   
+##        StdDev   Corr              
+## (Intr) 4.5355 (Intr) n(,3)1 n(,3)2
+## n(,3)1 2.7777                     
+## n(,3)2 1.9976                     
+## n(,3)3 1.4456                     
+## 
+## Survival Outcome:
+##               Mean  StDev    2.5%   97.5% P   Rhat
+## value(CD4) -0.2715 0.0379 -0.3509 -0.1994 0 1.0664
+## 
+## Longitudinal Outcome: CD4 (family = gaussian, link = identity)
+##                    Mean  StDev    2.5%   97.5% P   Rhat
+## (Intercept)      7.1466 0.2255  6.6979  7.5915 0 1.0007
+## ns(obstime, 3)1 -1.8732 0.3160 -2.4892 -1.2458 0 1.0283
+## ns(obstime, 3)2 -2.4435 0.2786 -3.0011 -1.9035 0 1.0413
+## ns(obstime, 3)3 -2.3694 0.2965 -2.9394 -1.7688 0 1.0760
+## sigma            1.7381 0.0707  1.6046  1.8763 0 1.3107
+## 
+## MCMC summary:
+## chains: 3 
+## iterations per chain: 5000 
+## burn-in per chain: 500 
+## thinning: 1 
+## time: 31 sec
+```
+]
+
+---
+
+## MAR vs MNAR
+
+&lt;img src="index_files/figure-html/unnamed-chunk-8-1.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Intermittent Missing Data
+
+&lt;div style = "width: 65%; padding: 1.15em 2em; background-color: var(--nord0); margin: auto; display: block;"&gt;
+&lt;strong&gt;17% of measurements before dropout were missing&lt;/strong&gt;
+&lt;/div&gt;
+
+--
+
+&lt;br&gt;
+
+&lt;font color = "#EBCB8B"&gt;Using the conditional independence assumption&lt;/font&gt;
+
++ We can extend the joint model to handle MNAR intermittent missing data
+
++ We let `\(r(t)\)` denote the binary indicator of a missed visit before dropout
+
+---
+
+## Intermittent Missing Data
+
+
+
+`\begin{eqnarray*}
+\mbox{CD}_4(t) &amp; = &amp; \color{var(--nord14)}{\eta_1(t, \mathbf{b})} + \varepsilon(t) = (\beta_{10} + b_{10}) + (\beta_{11} + b_{11}) NS_1(t)\\&amp;&amp;\quad\quad + \; (\beta_{12} + b_{12}) NS_2(t) + (\beta_{13} + b_{13}) NS_3(t) + \varepsilon(t)\\&amp;&amp;\\
+\mbox{logit} \bigl (\Pr\{r(t) = 1\} \bigr ) &amp; = &amp; \color{var(--nord12)}{\eta_2(t, \mathbf{b})} = (\beta_{20} + b_{20}) + \beta_{21} t\\&amp;&amp;\\
+h(t) &amp; = &amp; h_0(t) \exp \Bigl \{ \alpha_1 \color{var(--nord14)}{\eta_1(t, \mathbf{b})} + \alpha_2 \color{var(--nord12)}{\eta_2(t, \mathbf{b})} \Bigr \}\\&amp;&amp;\\
+\mathbf{b} &amp; \sim &amp; \mathcal{N}(\mathbf 0, \mathbf D)
+\end{eqnarray*}`
+
+---
+
+## Intermittent Missing Data
+
+&lt;img src="index_files/figure-html/unnamed-chunk-10-1.png" alt="" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Intermittent Missing Data
+
+.scroll450[
+
+``` r
+summary(jointFit2)
+```
+
+```
+## 
+## Call:
+## JMbayes2::jm(Surv_object = CoxFit, Mixed_objects = list(fm1, 
+##     fm2), time_var = "obstime", n_iter = 5000L)
+## 
+## Data Descriptives:
+## Number of Groups: 467		Number of events: 188 (40.3%)
+## Number of Observations:
+##   CD4: 1405
+##   inter_miss: 1700
+## 
+##                   DIC    WAIC       LPML
+## marginal     9799.443 10010.5  -5010.983
+## conditional 20464.219 20100.0 -10706.894
+## 
+## Random-effects covariance matrix:
+##                                             
+##        StdDev   Corr                        
+## (Intr) 4.5464 (Intr)  n(,3)1  n(,3)2  n(,3)3
+## n(,3)1 3.6477                               
+## n(,3)2 2.5784                               
+## n(,3)3 1.4189                               
+## (Intr) 1.3894 -0.2983 -0.1378 -0.2782 0.1860
+## 
+## Survival Outcome:
+##                      Mean  StDev    2.5%   97.5% P   Rhat
+## value(CD4)        -0.2407 0.0448 -0.3362 -0.1572 0 1.0128
+## value(inter_miss)  0.6980 0.1934  0.3594  1.0663 0 1.0653
+## 
+## Longitudinal Outcome: CD4 (family = gaussian, link = identity)
+##                    Mean  StDev    2.5%   97.5% P   Rhat
+## (Intercept)      7.1516 0.2260  6.7002  7.5922 0 1.0017
+## ns(obstime, 3)1 -2.0427 0.4898 -3.0179 -1.1099 0 1.0196
+## ns(obstime, 3)2 -2.6299 0.3313 -3.2995 -1.9655 0 1.0055
+## ns(obstime, 3)3 -2.4337 0.3827 -3.2020 -1.6939 0 1.0531
+## sigma            1.6730 0.0736  1.5228  1.8131 0 1.0537
+## 
+## Longitudinal Outcome: inter_miss (family = binomial, link = logit)
+##                Mean  StDev    2.5%   97.5% P   Rhat
+## (Intercept) -3.0508 0.1883 -3.4264 -2.6985 0 1.0432
+## obstime      0.2049 0.0185  0.1688  0.2404 0 1.0812
+## 
+## MCMC summary:
+## chains: 3 
+## iterations per chain: 5000 
+## burn-in per chain: 500 
+## thinning: 1 
+## time: 52 sec
+```
+]
+
+---
+
+## More Features
+
+.three-cols[
+
+&lt;button class="modal-button" href="#GLMMs"&gt;&lt;strong&gt;Mixed Effects Models&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="GLMMs" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;ul&gt;
+  &lt;li&gt;Gaussian (&lt;code&gt;lme(...)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Student's-t (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = students.t(df = 4)&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Beta (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = beta.fam()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Gamma (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = Gamma()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;censored Gaussian (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = censored.normal()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;br&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Binomial (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = binomial()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Poisson (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = poisson()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Negative Binomial (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = negative.binomial()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+    &lt;li&gt;Beta Binomial (&lt;code&gt;mixed_model(..., &lt;span class="hljs-string"&gt;family = beta.binomial()&lt;/span&gt;)&lt;/code&gt;)&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Non_Gaussian_Mixed_Models.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette distributions&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#MCEvents"&gt;&lt;strong&gt;Multi-State Processes&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="MCEvents" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  &lt;strong&gt;Using &lt;code&gt;mc_setup()&lt;/code&gt; to setup the data and fitting a stratified Cox model&lt;/strong&gt;
+  &lt;ul&gt;
+    &lt;li&gt;multiple longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;relative risk model per transition&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Multi_State_Processes.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette multi-state&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;button class="modal-button" href="#RecEvents"&gt;&lt;strong&gt;Recurrent Events&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="RecEvents" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  Using &lt;code&gt;rc_setup()&lt;/code&gt; to setup the data, fitting a stratified Cox model 
+  and calling &lt;code&gt;jm(..., &lt;span class="hljs-string"&gt;recurrent = "..."&lt;/span&gt;)&lt;/code&gt;
+  &lt;ul&gt;
+    &lt;li&gt;multiple longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;relative risk model with a frailty term for recurrent events&lt;/li&gt;
+    &lt;li&gt;relative risk models competing risks terminating events linked with frailty&lt;/li&gt;
+    &lt;li&gt;gap time and calendar time formulations&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Recurring_Events.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette recurrent&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+.three-cols[
+
+&lt;button class="modal-button" href="#FForms"&gt;&lt;strong&gt;Functional Forms&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="FForms" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  Via the &lt;code&gt;functional_forms&lt;/code&gt; argument of &lt;code&gt;jm()&lt;/code&gt; we can link different features of the longitudinal profiles to the risk of the event
+  &lt;ul&gt;
+    &lt;li&gt;value&lt;/li&gt;
+    &lt;li&gt;velocity&lt;/li&gt;
+    &lt;li&gt;acceleration&lt;/li&gt;
+    &lt;li&gt;average in a previous period&lt;/li&gt;
+    &lt;li&gt;difference (`\(\Delta\)`) in a previous period&lt;/li&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/JMbayes2.html#functional-forms"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette functional forms&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#DynPred"&gt;&lt;strong&gt;Dynamic Predictions&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="DynPred" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+  Using the &lt;code&gt;predict()&lt;/code&gt; method we can calculate (dynamic) predictions
+  &lt;ul&gt;
+    &lt;li&gt;longitudinal outcomes&lt;/li&gt;
+    &lt;li&gt;event outcomes (including competing risks)&lt;/li&gt;
+    &lt;li&gt;accuracy measures&lt;/li&gt;
+      &lt;ul&gt;
+        &lt;li&gt;discrimination: &lt;code&gt;tvROC()&lt;/code&gt;, &lt;code&gt;tvAUC()&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;calibration: &lt;code&gt;calibration_plot()&lt;/code&gt;, &lt;code&gt;calibration_metrics()&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;overall: &lt;code&gt;tvBrier()&lt;/code&gt;, &lt;code&gt;tvEPCE()&lt;/code&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+  &lt;/ul&gt;
+  
+  &lt;a href="https://drizopoulos.github.io/JMbayes2/articles/Dynamic_Predictions.html"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; vignette predictions&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+.three-cols[
+
+&lt;button class="modal-button" href="#Compare"&gt;&lt;strong&gt;Model Comparison&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="Compare" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+      Using the &lt;code&gt;compare_jm()&lt;/code&gt; function we can compare fitted joint models using DIC, WAIC and LPML
+  &lt;pre&gt;&lt;code class="r hljs remark-code"&gt;
+  &lt;div class="remark-code-line"&gt;&lt;span class="hljs-number"&gt;fit1&lt;/span&gt; &lt;- jm(&lt;span class="hljs-number"&gt;CoxModel1&lt;/span&gt;, &lt;span class="hljs-number"&gt;MixedModels1&lt;/span&gt;, ...)&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;&lt;span class="hljs-string"&gt;fit2&lt;/span&gt; &lt;- jm(&lt;span class="hljs-string"&gt;CoxModel2&lt;/span&gt;, &lt;span class="hljs-string"&gt;MixedModels2&lt;/span&gt;, ...)&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;compare_jm(&lt;span class="hljs-number"&gt;fit1&lt;/span&gt;, &lt;span class="hljs-string"&gt;fit2&lt;/span&gt;)&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="modal-button" href="#Penalties"&gt;&lt;strong&gt;Shrinkage Priors&lt;/strong&gt;&lt;/button&gt;
+&lt;div id="Penalties" class="modal"&gt;
+  &lt;div class="modal-content"&gt;
+  &lt;span class="close"&gt;&amp;times;&lt;/span&gt;
+      Using the &lt;strong&gt;priors&lt;/strong&gt; argument we can specify penalties:
+  &lt;pre&gt;&lt;code class="r hljs remark-code"&gt;
+  &lt;div class="remark-code-line"&gt;jm(..., &lt;span class="hljs-number"&gt;priors = list("penalty_alphas" = "horseshoe")&lt;/span&gt;)&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;&lt;/div&gt;
+  &lt;div class="remark-code-line"&gt;jm(..., &lt;span class="hljs-number"&gt;priors = list("penalty_gammas" = "ridge")&lt;/span&gt;)&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+]
+
+---
+class: center, middle
+
+.nord0box[
+More about **JMbayes2** on the dedicated website&lt;br&gt;&lt;br&gt;
+&lt;a href="https://drizopoulos.github.io/JMbayes2/"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; https://drizopoulos.github.io/JMbayes2/&lt;/a&gt;
+]
+
+---
+class: the-end, center, middle
+layout: true
+count: false
+
+## Thank you for your attention!
+
+
+&lt;div id="contact"&gt;
+&lt;a href="mailto:d.rizopoulos@erasmusmc.nl"&gt;&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; d.rizopoulos@erasmusmc.nl&lt;/a&gt; &amp;emsp;
+&lt;a href="https://github.com/drizopoulos"&gt;&lt;i class="fab fa-github"&gt;&lt;/i&gt; drizopoulos&lt;/a&gt; &amp;emsp;
+&lt;a href="https://www.drizopoulos.com/"&gt;&lt;i class="fas fa-globe-americas"&gt;&lt;/i&gt; https://www.drizopoulos.com/&lt;/a&gt;
+&lt;/div&gt;
+
+---
+count: false
+
+&lt;!-- &lt;script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'&gt;&lt;/script&gt; --&gt;
+&lt;script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"&gt;
+&lt;/script&gt;
+ 
+ 
+&lt;script&gt;
+// Get the button that opens the modal
+var btn = document.querySelectorAll("button.modal-button");
+
+// All page modals
+var modals = document.querySelectorAll('.modal');
+
+// Get the &lt;span&gt; element that closes the modal
+var spans = document.getElementsByClassName("close");
+
+// When the user clicks the button, open the modal
+for (var i = 0; i &lt; btn.length; i++) {
+ btn[i].onclick = function(e) {
+    e.preventDefault();
+    modal = document.querySelector(e.target.getAttribute("href"));
+    modal.style.display = "block";
+ }
+}
+
+// When the user clicks on &lt;span&gt; (x), close the modal
+for (var i = 0; i &lt; spans.length; i++) {
+ spans[i].onclick = function() {
+    for (var index in modals) {
+      if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+    }
+ }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+     for (var index in modals) {
+      if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+     }
+    }
+}
+&lt;/script&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "nord",
+  "highlightLines": true,
+  "highlightSpans": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
