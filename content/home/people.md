@@ -2,7 +2,7 @@
 # An example of using the custom widget to create your own homepage section.
 # To create more sections, duplicate this file and edit the values below as desired.
 
-date = "2023-09-28T00:00:00"
+date = "2026-04-02T00:00:00"
 draft = false
 
 title = "People"
@@ -16,15 +16,18 @@ weight = 3
 
 The current composition of my research group:
 
-- **Pedro Manuel Miranda Afonso**: Pedro works on extensions of joint models for recurrent event data and spatial correlations with applications in cystic fibrosis.
+- **Pedro Manuel Miranda-Afonso**: Pedro works on extensions of joint models for recurrent event data and spatial correlations with applications in cystic fibrosis.
 
-- **Arnau Garcia Fernandez**: Arnau works in combinations of joint models and machine learning.
+- **Arnau Garcia Fernandez**: Arnau works on asymmetric prediction loss functions with applications in gynecology.
 
-- **Nina van Gerwen**: Nina works in causal dynamic predictions using joint models and machine learning.
+- **Nina van Gerwen**: Nina works on causal dynamic predictions using joint models and machine learning.
 
-- **Aglina Lika**: Aglina works in developing methodology and software for Bayesian multivariate mixed effects models.
+- **Aglina Lika**: Aglina works on developing methodology and software for Bayesian multivariate mixed effects models.
 
-- **Fridtjof Petersen**: Fridtjof works in extending joint models to the setting of intensive longitudinal data.
+- **Felix Oppong**: Felix works on functional forms for joint models.
 
-- **Zhenwei Yang**: Zhenwei works on applications of joint models in personalized scheduling with applications in prostate cancer research.
+- **Fridtjof Petersen**: Fridtjof works on extending joint models to the setting of intensive longitudinal data.
+
+- **Yixiao Tang**: Yixiao works on surrogate markers evaluations with applications in hematology.
+
 
