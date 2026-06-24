@@ -42,6 +42,8 @@ I am the coordinator for the following courses at Erasmus MC:
 I have also been teaching short-courses in joint modeling in international conferences. A 
 list of recent courses
 
+- IBC 2026, Seoul, South Korea  
+[[course link](https://www.ibc2026.org/events/shortcourse26)] [[slides](courses/Int/JMwithR_IBC_2026.pdf)] [[Solutions practicals](courses/Int/Solutions_IBC_2026.R)]
 - ISCB 2024, Thessaloniki, Greece  
 [[course link](https://iscb2024.info/pre-conference-courses/#a2)] [[slides](courses/Int/JMwithR_ISCB_2024.pdf)] [[Solutions practicals](courses/Int/Solutions_ISCB_2024.R)]
 - JSM 2023, Toronto, Canada  
