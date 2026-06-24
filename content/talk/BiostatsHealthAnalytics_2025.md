@@ -1,5 +1,5 @@
 +++
-date = "2025-07-06"
+date = "2025-07-07"
 title = "Using Joint Models to Estimate Causal Effects for Salvage Therapy after Prostatectomy"
 abstract = ""
 abstract_short = ""
