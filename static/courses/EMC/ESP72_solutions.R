@@ -34,7 +34,7 @@ exp(stab[c(1,3,4)])
 
 
 # interaction term between serBilir and drug
-jointFit2.p1 <- update(jointFit1.p1,
+jointFit2.p1 <- update(jointFit1.p1, n_iter = 5500L, n_burnin = 1500L,
                        functional_forms = ~ value(log(serBilir)) * drug)
 
 summary(jointFit2.p1)
@@ -67,23 +67,10 @@ summary(jointFit1.p2)
 # the joint model that include both terms
 jointFit2.p2 <-
     update(jointFit1.p2, n_iter = 8500L, n_burnin = 3500L,
-           functional_forms = ~ value(log(serBilir)) +
-               slope(log(serBilir)))
+           functional_forms = ~ area(log(serBilir)) +
+               Delta(log(serBilir)))
 
 summary(jointFit2.p2)
-
-jointFit3.p2 <- update(jointFit2.p2,
-functional_forms = ~ value(log(serBilir)) +
-    slope(log(serBilir), direction = "back", eps = 1))
-
-summary(jointFit3.p2)
-
-
-jointFit4.p2 <-
-    update(jointFit2.p2,
-           functional_forms = ~ area(log(serBilir)))
-
-summary(jointFit4.p2)
 
 
 ###############
