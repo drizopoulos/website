@@ -9,5 +9,5 @@ publication = "Statistics in Medicine 45, e70710"
 publication_short = "Statistics in Medicine 45, e70710"
 selected = true
 title = "Dynamic predictions and predictimands for salvage therapy in recurrent prostate cancer using joint models"
-url_pdf = "https://doi.org/10.1002/sim.70057"
+url_pdf = "https://doi.org/10.1002/sim.70710"
 +++
